@@ -155,7 +155,7 @@ def find_node_levels(graph, start_node, node_list):
          dict: Return a dictionary with level as key and node list as value
     """
     # array to store level of each node
-    level_dict = {}
+    node_level_dict = {}
     marked = {node: False for node in node_list}
     # create a queue
     que = queue.Queue()
@@ -163,7 +163,7 @@ def find_node_levels(graph, start_node, node_list):
     que.put(start_node)
     # initialize level of start_node
     # node to 0
-    level_dict[start_node] = 0
+    node_level_dict[start_node] = 0
     # marked it as visited
     marked[start_node] = True
 
@@ -175,26 +175,28 @@ def find_node_levels(graph, start_node, node_list):
         if start_node in graph:
             for i in graph[start_node]:
                 # neighbor is neighbor of node start_node
-                neighbor = i
+                neighbor = i["neighborDevice"]
+
                 # if neighbor is not marked already
                 if neighbor in marked and not marked[neighbor]:
                     # enqueue neighbor in queue
                     que.put(neighbor)
                     # level of neighbor is level of start_node + 1
-                    level_dict[neighbor] = level_dict[start_node] + 1
+                    node_level_dict[neighbor] = node_level_dict[start_node] + 1
                     # mark neighbor
-                    marked[neighbor] = True
+                    marked[neighbor] = True             
 
-    rank_dict = {}
-    for node, level in level_dict.items():
-        if level not in rank_dict:
-            rank_dict[level] = [node]
+    level_dict = {}
+    for node, level in node_level_dict.items():
+        if level not in level_dict:
+            level_dict[level] = [node]
         else:
-            rank_dict[level].append(node)
-    return rank_dict
+            level_dict[level].append(node)
+             
+    return level_dict, node_level_dict
 
 
-def draw_nested_subgraphs(input_data, rank_dict, graph_obj, undefined_rank_nodes):
+def draw_nested_subgraphs(input_data, rank_dict, graph_obj, undefined_rank_nodes, node_port_val):
     """
     Create a nested subgraphs recursively based on input_data
 
@@ -226,7 +228,126 @@ def draw_nested_subgraphs(input_data, rank_dict, graph_obj, undefined_rank_nodes
                     with subgraph.subgraph() as inner_subgraph:
                         inner_subgraph.attr(rank="same")
                         for node in nodes:
-                            inner_subgraph.node(node)
+                            node_ports = node_port_val[node]
+
+                            node_table = "<<TABLE BORDER=\"0\" CELLBORDER=\"1\" CELLSPACING=\"0\" CELLPADDING=\"4\">"
+                            column_num = 7
+
+                            #top
+                            node_table = node_table + "<TR>"
+
+                            port_len = len(node_ports["top"])
+
+                            port_col = [0] * column_num
+
+                            if port_len%2 != 0:
+                                port_start = column_num/(port_len*2)
+                            else:
+                                if port_len == 0:
+                                    port_start = column_num/(port_len + 2)
+                                else:
+                                    port_start = column_num/(port_len)                                       
+
+                            port_start = int(port_start)
+
+                            for port_pos in range(port_start,port_len+port_start):
+                                port_col[port_pos] = node_ports["top"][port_pos - port_start]
+
+                            for port_val in port_col:
+                                if port_val == 0 and port_val != "":
+                                    node_table = node_table + "<TD></TD>"
+                                else:
+                                    node_table = node_table + "<TD" + " PORT=\"" + str(port_val)  +   "\"" + ">" + str(port_val)  +  "</TD>"
+
+                            node_table = node_table + "</TR>"
+
+                            #right
+                            # if len(node_ports["right"]) > 0 :                           
+                            #     node_table = node_table + "<TR> <TD></TD>"
+                            #     node_table = node_table + "<TD COLSPAN=\"5\" ROWSPAN=\"2\">" + node + "</TD>"
+                            #     node_table = node_table + " <TD" + " PORT=\" " + str(node_ports["right"][0])  +   " \" " + ">" + str(node_ports["right"][0])  +  "</TD></TR>"
+                            #     node_table = node_table + "<TR> <TD></TD>"
+                            #     node_table = node_table + "<TD" + " PORT=\" " + str(node_ports["right"][1])  +   " \" " + ">" + str(node_ports["right"][1])  +  "</TD></TR>"
+                            
+                            # if len(node_ports["left"]) == 0 and len(node_ports["right"]) == 0 : 
+                            node_table = node_table + "<TR><TD></TD>"
+                            node_table = node_table + "<TD COLSPAN=\"5\" ROWSPAN=\"2\">" + node + "</TD><TD></TD></TR>"
+                            node_table = node_table + "<TR> <TD></TD>"
+                            node_table = node_table + "<TD></TD></TR>" 
+
+
+                            #left
+                            # if len(node_ports["left"]) > 0 :                           
+                            #     node_table = node_table + "<TR> <TD" + " PORT=\" " + str(node_ports["left"][0])  +   " \" " + ">" + str(node_ports["left"][0])  +  "</TD>"
+                            #     node_table = node_table + "<TD COLSPAN=\"5\" ROWSPAN=\"2\">" + node + "</TD><TD></TD></TR>"
+                            #     node_table = node_table + "<TR> <TD" + " PORT=\" " + str(node_ports["left"][1])  +   " \" " + ">" + str(node_ports["left"][1])  +  "</TD>"
+                            #     node_table = node_table + "<TD></TD></TR>"                              
+
+
+                            #bottom
+                            node_table = node_table + "<TR>"
+
+                            port_len = len(node_ports["bottom"])
+
+                            port_col = [0] * column_num
+
+                            if port_len%2 != 0:
+                                port_start = column_num/(port_len*2)
+                            else:
+                                if port_len == 0:
+                                    port_start = column_num/(port_len + 2)
+                                else:
+                                    port_start = column_num/(port_len)                                      
+                            port_start = int(port_start)
+
+                            for port_pos in range(port_start,port_len+port_start):
+                                port_col[port_pos] = node_ports["bottom"][port_pos - port_start]
+
+                            for port_val in port_col:
+                                if port_val == 0 and port_val != "":
+                                    node_table = node_table + "<TD></TD>"
+                                else:
+                                    node_table = node_table + "<TD" + " PORT=\"" + str(port_val)  +   "\"" + ">" + str(port_val)  +  "</TD>"
+
+                            node_table = node_table + "</TR></TABLE>>"
+                            node_table = node_table.replace("\n", "")
+
+                            inner_subgraph.node(node, node_table)
+                            # inner_subgraph.node("hello")
+#                             inner_subgraph.node(node,'''<
+# <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4">
+#   <TR>
+#     <TD></TD>
+#     <TD></TD>
+#     <TD></TD>
+#     <TD></TD>
+#     <TD></TD>
+#     <TD></TD>
+#     <TD></TD>
+#   </TR>
+#   <TR>
+#     <TD></TD>
+#     <TD COLSPAN="5" ROWSPAN="2">
+#     '''
+#     + node +
+#     '''
+#     </TD>
+#     <TD></TD>
+#   </TR>
+#   <TR>
+#     <TD></TD>
+#     <TD></TD>
+#   </TR>
+#   <TR>
+#     <TD></TD>
+#     <TD></TD>
+#     <TD></TD>
+#     <TD></TD>
+#     <TD></TD>
+#     <TD></TD>
+#     <TD></TD>
+#   </TR>
+# </TABLE>>''')                            
 
             if "groups" in data and data["groups"]:
                 draw_nested_subgraphs(data["groups"], rank_dict, subgraph, undefined_rank_nodes)

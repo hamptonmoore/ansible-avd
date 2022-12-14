@@ -1,0 +1,175 @@
+graph parent {
+	graph [splines=line]
+	node [fontsize=" 8pt" shape=plaintext]
+	edge [center=true concentrate=true fontname=arial fontsize=6 labelfloat=false minlen=2]
+	rank=min
+	ranksep=0.7
+	subgraph cluster_child_fabric_name {
+		label=fabric_name
+		labelloc=t
+		{
+			rank=min
+		}
+		{
+			rank=min
+		}
+		{
+			rank=min
+			FIREWALL [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD></TD><TD></TD><TD></TD><TD PORT=""></TD><TD></TD><TD></TD><TD></TD></TR><TR><TD></TD><TD COLSPAN="5" ROWSPAN="2">FIREWALL</TD><TD></TD></TR><TR> <TD></TD><TD></TD></TR><TR><TD></TD><TD></TD><TD></TD><TD PORT="4">4</TD><TD PORT="6">6</TD><TD></TD><TD></TD></TR></TABLE>>]
+		}
+		{
+			rank=min
+		}
+		{
+			rank=min
+		}
+		{
+			rank=min
+		}
+		ranksep=0.7
+		subgraph cluster_child_dc_name1 {
+			label=dc_name1
+			labelloc=t
+			{
+				rank=min
+			}
+			{
+				rank=min
+			}
+			{
+				rank=min
+			}
+			{
+				rank=min
+				SPINE1 [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD></TD><TD></TD><TD></TD><TD PORT="5">5</TD><TD></TD><TD></TD><TD></TD></TR><TR><TD></TD><TD COLSPAN="5" ROWSPAN="2">SPINE1</TD><TD></TD></TR><TR> <TD></TD><TD></TD></TR><TR><TD></TD><TD PORT="1">1</TD><TD PORT="2">2</TD><TD PORT="3">3</TD><TD PORT="4">4</TD><TD></TD><TD></TD></TR></TABLE>>]
+				SPINE2 [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD></TD><TD></TD><TD></TD><TD PORT="5">5</TD><TD></TD><TD></TD><TD></TD></TR><TR><TD></TD><TD COLSPAN="5" ROWSPAN="2">SPINE2</TD><TD></TD></TR><TR> <TD></TD><TD></TD></TR><TR><TD></TD><TD PORT="1">1</TD><TD PORT="2">2</TD><TD PORT="3">3</TD><TD PORT="4">4</TD><TD></TD><TD></TD></TR></TABLE>>]
+			}
+			{
+				rank=min
+			}
+			{
+				rank=min
+			}
+			ranksep=0.7
+			subgraph cluster_child_pod_name1 {
+				label=pod_name1
+				labelloc=t
+				{
+					rank=min
+				}
+				{
+					rank=min
+				}
+				{
+					rank=min
+				}
+				{
+					rank=min
+				}
+				{
+					rank=min
+					LEAF1 [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD></TD><TD></TD><TD></TD><TD PORT="2">2</TD><TD PORT="1">1</TD><TD></TD><TD></TD></TR><TR><TD></TD><TD COLSPAN="5" ROWSPAN="2">LEAF1</TD><TD></TD></TR><TR> <TD></TD><TD></TD></TR><TR><TD></TD><TD></TD><TD></TD><TD PORT="3">3</TD><TD></TD><TD></TD><TD></TD></TR></TABLE>>]
+					LEAF2 [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD></TD><TD></TD><TD></TD><TD PORT="2">2</TD><TD PORT="1">1</TD><TD></TD><TD></TD></TR><TR><TD></TD><TD COLSPAN="5" ROWSPAN="2">LEAF2</TD><TD></TD></TR><TR> <TD></TD><TD></TD></TR><TR><TD></TD><TD></TD><TD></TD><TD PORT="3">3</TD><TD></TD><TD></TD><TD></TD></TR></TABLE>>]
+				}
+				{
+					rank=min
+				}
+				ranksep=0.7
+				subgraph "cluster_child_pod_name1.5" {
+					label="pod_name1.5"
+					labelloc=t
+					{
+						rank=min
+					}
+					{
+						rank=min
+					}
+					{
+						rank=min
+					}
+					{
+						rank=min
+					}
+					{
+						rank=min
+					}
+					{
+						rank=min
+						HostA [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD></TD><TD></TD><TD></TD><TD PORT=""></TD><TD></TD><TD></TD><TD></TD></TR><TR><TD></TD><TD COLSPAN="5" ROWSPAN="2">HostA</TD><TD></TD></TR><TR> <TD></TD><TD></TD></TR><TR><TD></TD><TD></TD><TD></TD><TD></TD><TD></TD><TD></TD><TD></TD></TR></TABLE>>]
+						HostB [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD></TD><TD></TD><TD></TD><TD PORT=""></TD><TD></TD><TD></TD><TD></TD></TR><TR><TD></TD><TD COLSPAN="5" ROWSPAN="2">HostB</TD><TD></TD></TR><TR> <TD></TD><TD></TD></TR><TR><TD></TD><TD></TD><TD></TD><TD></TD><TD></TD><TD></TD><TD></TD></TR></TABLE>>]
+					}
+				}
+			}
+			ranksep=0.7
+			subgraph cluster_child_pod_name2 {
+				label=pod_name2
+				labelloc=t
+				{
+					rank=min
+				}
+				{
+					rank=min
+				}
+				{
+					rank=min
+				}
+				{
+					rank=min
+				}
+				{
+					rank=min
+					LEAF3 [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD></TD><TD></TD><TD></TD><TD PORT="2">2</TD><TD PORT="1">1</TD><TD></TD><TD></TD></TR><TR><TD></TD><TD COLSPAN="5" ROWSPAN="2">LEAF3</TD><TD></TD></TR><TR> <TD></TD><TD></TD></TR><TR><TD></TD><TD></TD><TD></TD><TD PORT="3">3</TD><TD></TD><TD></TD><TD></TD></TR></TABLE>>]
+					LEAF4 [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD></TD><TD></TD><TD></TD><TD PORT="2">2</TD><TD PORT="1">1</TD><TD></TD><TD></TD></TR><TR><TD></TD><TD COLSPAN="5" ROWSPAN="2">LEAF4</TD><TD></TD></TR><TR> <TD></TD><TD></TD></TR><TR><TD></TD><TD></TD><TD></TD><TD PORT="3">3</TD><TD></TD><TD></TD><TD></TD></TR></TABLE>>]
+				}
+				{
+					rank=min
+				}
+				ranksep=0.7
+				subgraph "cluster_child_pod_name2.5" {
+					label="pod_name2.5"
+					labelloc=t
+					{
+						rank=min
+					}
+					{
+						rank=min
+					}
+					{
+						rank=min
+					}
+					{
+						rank=min
+					}
+					{
+						rank=min
+					}
+					{
+						rank=min
+						HostC [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD></TD><TD></TD><TD></TD><TD PORT=""></TD><TD></TD><TD></TD><TD></TD></TR><TR><TD></TD><TD COLSPAN="5" ROWSPAN="2">HostC</TD><TD></TD></TR><TR> <TD></TD><TD></TD></TR><TR><TD></TD><TD></TD><TD></TD><TD></TD><TD></TD><TD></TD><TD></TD></TR></TABLE>>]
+						Host2 [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD></TD><TD></TD><TD></TD><TD PORT=""></TD><TD></TD><TD></TD><TD></TD></TR><TR><TD></TD><TD COLSPAN="5" ROWSPAN="2">Host2</TD><TD></TD></TR><TR> <TD></TD><TD></TD></TR><TR><TD></TD><TD></TD><TD></TD><TD></TD><TD></TD><TD></TD><TD></TD></TR></TABLE>>]
+					}
+				}
+			}
+		}
+	}
+	FIREWALL:4 -- SPINE1:5
+	FIREWALL:6 -- SPINE2:5
+	SPINE2:47 -- SPINE1:47
+	SPINE2:48 -- SPINE1:48
+	SPINE2:1 -- LEAF1:2
+	SPINE2:2 -- LEAF2:2
+	SPINE2:3 -- LEAF3:2
+	SPINE2:4 -- LEAF4:2
+	SPINE1:1 -- LEAF1:1
+	SPINE1:2 -- LEAF2:1
+	SPINE1:3 -- LEAF3:1
+	SPINE1:4 -- LEAF4:1
+	LEAF1:47 -- LEAF2:47
+	LEAF1:48 -- LEAF2:48
+	LEAF1:3 -- HostA
+	LEAF2:3 -- HostB
+	LEAF3:47 -- LEAF4:47
+	LEAF3:48 -- LEAF4:48
+	LEAF3:3 -- HostC
+	LEAF4:3 -- Host2
+}
