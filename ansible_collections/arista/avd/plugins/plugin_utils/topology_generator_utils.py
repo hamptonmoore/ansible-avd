@@ -231,7 +231,7 @@ def draw_nested_subgraphs(input_data, rank_dict, graph_obj, undefined_rank_nodes
                             node_ports = node_port_val[node]
 
                             node_table = "<<TABLE BORDER=\"0\" CELLBORDER=\"1\" CELLSPACING=\"0\" CELLPADDING=\"4\">"
-                            column_num = 7
+                            column_num = 7 
 
                             #top
                             node_table = node_table + "<TR>"
@@ -305,7 +305,7 @@ def draw_nested_subgraphs(input_data, rank_dict, graph_obj, undefined_rank_nodes
 
                             for port_val in port_col:
                                 if port_val == 0 and port_val != "":
-                                    node_table = node_table + "<TD></TD>"
+                                    node_table = node_table + "<TD ></TD>"
                                 else:
                                     node_table = node_table + "<TD" + " PORT=\"" + str(port_val)  +   "\"" + ">" + str(port_val)  +  "</TD>"
 

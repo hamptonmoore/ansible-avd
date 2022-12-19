@@ -15,7 +15,7 @@ graph parent {
 		}
 		{
 			rank=min
-			FIREWALL [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD></TD><TD></TD><TD></TD><TD PORT=""></TD><TD></TD><TD></TD><TD></TD></TR><TR><TD></TD><TD COLSPAN="5" ROWSPAN="2">FIREWALL</TD><TD></TD></TR><TR> <TD></TD><TD></TD></TR><TR><TD></TD><TD></TD><TD></TD><TD PORT="4">4</TD><TD PORT="6">6</TD><TD></TD><TD></TD></TR></TABLE>>]
+			FIREWALL [label=<<TABLE BORDERCOLLAPSE="COLLAPSE" BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD></TD><TD></TD><TD></TD><TD PORT=""></TD><TD></TD><TD></TD><TD></TD></TR><TR><TD></TD><TD COLSPAN="5" ROWSPAN="2">FIREWALL</TD><TD></TD></TR><TR> <TD></TD><TD></TD></TR><TR><TD ></TD><TD ></TD><TD ></TD><TD PORT="4">4</TD><TD PORT="6">6</TD><TD ></TD><TD ></TD></TR></TABLE>>]
 		}
 		{
 			rank=min
@@ -41,8 +41,8 @@ graph parent {
 			}
 			{
 				rank=min
-				SPINE1 [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD></TD><TD></TD><TD></TD><TD PORT="5">5</TD><TD></TD><TD></TD><TD></TD></TR><TR><TD></TD><TD COLSPAN="5" ROWSPAN="2">SPINE1</TD><TD></TD></TR><TR> <TD></TD><TD></TD></TR><TR><TD></TD><TD PORT="1">1</TD><TD PORT="2">2</TD><TD PORT="3">3</TD><TD PORT="4">4</TD><TD></TD><TD></TD></TR></TABLE>>]
-				SPINE2 [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD></TD><TD></TD><TD></TD><TD PORT="5">5</TD><TD></TD><TD></TD><TD></TD></TR><TR><TD></TD><TD COLSPAN="5" ROWSPAN="2">SPINE2</TD><TD></TD></TR><TR> <TD></TD><TD></TD></TR><TR><TD></TD><TD PORT="1">1</TD><TD PORT="2">2</TD><TD PORT="3">3</TD><TD PORT="4">4</TD><TD></TD><TD></TD></TR></TABLE>>]
+				SPINE1 [label=<<TABLE BORDERCOLLAPSE="COLLAPSE" BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD></TD><TD></TD><TD></TD><TD PORT="5">5</TD><TD></TD><TD></TD><TD></TD></TR><TR><TD></TD><TD COLSPAN="5" ROWSPAN="2">SPINE1</TD><TD></TD></TR><TR> <TD></TD><TD></TD></TR><TR><TD ></TD><TD PORT="1">1</TD><TD PORT="2">2</TD><TD PORT="3">3</TD><TD PORT="4">4</TD><TD ></TD><TD ></TD></TR></TABLE>>]
+				SPINE2 [label=<<TABLE BORDERCOLLAPSE="COLLAPSE" BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD></TD><TD></TD><TD></TD><TD PORT="5">5</TD><TD></TD><TD></TD><TD></TD></TR><TR><TD></TD><TD COLSPAN="5" ROWSPAN="2">SPINE2</TD><TD></TD></TR><TR> <TD></TD><TD></TD></TR><TR><TD ></TD><TD PORT="1">1</TD><TD PORT="2">2</TD><TD PORT="3">3</TD><TD PORT="4">4</TD><TD ></TD><TD ></TD></TR></TABLE>>]
 			}
 			{
 				rank=min
@@ -68,8 +68,8 @@ graph parent {
 				}
 				{
 					rank=min
-					LEAF1 [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD></TD><TD></TD><TD></TD><TD PORT="2">2</TD><TD PORT="1">1</TD><TD></TD><TD></TD></TR><TR><TD></TD><TD COLSPAN="5" ROWSPAN="2">LEAF1</TD><TD></TD></TR><TR> <TD></TD><TD></TD></TR><TR><TD></TD><TD></TD><TD></TD><TD PORT="3">3</TD><TD></TD><TD></TD><TD></TD></TR></TABLE>>]
-					LEAF2 [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD></TD><TD></TD><TD></TD><TD PORT="2">2</TD><TD PORT="1">1</TD><TD></TD><TD></TD></TR><TR><TD></TD><TD COLSPAN="5" ROWSPAN="2">LEAF2</TD><TD></TD></TR><TR> <TD></TD><TD></TD></TR><TR><TD></TD><TD></TD><TD></TD><TD PORT="3">3</TD><TD></TD><TD></TD><TD></TD></TR></TABLE>>]
+					LEAF1 [label=<<TABLE BORDERCOLLAPSE="COLLAPSE" BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD></TD><TD></TD><TD></TD><TD PORT="2">2</TD><TD PORT="1">1</TD><TD></TD><TD></TD></TR><TR><TD></TD><TD COLSPAN="5" ROWSPAN="2">LEAF1</TD><TD></TD></TR><TR> <TD></TD><TD></TD></TR><TR><TD ></TD><TD ></TD><TD ></TD><TD PORT="3">3</TD><TD ></TD><TD ></TD><TD ></TD></TR></TABLE>>]
+					LEAF2 [label=<<TABLE BORDERCOLLAPSE="COLLAPSE" BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD></TD><TD></TD><TD></TD><TD PORT="2">2</TD><TD PORT="1">1</TD><TD></TD><TD></TD></TR><TR><TD></TD><TD COLSPAN="5" ROWSPAN="2">LEAF2</TD><TD></TD></TR><TR> <TD></TD><TD></TD></TR><TR><TD ></TD><TD ></TD><TD ></TD><TD PORT="3">3</TD><TD ></TD><TD ></TD><TD ></TD></TR></TABLE>>]
 				}
 				{
 					rank=min
@@ -95,8 +95,8 @@ graph parent {
 					}
 					{
 						rank=min
-						HostA [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD></TD><TD></TD><TD></TD><TD PORT=""></TD><TD></TD><TD></TD><TD></TD></TR><TR><TD></TD><TD COLSPAN="5" ROWSPAN="2">HostA</TD><TD></TD></TR><TR> <TD></TD><TD></TD></TR><TR><TD></TD><TD></TD><TD></TD><TD></TD><TD></TD><TD></TD><TD></TD></TR></TABLE>>]
-						HostB [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD></TD><TD></TD><TD></TD><TD PORT=""></TD><TD></TD><TD></TD><TD></TD></TR><TR><TD></TD><TD COLSPAN="5" ROWSPAN="2">HostB</TD><TD></TD></TR><TR> <TD></TD><TD></TD></TR><TR><TD></TD><TD></TD><TD></TD><TD></TD><TD></TD><TD></TD><TD></TD></TR></TABLE>>]
+						HostA [label=<<TABLE BORDERCOLLAPSE="COLLAPSE" BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD></TD><TD></TD><TD></TD><TD PORT=""></TD><TD></TD><TD></TD><TD></TD></TR><TR><TD></TD><TD COLSPAN="5" ROWSPAN="2">HostA</TD><TD></TD></TR><TR> <TD></TD><TD></TD></TR><TR><TD ></TD><TD ></TD><TD ></TD><TD ></TD><TD ></TD><TD ></TD><TD ></TD></TR></TABLE>>]
+						HostB [label=<<TABLE BORDERCOLLAPSE="COLLAPSE" BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD></TD><TD></TD><TD></TD><TD PORT=""></TD><TD></TD><TD></TD><TD></TD></TR><TR><TD></TD><TD COLSPAN="5" ROWSPAN="2">HostB</TD><TD></TD></TR><TR> <TD></TD><TD></TD></TR><TR><TD ></TD><TD ></TD><TD ></TD><TD ></TD><TD ></TD><TD ></TD><TD ></TD></TR></TABLE>>]
 					}
 				}
 			}
@@ -118,8 +118,8 @@ graph parent {
 				}
 				{
 					rank=min
-					LEAF3 [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD></TD><TD></TD><TD></TD><TD PORT="2">2</TD><TD PORT="1">1</TD><TD></TD><TD></TD></TR><TR><TD></TD><TD COLSPAN="5" ROWSPAN="2">LEAF3</TD><TD></TD></TR><TR> <TD></TD><TD></TD></TR><TR><TD></TD><TD></TD><TD></TD><TD PORT="3">3</TD><TD></TD><TD></TD><TD></TD></TR></TABLE>>]
-					LEAF4 [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD></TD><TD></TD><TD></TD><TD PORT="2">2</TD><TD PORT="1">1</TD><TD></TD><TD></TD></TR><TR><TD></TD><TD COLSPAN="5" ROWSPAN="2">LEAF4</TD><TD></TD></TR><TR> <TD></TD><TD></TD></TR><TR><TD></TD><TD></TD><TD></TD><TD PORT="3">3</TD><TD></TD><TD></TD><TD></TD></TR></TABLE>>]
+					LEAF3 [label=<<TABLE BORDERCOLLAPSE="COLLAPSE" BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD></TD><TD></TD><TD></TD><TD PORT="2">2</TD><TD PORT="1">1</TD><TD></TD><TD></TD></TR><TR><TD></TD><TD COLSPAN="5" ROWSPAN="2">LEAF3</TD><TD></TD></TR><TR> <TD></TD><TD></TD></TR><TR><TD ></TD><TD ></TD><TD ></TD><TD PORT="3">3</TD><TD ></TD><TD ></TD><TD ></TD></TR></TABLE>>]
+					LEAF4 [label=<<TABLE BORDERCOLLAPSE="COLLAPSE" BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD></TD><TD></TD><TD></TD><TD PORT="2">2</TD><TD PORT="1">1</TD><TD></TD><TD></TD></TR><TR><TD></TD><TD COLSPAN="5" ROWSPAN="2">LEAF4</TD><TD></TD></TR><TR> <TD></TD><TD></TD></TR><TR><TD ></TD><TD ></TD><TD ></TD><TD PORT="3">3</TD><TD ></TD><TD ></TD><TD ></TD></TR></TABLE>>]
 				}
 				{
 					rank=min
@@ -145,8 +145,8 @@ graph parent {
 					}
 					{
 						rank=min
-						HostC [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD></TD><TD></TD><TD></TD><TD PORT=""></TD><TD></TD><TD></TD><TD></TD></TR><TR><TD></TD><TD COLSPAN="5" ROWSPAN="2">HostC</TD><TD></TD></TR><TR> <TD></TD><TD></TD></TR><TR><TD></TD><TD></TD><TD></TD><TD></TD><TD></TD><TD></TD><TD></TD></TR></TABLE>>]
-						Host2 [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD></TD><TD></TD><TD></TD><TD PORT=""></TD><TD></TD><TD></TD><TD></TD></TR><TR><TD></TD><TD COLSPAN="5" ROWSPAN="2">Host2</TD><TD></TD></TR><TR> <TD></TD><TD></TD></TR><TR><TD></TD><TD></TD><TD></TD><TD></TD><TD></TD><TD></TD><TD></TD></TR></TABLE>>]
+						HostC [label=<<TABLE BORDERCOLLAPSE="COLLAPSE" BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD></TD><TD></TD><TD></TD><TD PORT=""></TD><TD></TD><TD></TD><TD></TD></TR><TR><TD></TD><TD COLSPAN="5" ROWSPAN="2">HostC</TD><TD></TD></TR><TR> <TD></TD><TD></TD></TR><TR><TD ></TD><TD ></TD><TD ></TD><TD ></TD><TD ></TD><TD ></TD><TD ></TD></TR></TABLE>>]
+						Host2 [label=<<TABLE BORDERCOLLAPSE="COLLAPSE" BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD></TD><TD></TD><TD></TD><TD PORT=""></TD><TD></TD><TD></TD><TD></TD></TR><TR><TD></TD><TD COLSPAN="5" ROWSPAN="2">Host2</TD><TD></TD></TR><TR> <TD></TD><TD></TD></TR><TR><TD ></TD><TD ></TD><TD ></TD><TD ></TD><TD ></TD><TD ></TD><TD ></TD></TR></TABLE>>]
 					}
 				}
 			}
