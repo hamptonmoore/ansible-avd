@@ -106,7 +106,7 @@ ethernet_interfaces:
     vlans: 10,20,30
     channel_group:
       id: 5
-      mode: active 
+      mode: active
 mlag_configuration:
   domain_id: RACK1
   local_interface: Vlan4094
