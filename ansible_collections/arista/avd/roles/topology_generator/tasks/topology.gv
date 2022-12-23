@@ -8,95 +8,35 @@ graph parent {
 		label=fabric_name
 		labelloc=t
 		{
-			rank=min
-		}
-		{
-			rank=min
-		}
-		{
-			rank=min
-			FIREWALL [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD></TD><TD></TD><TD></TD><TD PORT=""></TD><TD></TD><TD></TD><TD></TD></TR><TR><TD></TD><TD COLSPAN="5" ROWSPAN="2">FIREWALL</TD><TD></TD></TR><TR> <TD></TD><TD></TD></TR><TR><TD ></TD><TD ></TD><TD ></TD><TD PORT="4">4</TD><TD PORT="6">6</TD><TD ></TD><TD ></TD></TR></TABLE>>]
-		}
-		{
-			rank=min
-		}
-		{
-			rank=min
-		}
-		{
-			rank=min
+			rank=same
+			FIREWALL [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD  BORDER="0" > </TD><TD BGCOLOR="#4a69bd" COLSPAN="5" ROWSPAN="2"> <FONT COLOR="#ffffff">FIREWALL</FONT></TD><TD  BORDER="0" ></TD></TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" ></TD> </TR><TR><TD BORDER="0" ></TD><TD BORDER="0" ></TD><TD BORDER="0" ></TD><TD PORT="4">4</TD><TD PORT="6">6</TD><TD BORDER="0" ></TD><TD BORDER="0" ></TD></TR></TABLE>>]
 		}
 		ranksep=0.7
 		subgraph cluster_child_dc_name1 {
 			label=dc_name1
 			labelloc=t
 			{
-				rank=min
-			}
-			{
-				rank=min
-			}
-			{
-				rank=min
-			}
-			{
-				rank=min
-				SPINE1 [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD></TD><TD></TD><TD></TD><TD PORT="5">5</TD><TD></TD><TD></TD><TD></TD></TR><TR><TD></TD><TD COLSPAN="5" ROWSPAN="2">SPINE1</TD><TD></TD></TR><TR> <TD></TD><TD></TD></TR><TR><TD ></TD><TD PORT="1">1</TD><TD PORT="2">2</TD><TD PORT="3">3</TD><TD PORT="4">4</TD><TD ></TD><TD ></TD></TR></TABLE>>]
-				SPINE2 [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD></TD><TD></TD><TD></TD><TD PORT="5">5</TD><TD></TD><TD></TD><TD></TD></TR><TR><TD></TD><TD COLSPAN="5" ROWSPAN="2">SPINE2</TD><TD></TD></TR><TR> <TD></TD><TD></TD></TR><TR><TD ></TD><TD PORT="1">1</TD><TD PORT="2">2</TD><TD PORT="3">3</TD><TD PORT="4">4</TD><TD ></TD><TD ></TD></TR></TABLE>>]
-			}
-			{
-				rank=min
-			}
-			{
-				rank=min
+				rank=same
+				SPINE1 [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BORDER="0" ></TD><TD BORDER="0" ></TD><TD BORDER="0" ></TD><TD PORT="5">5</TD><TD BORDER="0" ></TD><TD BORDER="0" ></TD><TD BORDER="0" ></TD></TR><TR><TD  BORDER="0" >  </TD><TD BGCOLOR="#4a69bd" COLSPAN="5" ROWSPAN="3"> <FONT COLOR="#ffffff">SPINE1</FONT></TD><TD PORT="47" >47</TD></TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" ></TD> </TR><TR> <TD BORDER="0" ></TD> <TD PORT="48" > 48</TD></TR><TR><TD BORDER="0" ></TD><TD PORT="1">1</TD><TD PORT="2">2</TD><TD PORT="3">3</TD><TD PORT="4">4</TD><TD BORDER="0" ></TD><TD BORDER="0" ></TD></TR></TABLE>>]
+				SPINE2 [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BORDER="0" ></TD><TD BORDER="0" ></TD><TD BORDER="0" ></TD><TD PORT="5">5</TD><TD BORDER="0" ></TD><TD BORDER="0" ></TD><TD BORDER="0" ></TD></TR><TR><TD PORT="47" > 47 </TD><TD BGCOLOR="#4a69bd" COLSPAN="5" ROWSPAN="3"> <FONT COLOR="#ffffff">SPINE2</FONT></TD><TD  BORDER="0" ></TD></TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" ></TD> </TR><TR> <TD PORT="48" > 48</TD><TD BORDER="0" ></TD> </TR><TR><TD BORDER="0" ></TD><TD PORT="1">1</TD><TD PORT="2">2</TD><TD PORT="3">3</TD><TD PORT="4">4</TD><TD BORDER="0" ></TD><TD BORDER="0" ></TD></TR></TABLE>>]
 			}
 			ranksep=0.7
 			subgraph cluster_child_pod_name1 {
 				label=pod_name1
 				labelloc=t
 				{
-					rank=min
-				}
-				{
-					rank=min
-				}
-				{
-					rank=min
-				}
-				{
-					rank=min
-				}
-				{
-					rank=min
-					LEAF1 [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD></TD><TD></TD><TD></TD><TD PORT="2">2</TD><TD PORT="1">1</TD><TD></TD><TD></TD></TR><TR><TD></TD><TD COLSPAN="5" ROWSPAN="2">LEAF1</TD><TD></TD></TR><TR> <TD></TD><TD></TD></TR><TR><TD ></TD><TD ></TD><TD ></TD><TD PORT="3">3</TD><TD ></TD><TD ></TD><TD ></TD></TR></TABLE>>]
-					LEAF2 [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD></TD><TD></TD><TD></TD><TD PORT="2">2</TD><TD PORT="1">1</TD><TD></TD><TD></TD></TR><TR><TD></TD><TD COLSPAN="5" ROWSPAN="2">LEAF2</TD><TD></TD></TR><TR> <TD></TD><TD></TD></TR><TR><TD ></TD><TD ></TD><TD ></TD><TD PORT="3">3</TD><TD ></TD><TD ></TD><TD ></TD></TR></TABLE>>]
-				}
-				{
-					rank=min
+					rank=same
+					LEAF1 [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BORDER="0" ></TD><TD BORDER="0" ></TD><TD BORDER="0" ></TD><TD PORT="1">1</TD><TD PORT="2">2</TD><TD BORDER="0" ></TD><TD BORDER="0" ></TD></TR><TR><TD  BORDER="0" >  </TD><TD BGCOLOR="#4a69bd" COLSPAN="5" ROWSPAN="3"> <FONT COLOR="#ffffff">LEAF1</FONT></TD><TD PORT="47" >47</TD></TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" ></TD> </TR><TR> <TD BORDER="0" ></TD> <TD PORT="48" > 48</TD></TR><TR><TD BORDER="0" ></TD><TD BORDER="0" ></TD><TD BORDER="0" ></TD><TD PORT="3">3</TD><TD BORDER="0" ></TD><TD BORDER="0" ></TD><TD BORDER="0" ></TD></TR></TABLE>>]
+					LEAF2 [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BORDER="0" ></TD><TD BORDER="0" ></TD><TD BORDER="0" ></TD><TD PORT="1">1</TD><TD PORT="2">2</TD><TD BORDER="0" ></TD><TD BORDER="0" ></TD></TR><TR><TD PORT="47" > 47 </TD><TD BGCOLOR="#4a69bd" COLSPAN="5" ROWSPAN="3"> <FONT COLOR="#ffffff">LEAF2</FONT></TD><TD  BORDER="0" ></TD></TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" ></TD> </TR><TR> <TD PORT="48" > 48</TD><TD BORDER="0" ></TD> </TR><TR><TD BORDER="0" ></TD><TD BORDER="0" ></TD><TD BORDER="0" ></TD><TD PORT="3">3</TD><TD BORDER="0" ></TD><TD BORDER="0" ></TD><TD BORDER="0" ></TD></TR></TABLE>>]
 				}
 				ranksep=0.7
 				subgraph "cluster_child_pod_name1.5" {
 					label="pod_name1.5"
 					labelloc=t
 					{
-						rank=min
-					}
-					{
-						rank=min
-					}
-					{
-						rank=min
-					}
-					{
-						rank=min
-					}
-					{
-						rank=min
-					}
-					{
-						rank=min
-						HostA [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD></TD><TD></TD><TD></TD><TD PORT=""></TD><TD></TD><TD></TD><TD></TD></TR><TR><TD></TD><TD COLSPAN="5" ROWSPAN="2">HostA</TD><TD></TD></TR><TR> <TD></TD><TD></TD></TR><TR><TD ></TD><TD ></TD><TD ></TD><TD ></TD><TD ></TD><TD ></TD><TD ></TD></TR></TABLE>>]
-						HostB [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD></TD><TD></TD><TD></TD><TD PORT=""></TD><TD></TD><TD></TD><TD></TD></TR><TR><TD></TD><TD COLSPAN="5" ROWSPAN="2">HostB</TD><TD></TD></TR><TR> <TD></TD><TD></TD></TR><TR><TD ></TD><TD ></TD><TD ></TD><TD ></TD><TD ></TD><TD ></TD><TD ></TD></TR></TABLE>>]
+						rank=same
+						HostA [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD  BORDER="0" > </TD><TD BGCOLOR="#4a69bd" COLSPAN="5" ROWSPAN="2"> <FONT COLOR="#ffffff">HostA</FONT></TD><TD  BORDER="0" ></TD></TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" ></TD> </TR><TR><TD BORDER="0" ></TD><TD BORDER="0" ></TD><TD BORDER="0" ></TD><TD BORDER="0" ></TD><TD BORDER="0" ></TD><TD BORDER="0" ></TD><TD BORDER="0" ></TD></TR></TABLE>>]
+						HostB [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD  BORDER="0" > </TD><TD BGCOLOR="#4a69bd" COLSPAN="5" ROWSPAN="2"> <FONT COLOR="#ffffff">HostB</FONT></TD><TD  BORDER="0" ></TD></TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" ></TD> </TR><TR><TD BORDER="0" ></TD><TD BORDER="0" ></TD><TD BORDER="0" ></TD><TD BORDER="0" ></TD><TD BORDER="0" ></TD><TD BORDER="0" ></TD><TD BORDER="0" ></TD></TR></TABLE>>]
 					}
 				}
 			}
@@ -105,48 +45,18 @@ graph parent {
 				label=pod_name2
 				labelloc=t
 				{
-					rank=min
-				}
-				{
-					rank=min
-				}
-				{
-					rank=min
-				}
-				{
-					rank=min
-				}
-				{
-					rank=min
-					LEAF3 [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD></TD><TD></TD><TD></TD><TD PORT="2">2</TD><TD PORT="1">1</TD><TD></TD><TD></TD></TR><TR><TD></TD><TD COLSPAN="5" ROWSPAN="2">LEAF3</TD><TD></TD></TR><TR> <TD></TD><TD></TD></TR><TR><TD ></TD><TD ></TD><TD ></TD><TD PORT="3">3</TD><TD ></TD><TD ></TD><TD ></TD></TR></TABLE>>]
-					LEAF4 [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD></TD><TD></TD><TD></TD><TD PORT="2">2</TD><TD PORT="1">1</TD><TD></TD><TD></TD></TR><TR><TD></TD><TD COLSPAN="5" ROWSPAN="2">LEAF4</TD><TD></TD></TR><TR> <TD></TD><TD></TD></TR><TR><TD ></TD><TD ></TD><TD ></TD><TD PORT="3">3</TD><TD ></TD><TD ></TD><TD ></TD></TR></TABLE>>]
-				}
-				{
-					rank=min
+					rank=same
+					LEAF3 [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BORDER="0" ></TD><TD BORDER="0" ></TD><TD BORDER="0" ></TD><TD PORT="1">1</TD><TD PORT="2">2</TD><TD BORDER="0" ></TD><TD BORDER="0" ></TD></TR><TR><TD  BORDER="0" >  </TD><TD BGCOLOR="#4a69bd" COLSPAN="5" ROWSPAN="3"> <FONT COLOR="#ffffff">LEAF3</FONT></TD><TD PORT="47" >47</TD></TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" ></TD> </TR><TR> <TD BORDER="0" ></TD> <TD PORT="48" > 48</TD></TR><TR><TD BORDER="0" ></TD><TD BORDER="0" ></TD><TD BORDER="0" ></TD><TD PORT="3">3</TD><TD BORDER="0" ></TD><TD BORDER="0" ></TD><TD BORDER="0" ></TD></TR></TABLE>>]
+					LEAF4 [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BORDER="0" ></TD><TD BORDER="0" ></TD><TD BORDER="0" ></TD><TD PORT="1">1</TD><TD PORT="2">2</TD><TD BORDER="0" ></TD><TD BORDER="0" ></TD></TR><TR><TD PORT="47" > 47 </TD><TD BGCOLOR="#4a69bd" COLSPAN="5" ROWSPAN="3"> <FONT COLOR="#ffffff">LEAF4</FONT></TD><TD  BORDER="0" ></TD></TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" ></TD> </TR><TR> <TD PORT="48" > 48</TD><TD BORDER="0" ></TD> </TR><TR><TD BORDER="0" ></TD><TD BORDER="0" ></TD><TD BORDER="0" ></TD><TD PORT="3">3</TD><TD BORDER="0" ></TD><TD BORDER="0" ></TD><TD BORDER="0" ></TD></TR></TABLE>>]
 				}
 				ranksep=0.7
 				subgraph "cluster_child_pod_name2.5" {
 					label="pod_name2.5"
 					labelloc=t
 					{
-						rank=min
-					}
-					{
-						rank=min
-					}
-					{
-						rank=min
-					}
-					{
-						rank=min
-					}
-					{
-						rank=min
-					}
-					{
-						rank=min
-						HostC [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD></TD><TD></TD><TD></TD><TD PORT=""></TD><TD></TD><TD></TD><TD></TD></TR><TR><TD></TD><TD COLSPAN="5" ROWSPAN="2">HostC</TD><TD></TD></TR><TR> <TD></TD><TD></TD></TR><TR><TD ></TD><TD ></TD><TD ></TD><TD ></TD><TD ></TD><TD ></TD><TD ></TD></TR></TABLE>>]
-						Host2 [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD></TD><TD></TD><TD></TD><TD PORT=""></TD><TD></TD><TD></TD><TD></TD></TR><TR><TD></TD><TD COLSPAN="5" ROWSPAN="2">Host2</TD><TD></TD></TR><TR> <TD></TD><TD></TD></TR><TR><TD ></TD><TD ></TD><TD ></TD><TD ></TD><TD ></TD><TD ></TD><TD ></TD></TR></TABLE>>]
+						rank=same
+						HostC [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD  BORDER="0" > </TD><TD BGCOLOR="#4a69bd" COLSPAN="5" ROWSPAN="2"> <FONT COLOR="#ffffff">HostC</FONT></TD><TD  BORDER="0" ></TD></TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" ></TD> </TR><TR><TD BORDER="0" ></TD><TD BORDER="0" ></TD><TD BORDER="0" ></TD><TD BORDER="0" ></TD><TD BORDER="0" ></TD><TD BORDER="0" ></TD><TD BORDER="0" ></TD></TR></TABLE>>]
+						Host2 [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD  BORDER="0" > </TD><TD BGCOLOR="#4a69bd" COLSPAN="5" ROWSPAN="2"> <FONT COLOR="#ffffff">Host2</FONT></TD><TD  BORDER="0" ></TD></TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" ></TD> </TR><TR><TD BORDER="0" ></TD><TD BORDER="0" ></TD><TD BORDER="0" ></TD><TD BORDER="0" ></TD><TD BORDER="0" ></TD><TD BORDER="0" ></TD><TD BORDER="0" ></TD></TR></TABLE>>]
 					}
 				}
 			}
