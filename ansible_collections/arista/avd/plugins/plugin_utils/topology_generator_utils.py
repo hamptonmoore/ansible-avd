@@ -166,10 +166,12 @@ def create_graph_dict(output_list, nodes=None, node_neighbour_dict=None):
                 node_neighbour_dict[node["name"]] = neighbours
         if "groups" in group and group["groups"]:
             create_graph_dict(group["groups"], nodes, node_neighbour_dict)
+     
     return nodes, node_neighbour_dict
 
 
 def find_node_levels(graph, start_node, node_list):
+
     """
     Function to determine level of each node starting from start_node using BFS algorithm
     Args:
@@ -182,6 +184,7 @@ def find_node_levels(graph, start_node, node_list):
     # array to store level of each node
     node_level_dict = {}
     marked = {node: False for node in node_list}
+
     # create a queue
     que = queue.Queue()
     # enqueue element x
@@ -195,14 +198,14 @@ def find_node_levels(graph, start_node, node_list):
     # do until queue is empty
     while not que.empty():
         # get the first element of queue
-        start_node = que.get()
+        start_node = que.get()       
         # traverse neighbors of node start_node
         if start_node in graph:
             for i in graph[start_node]:
                 # neighbor is neighbor of node start_node
-                neighbor = i["neighborDevice"]
+                neighbor = i["neighborDevice"]                            
                 # if neighbor is not marked already
-                if neighbor in marked and not marked[neighbor]:
+                if neighbor in marked.keys() and not marked[neighbor]:
                     # enqueue neighbor in queue
                     que.put(neighbor)
                     # level of neighbor is level of start_node + 1
@@ -257,18 +260,80 @@ def draw_nested_subgraphs(input_data, level_dict, graph_obj, undefined_rank_node
                             inner_subgraph.attr(rank="same")
                             # inner_subgraph.attr(rankdir="LR")
                             for node in nodes:
-                                node_ports = node_port_val[node]
+                                if node not in undefined_rank_nodes:
+                                    node_ports = node_port_val[node]
 
-                                node_table = '<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4">'
+                                    node_table = '<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4">'
 
-                                # top
-                                port_len = len(node_ports["top"])
+                                    # top
+                                    port_len = len(node_ports["top"])
 
-                                if port_len != 0:
+                                    if port_len != 0:
 
+                                        node_table = node_table + "<TR>"
+
+                                        # port_len = len(node_ports["top"])
+
+                                        port_col = [0] * column_num
+
+                                        if port_len % 2 != 0:
+                                            port_start = column_num / (port_len * 2)
+                                        else:
+                                            if port_len == 0:
+                                                port_start = column_num / (port_len + 2)
+                                            else:
+                                                port_start = column_num / (port_len)
+
+                                        port_start = int(port_start)
+
+                                        node_ports["top"].sort()
+                                        for port_pos in range(port_start, port_len + port_start):
+                                            port_col[port_pos] = node_ports["top"][port_pos - port_start]
+
+                                        for port_val in port_col:
+                                            port_val = str(port_val).replace(" ", "").replace("0", "")
+                                            if port_val == 0 or port_val == "":
+                                                node_table = node_table + "<TD BORDER=\"0\" > </TD>"
+                                            else:
+                                                node_table = node_table + "<TD" + ' PORT="' + str(port_val) + '"' + ">" + str(port_val) + "</TD>"
+
+                                        node_table = node_table + "</TR>"
+
+
+                                    #left right
+                                    
+
+                                    if len(node_ports["left"]) == 0 and len(node_ports["right"]) == 0:
+                                        node_table = node_table + "<TR><TD  BORDER=\"0\" > </TD>" + '<TD BGCOLOR="#4a69bd" COLSPAN="' + str(column_num - 2) + '" ROWSPAN="' + str(row_num + 2) +  '"> <FONT COLOR="#ffffff">' + node + "</FONT> </TD><TD  BORDER=\"0\" > </TD></TR>"
+                                        for i in range(row_num+1):
+                                            node_table = node_table + "<TR> <TD  BORDER=\"0\" > </TD><TD BORDER=\"0\" > </TD> </TR>"
+
+                                    #left
+                                    if len(node_ports["left"]) > 0:
+                                        node_table = node_table + "<TR><TD BORDER=\"0\" > </TD>" + '<TD BGCOLOR="#4a69bd" COLSPAN="' + str(column_num - 2) + '" ROWSPAN="' + str(row_num + 2) +  '"> <FONT COLOR="#ffffff">' + node + "</FONT> </TD><TD  BORDER=\"0\" > </TD></TR>"
+                                        
+                                        if len(node_ports["left"]) > 1:
+                                            for i in range(row_num):
+                                                node_table = node_table + "<TR> <TD PORT=\""+ node_ports["left"][i]  +"\" > " + node_ports["left"][i] + "</TD><TD BORDER=\"0\" > </TD> </TR>"
+                                            node_table = node_table + "<TR> <TD  BORDER=\"0\" > </TD><TD BORDER=\"0\" > </TD> </TR>"    
+                                        else:    
+                                            node_table = node_table + "<TR> <TD  BORDER=\"0\" > </TD><TD BORDER=\"0\" > </TD> </TR>"
+
+                                    #right
+                                    if len(node_ports["right"]) > 0:
+                                        node_table = node_table + "<TR><TD  BORDER=\"0\" >  </TD>" + '<TD BGCOLOR="#4a69bd" COLSPAN="' + str(column_num - 2) + '" ROWSPAN="' + str(row_num + 2) +  '"> <FONT COLOR="#ffffff">' + node + "</FONT> </TD><TD BORDER=\"0\" > </TD></TR>"
+                                        
+                                        if len(node_ports["right"]) > 1:
+                                            for i in range(row_num):
+                                                node_table = node_table + "<TR> <TD BORDER=\"0\" > </TD> <TD PORT=\""+ node_ports["right"][i]  +"\" > " + node_ports["right"][i] + "</TD></TR>"
+                                            node_table = node_table + "<TR> <TD  BORDER=\"0\" > </TD><TD BORDER=\"0\" > </TD> </TR>"
+                                        else:    
+                                            node_table = node_table + "<TR> <TD  BORDER=\"0\" > </TD><TD BORDER=\"0\" > </TD> </TR>"
+
+                                    # bottom
                                     node_table = node_table + "<TR>"
 
-                                    # port_len = len(node_ports["top"])
+                                    port_len = len(node_ports["bottom"])
 
                                     port_col = [0] * column_num
 
@@ -279,81 +344,24 @@ def draw_nested_subgraphs(input_data, level_dict, graph_obj, undefined_rank_node
                                             port_start = column_num / (port_len + 2)
                                         else:
                                             port_start = column_num / (port_len)
-
                                     port_start = int(port_start)
 
-                                    node_ports["top"].sort()
+                                    node_ports["bottom"].sort()
                                     for port_pos in range(port_start, port_len + port_start):
-                                        port_col[port_pos] = node_ports["top"][port_pos - port_start]
+                                        port_col[port_pos] = node_ports["bottom"][port_pos - port_start]
 
                                     for port_val in port_col:
                                         port_val = str(port_val).replace(" ", "").replace("0", "")
                                         if port_val == 0 or port_val == "":
-                                            node_table = node_table + "<TD BORDER=\"0\" ></TD>"
+                                            node_table = node_table + "<TD BORDER=\"0\" > </TD>"
                                         else:
                                             node_table = node_table + "<TD" + ' PORT="' + str(port_val) + '"' + ">" + str(port_val) + "</TD>"
 
-                                    node_table = node_table + "</TR>"
+                                    node_table = node_table + "</TR></TABLE>>"
+                                    node_table = node_table.replace("\n", "")
 
-                                #left right
-                                if len(node_ports["left"]) == 0 and len(node_ports["right"]) == 0:
-                                    node_table = node_table + "<TR><TD  BORDER=\"0\" > </TD>" + '<TD BGCOLOR="#4a69bd" COLSPAN="' + str(column_num - 2) + '" ROWSPAN="2"> <FONT COLOR="#ffffff">' + node + "</FONT></TD><TD  BORDER=\"0\" ></TD></TR>"
-                                    node_table = node_table + "<TR> <TD  BORDER=\"0\" > </TD><TD BORDER=\"0\" ></TD> </TR>"
-
-                                #left
-                                if len(node_ports["left"]) > 0:
-                                    node_table = node_table + "<TR><TD PORT=\""+ node_ports["left"][0]  +"\" > " + node_ports["left"][0]  + " </TD>" + '<TD BGCOLOR="#4a69bd" COLSPAN="' + str(column_num - 2) + '" ROWSPAN="' + str(row_num + 1) +  '"> <FONT COLOR="#ffffff">' + node + "</FONT></TD><TD  BORDER=\"0\" ></TD></TR>"
-                                    
-                                    if len(node_ports["left"]) > 1:
-                                        for i in range(1,row_num):
-                                            node_table = node_table + "<TR> <TD  BORDER=\"0\" > </TD><TD BORDER=\"0\" ></TD> </TR>"
-                                            node_table = node_table + "<TR> <TD PORT=\""+ node_ports["left"][i]  +"\" > " + node_ports["left"][i] + "</TD><TD BORDER=\"0\" ></TD> </TR>"
-                                    else:    
-                                        node_table = node_table + "<TR> <TD  BORDER=\"0\" > </TD><TD BORDER=\"0\" ></TD> </TR>"
-
-                                #right
-                                if len(node_ports["right"]) > 0:
-                                    node_table = node_table + "<TR><TD  BORDER=\"0\" >  </TD>" + '<TD BGCOLOR="#4a69bd" COLSPAN="' + str(column_num - 2) + '" ROWSPAN="' + str(row_num + 1) +  '"> <FONT COLOR="#ffffff">' + node + "</FONT></TD><TD PORT=\""+ node_ports["right"][0]  +"\" >" + node_ports["right"][0]  + "</TD></TR>"
-                                    
-                                    if len(node_ports["right"]) > 1:
-                                        for i in range(1,row_num):
-                                            node_table = node_table + "<TR> <TD  BORDER=\"0\" > </TD><TD BORDER=\"0\" ></TD> </TR>"
-                                            node_table = node_table + "<TR> <TD BORDER=\"0\" ></TD> <TD PORT=\""+ node_ports["right"][i]  +"\" > " + node_ports["right"][i] + "</TD></TR>"
-                                    else:    
-                                        node_table = node_table + "<TR> <TD  BORDER=\"0\" > </TD><TD BORDER=\"0\" ></TD> </TR>"
-
-                                # bottom
-                                node_table = node_table + "<TR>"
-
-                                port_len = len(node_ports["bottom"])
-
-                                port_col = [0] * column_num
-
-                                if port_len % 2 != 0:
-                                    port_start = column_num / (port_len * 2)
-                                else:
-                                    if port_len == 0:
-                                        port_start = column_num / (port_len + 2)
-                                    else:
-                                        port_start = column_num / (port_len)
-                                port_start = int(port_start)
-
-                                node_ports["bottom"].sort()
-                                for port_pos in range(port_start, port_len + port_start):
-                                    port_col[port_pos] = node_ports["bottom"][port_pos - port_start]
-
-                                for port_val in port_col:
-                                    port_val = str(port_val).replace(" ", "").replace("0", "")
-                                    if port_val == 0 or port_val == "":
-                                        node_table = node_table + "<TD BORDER=\"0\" ></TD>"
-                                    else:
-                                        node_table = node_table + "<TD" + ' PORT="' + str(port_val) + '"' + ">" + str(port_val) + "</TD>"
-
-                                node_table = node_table + "</TR></TABLE>>"
-                                node_table = node_table.replace("\n", "")
-
-                                inner_subgraph.node(node, node_table)
-                                # inner_subgraph.node("hello")
+                                    inner_subgraph.node(node, node_table)
+                                    # inner_subgraph.node("hello")
 
 
             if "groups" in data and data["groups"]:

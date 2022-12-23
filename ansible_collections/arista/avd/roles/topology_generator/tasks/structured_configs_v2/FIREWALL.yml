@@ -1,8 +1,5 @@
 diagram_groups:
   - 'name': 'fabric_name'
-  - 'name': 'dc_name1'
-  - 'name': 'pod_name2'
-  - 'name': 'pod_name2.5'
 static_routes:
 - vrf: MGMT
   destination_address_prefix: 0.0.0.0/0
@@ -86,6 +83,30 @@ port_channel_interfaces:
     mode: trunk
     mlag: 1
 ethernet_interfaces:
+  Ethernet4:
+    peer: SPINE1
+    peer_interface: Ethernet5
+    peer_type: firewall
+    description: FIREWALL_Eth1
+    type: switched
+    shutdown: false
+    mode: trunk
+    vlans: 10,20,30
+    channel_group:
+      id: 5
+      mode: active
+  Ethernet6:
+    peer: SPINE2
+    peer_interface: Ethernet5
+    peer_type: firewall
+    description: FIREWALL_Eth1
+    type: switched
+    shutdown: false
+    mode: trunk
+    vlans: 10,20,30
+    channel_group:
+      id: 5
+      mode: active 
 mlag_configuration:
   domain_id: RACK1
   local_interface: Vlan4094
