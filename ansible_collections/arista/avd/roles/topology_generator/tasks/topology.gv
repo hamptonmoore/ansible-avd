@@ -35,8 +35,8 @@ graph parent {
 					labelloc=t
 					{
 						rank=same
-						HostA [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD  BORDER="0" > </TD><TD BGCOLOR="#4a69bd" COLSPAN="5" ROWSPAN="4"> <FONT COLOR="#ffffff">HostA</FONT> </TD><TD  BORDER="0" > </TD></TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" > </TD> </TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" > </TD> </TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" > </TD> </TR><TR><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD></TR></TABLE>>]
-						HostB [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD  BORDER="0" > </TD><TD BGCOLOR="#4a69bd" COLSPAN="5" ROWSPAN="4"> <FONT COLOR="#ffffff">HostB</FONT> </TD><TD  BORDER="0" > </TD></TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" > </TD> </TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" > </TD> </TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" > </TD> </TR><TR><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD></TR></TABLE>>]
+						HostA [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#4a69bd" HEIGHT="70" WIDTH="40"> <FONT COLOR="#ffffff">HostA</FONT> </TD></TR></TABLE>>]
+						HostB [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#4a69bd" HEIGHT="70" WIDTH="40"> <FONT COLOR="#ffffff">HostB</FONT> </TD></TR></TABLE>>]
 					}
 				}
 			}
@@ -55,8 +55,8 @@ graph parent {
 					labelloc=t
 					{
 						rank=same
-						HostC [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD  BORDER="0" > </TD><TD BGCOLOR="#4a69bd" COLSPAN="5" ROWSPAN="4"> <FONT COLOR="#ffffff">HostC</FONT> </TD><TD  BORDER="0" > </TD></TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" > </TD> </TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" > </TD> </TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" > </TD> </TR><TR><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD></TR></TABLE>>]
-						Host2 [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD  BORDER="0" > </TD><TD BGCOLOR="#4a69bd" COLSPAN="5" ROWSPAN="4"> <FONT COLOR="#ffffff">Host2</FONT> </TD><TD  BORDER="0" > </TD></TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" > </TD> </TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" > </TD> </TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" > </TD> </TR><TR><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD></TR></TABLE>>]
+						HostC [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#4a69bd" HEIGHT="70" WIDTH="40"> <FONT COLOR="#ffffff">HostC</FONT> </TD></TR></TABLE>>]
+						Host2 [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#4a69bd" HEIGHT="70" WIDTH="40"> <FONT COLOR="#ffffff">Host2</FONT> </TD></TR></TABLE>>]
 					}
 				}
 			}
