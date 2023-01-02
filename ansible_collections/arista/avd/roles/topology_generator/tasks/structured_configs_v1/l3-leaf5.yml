@@ -326,8 +326,8 @@ port_channel_interfaces:
     - LEAF_PEER_L3
     - MLAG
 ethernet_interfaces:
-  Ethernet5:
-    peer: l2-leaf2
+  Ethernet1:
+    peer: spine4
     peer_interface: Ethernet5
     peer_type: mlag_peer
     description: MLAG_PEER_DC1-BL1B_Ethernet5
@@ -336,9 +336,9 @@ ethernet_interfaces:
     channel_group:
       id: 5
       mode: active
-  Ethernet6:
-    peer: l3-leaf4
-    peer_interface: Ethernet6
+  Ethernet2:
+    peer: spine5
+    peer_interface: Ethernet5
     peer_type: mlag_peer
     description: MLAG_PEER_DC1-BL1B_Ethernet6
     type: switched
@@ -346,6 +346,12 @@ ethernet_interfaces:
     channel_group:
       id: 5
       mode: active
+  Ethernet47:
+    peer: l3-leaf4
+    peer_interface: Ethernet47
+  Ethernet48:
+    peer: l3-leaf4
+    peer_interface: Ethernet48
 mlag_configuration:
   domain_id: DC1_BL1
   local_interface: Vlan4094

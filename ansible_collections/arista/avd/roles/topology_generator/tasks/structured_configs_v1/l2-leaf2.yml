@@ -326,7 +326,12 @@ port_channel_interfaces:
     - LEAF_PEER_L3
     - MLAG
 ethernet_interfaces:
-
+  Ethernet1:
+    peer: l3-leaf4
+    peer_interface: Ethernet3
+  Ethernet2:
+    peer: l3-leaf3
+    peer_interface: Ethernet3
 mlag_configuration:
   domain_id: DC1_BL1
   local_interface: Vlan4094

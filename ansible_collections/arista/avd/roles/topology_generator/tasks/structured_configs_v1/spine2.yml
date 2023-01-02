@@ -326,9 +326,9 @@ port_channel_interfaces:
     - LEAF_PEER_L3
     - MLAG
 ethernet_interfaces:
-  Ethernet5:
+  Ethernet3:
     peer: l3-leaf1
-    peer_interface: Ethernet5
+    peer_interface: Ethernet2
     peer_type: mlag_peer
     description: MLAG_PEER_DC1-BL1B_Ethernet5
     type: switched
@@ -336,9 +336,9 @@ ethernet_interfaces:
     channel_group:
       id: 5
       mode: active
-  Ethernet6:
+  Ethernet4:
     peer: l3-leaf2
-    peer_interface: Ethernet6
+    peer_interface: Ethernet2
     peer_type: mlag_peer
     description: MLAG_PEER_DC1-BL1B_Ethernet6
     type: switched

@@ -135,6 +135,13 @@ ethernet_interfaces:
     mode: access
     vlans: 10
     spanning_tree_portfast: edge
+  Ethernet50:
+    peer: LEAF2
+    peer_interface: Ethernet50
+    peer_type: spine
+    description: SPINE2_Ethernet3
+    type: switched
+    shutdown: false     
 mlag_configuration:
   domain_id: RACK2
   local_interface: Vlan4094

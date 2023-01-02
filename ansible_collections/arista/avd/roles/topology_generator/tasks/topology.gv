@@ -2,23 +2,19 @@ graph parent {
 	graph [splines=line]
 	node [fontsize=" 8pt" shape=plaintext]
 	edge [center=true concentrate=true fontname=arial fontsize=6 labelfloat=false minlen=2]
-	rank=min
+	rank=same
 	ranksep=0.7
 	subgraph cluster_child_fabric_name {
 		label=fabric_name
 		labelloc=t
-		{
-			rank=same
-			FIREWALL [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD  BORDER="0" > </TD><TD BGCOLOR="#4a69bd" COLSPAN="5" ROWSPAN="4"> <FONT COLOR="#ffffff">FIREWALL</FONT> </TD><TD  BORDER="0" > </TD></TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" > </TD> </TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" > </TD> </TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" > </TD> </TR><TR><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD PORT="4">4</TD><TD PORT="6">6</TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD></TR></TABLE>>]
-		}
 		ranksep=0.7
 		subgraph cluster_child_dc_name1 {
 			label=dc_name1
 			labelloc=t
 			{
 				rank=same
-				SPINE1 [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD PORT="5">5</TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD></TR><TR><TD  BORDER="0" >  </TD><TD BGCOLOR="#4a69bd" COLSPAN="5" ROWSPAN="4"> <FONT COLOR="#ffffff">SPINE1</FONT> </TD><TD BORDER="0" > </TD></TR><TR> <TD BORDER="0" > </TD> <TD PORT="47" > 47</TD></TR><TR> <TD BORDER="0" > </TD> <TD PORT="48" > 48</TD></TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" > </TD> </TR><TR><TD BORDER="0" > </TD><TD PORT="1">1</TD><TD PORT="2">2</TD><TD PORT="3">3</TD><TD PORT="4">4</TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD></TR></TABLE>>]
-				SPINE2 [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD PORT="5">5</TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD></TR><TR><TD BORDER="0" > </TD><TD BGCOLOR="#4a69bd" COLSPAN="5" ROWSPAN="4"> <FONT COLOR="#ffffff">SPINE2</FONT> </TD><TD  BORDER="0" > </TD></TR><TR> <TD PORT="47" > 47</TD><TD BORDER="0" > </TD> </TR><TR> <TD PORT="48" > 48</TD><TD BORDER="0" > </TD> </TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" > </TD> </TR><TR><TD BORDER="0" > </TD><TD PORT="1">1</TD><TD PORT="2">2</TD><TD PORT="3">3</TD><TD PORT="4">4</TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD></TR></TABLE>>]
+				"super-spine1" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD  BORDER="0" > </TD><TD BGCOLOR="#4a69bd" COLSPAN="5" ROWSPAN="4"> <FONT COLOR="#ffffff">super-spine1</FONT> </TD><TD  BORDER="0" > </TD></TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" > </TD> </TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" > </TD> </TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" > </TD> </TR><TR><TD BORDER="0" > </TD><TD PORT="1">1</TD><TD PORT="2">2</TD><TD PORT="3">3</TD><TD PORT="4">4</TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD></TR></TABLE>>]
+				"super-spine2" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD  BORDER="0" > </TD><TD BGCOLOR="#4a69bd" COLSPAN="5" ROWSPAN="4"> <FONT COLOR="#ffffff">super-spine2</FONT> </TD><TD  BORDER="0" > </TD></TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" > </TD> </TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" > </TD> </TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" > </TD> </TR><TR><TD BORDER="0" > </TD><TD PORT="1">1</TD><TD PORT="2">2</TD><TD PORT="3">3</TD><TD PORT="4">4</TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD></TR></TABLE>>]
 			}
 			ranksep=0.7
 			subgraph cluster_child_pod_name1 {
@@ -26,18 +22,17 @@ graph parent {
 				labelloc=t
 				{
 					rank=same
-					LEAF1 [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD PORT="1">1</TD><TD PORT="2">2</TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD></TR><TR><TD  BORDER="0" >  </TD><TD BGCOLOR="#4a69bd" COLSPAN="5" ROWSPAN="4"> <FONT COLOR="#ffffff">LEAF1</FONT> </TD><TD BORDER="0" > </TD></TR><TR> <TD BORDER="0" > </TD> <TD PORT="47" > 47</TD></TR><TR> <TD BORDER="0" > </TD> <TD PORT="48" > 48</TD></TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" > </TD> </TR><TR><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD PORT="3">3</TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD></TR></TABLE>>]
-					LEAF2 [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD PORT="1">1</TD><TD PORT="2">2</TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD></TR><TR><TD BORDER="0" > </TD><TD BGCOLOR="#4a69bd" COLSPAN="5" ROWSPAN="4"> <FONT COLOR="#ffffff">LEAF2</FONT> </TD><TD  BORDER="0" > </TD></TR><TR> <TD PORT="47" > 47</TD><TD BORDER="0" > </TD> </TR><TR> <TD PORT="48" > 48</TD><TD BORDER="0" > </TD> </TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" > </TD> </TR><TR><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD PORT="3">3</TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD></TR></TABLE>>]
+					spine1 [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD PORT="1">1</TD><TD PORT="2">2</TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD></TR><TR><TD  BORDER="0" > </TD><TD BGCOLOR="#4a69bd" COLSPAN="5" ROWSPAN="4"> <FONT COLOR="#ffffff">spine1</FONT> </TD><TD  BORDER="0" > </TD></TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" > </TD> </TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" > </TD> </TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" > </TD> </TR><TR><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD PORT="3">3</TD><TD PORT="4">4</TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD></TR></TABLE>>]
+					spine2 [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD PORT="1">1</TD><TD PORT="2">2</TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD></TR><TR><TD  BORDER="0" > </TD><TD BGCOLOR="#4a69bd" COLSPAN="5" ROWSPAN="4"> <FONT COLOR="#ffffff">spine2</FONT> </TD><TD  BORDER="0" > </TD></TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" > </TD> </TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" > </TD> </TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" > </TD> </TR><TR><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD PORT="3">3</TD><TD PORT="4">4</TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD></TR></TABLE>>]
 				}
-				ranksep=0.7
-				subgraph "cluster_child_pod_name1.5" {
-					label="pod_name1.5"
-					labelloc=t
-					{
-						rank=same
-						HostA [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#4a69bd" HEIGHT="70" WIDTH="40"> <FONT COLOR="#ffffff">HostA</FONT> </TD></TR></TABLE>>]
-						HostB [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#4a69bd" HEIGHT="70" WIDTH="40"> <FONT COLOR="#ffffff">HostB</FONT> </TD></TR></TABLE>>]
-					}
+				{
+					rank=same
+					"l3-leaf1" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD PORT="1">1</TD><TD PORT="2">2</TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD></TR><TR><TD  BORDER="0" > </TD><TD BGCOLOR="#4a69bd" COLSPAN="5" ROWSPAN="4"> <FONT COLOR="#ffffff">l3-leaf1</FONT> </TD><TD  BORDER="0" > </TD></TR><TR> <TD  BORDER="0" > </TD><TD PORT="47">47</TD></TR><TR> <TD  BORDER="0" > </TD><TD PORT="48">48</TD></TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" > </TD> </TR><TR><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD PORT="3">3</TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD></TR></TABLE>>]
+					"l3-leaf2" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD PORT="1">1</TD><TD PORT="2">2</TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD></TR><TR><TD  BORDER="0" > </TD><TD BGCOLOR="#4a69bd" COLSPAN="5" ROWSPAN="4"> <FONT COLOR="#ffffff">l3-leaf2</FONT> </TD><TD  BORDER="0" > </TD></TR><TR><TD PORT="47">47</TD><TD PORT="50">50</TD></TR><TR><TD PORT="48">48</TD><TD BORDER="0" > </TD> </TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" > </TD> </TR><TR><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD PORT="3">3</TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD></TR></TABLE>>]
+				}
+				{
+					rank=same
+					"l2-leaf1" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD PORT="1">1</TD><TD PORT="2">2</TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD></TR><TR><TD  BORDER="0" > </TD><TD BGCOLOR="#4a69bd" COLSPAN="5" ROWSPAN="4"> <FONT COLOR="#ffffff">l2-leaf1</FONT> </TD><TD  BORDER="0" > </TD></TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" > </TD> </TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" > </TD> </TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" > </TD> </TR></TABLE>>]
 				}
 			}
 			ranksep=0.7
@@ -46,40 +41,118 @@ graph parent {
 				labelloc=t
 				{
 					rank=same
-					LEAF3 [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD PORT="1">1</TD><TD PORT="2">2</TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD></TR><TR><TD  BORDER="0" >  </TD><TD BGCOLOR="#4a69bd" COLSPAN="5" ROWSPAN="4"> <FONT COLOR="#ffffff">LEAF3</FONT> </TD><TD BORDER="0" > </TD></TR><TR> <TD BORDER="0" > </TD> <TD PORT="47" > 47</TD></TR><TR> <TD BORDER="0" > </TD> <TD PORT="48" > 48</TD></TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" > </TD> </TR><TR><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD PORT="3">3</TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD></TR></TABLE>>]
-					LEAF4 [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD PORT="1">1</TD><TD PORT="2">2</TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD></TR><TR><TD BORDER="0" > </TD><TD BGCOLOR="#4a69bd" COLSPAN="5" ROWSPAN="4"> <FONT COLOR="#ffffff">LEAF4</FONT> </TD><TD  BORDER="0" > </TD></TR><TR> <TD PORT="47" > 47</TD><TD BORDER="0" > </TD> </TR><TR> <TD PORT="48" > 48</TD><TD BORDER="0" > </TD> </TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" > </TD> </TR><TR><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD PORT="3">3</TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD></TR></TABLE>>]
 				}
-				ranksep=0.7
-				subgraph "cluster_child_pod_name2.5" {
-					label="pod_name2.5"
-					labelloc=t
-					{
-						rank=same
-						HostC [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#4a69bd" HEIGHT="70" WIDTH="40"> <FONT COLOR="#ffffff">HostC</FONT> </TD></TR></TABLE>>]
-						Host2 [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#4a69bd" HEIGHT="70" WIDTH="40"> <FONT COLOR="#ffffff">Host2</FONT> </TD></TR></TABLE>>]
-					}
+				{
+					rank=same
+					spine4 [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD PORT="1">1</TD><TD PORT="2">2</TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD></TR><TR><TD  BORDER="0" > </TD><TD BGCOLOR="#4a69bd" COLSPAN="5" ROWSPAN="4"> <FONT COLOR="#ffffff">spine4</FONT> </TD><TD  BORDER="0" > </TD></TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" > </TD> </TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" > </TD> </TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" > </TD> </TR><TR><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD PORT="3">3</TD><TD PORT="4">4</TD><TD PORT="5">5</TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD></TR></TABLE>>]
+					spine5 [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD PORT="1">1</TD><TD PORT="2">2</TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD></TR><TR><TD  BORDER="0" > </TD><TD BGCOLOR="#4a69bd" COLSPAN="5" ROWSPAN="4"> <FONT COLOR="#ffffff">spine5</FONT> </TD><TD  BORDER="0" > </TD></TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" > </TD> </TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" > </TD> </TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" > </TD> </TR><TR><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD PORT="3">3</TD><TD PORT="4">4</TD><TD PORT="5">5</TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD></TR></TABLE>>]
+				}
+				{
+					rank=same
+					"l3-leaf3" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD PORT="1">1</TD><TD PORT="2">2</TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD></TR><TR><TD  BORDER="0" > </TD><TD BGCOLOR="#4a69bd" COLSPAN="5" ROWSPAN="4"> <FONT COLOR="#ffffff">l3-leaf3</FONT> </TD><TD  BORDER="0" > </TD></TR><TR><TD PORT="50">50</TD><TD BORDER="0" > </TD> </TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" > </TD> </TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" > </TD> </TR></TABLE>>]
+					"l3-leaf4" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD PORT="1">1</TD><TD PORT="2">2</TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD></TR><TR><TD  BORDER="0" > </TD><TD BGCOLOR="#4a69bd" COLSPAN="5" ROWSPAN="4"> <FONT COLOR="#ffffff">l3-leaf4</FONT> </TD><TD  BORDER="0" > </TD></TR><TR> <TD  BORDER="0" > </TD><TD PORT="47">47</TD></TR><TR> <TD  BORDER="0" > </TD><TD PORT="48">48</TD></TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" > </TD> </TR></TABLE>>]
+					"l3-leaf5" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD PORT="1">1</TD><TD PORT="2">2</TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD></TR><TR><TD  BORDER="0" > </TD><TD BGCOLOR="#4a69bd" COLSPAN="5" ROWSPAN="4"> <FONT COLOR="#ffffff">l3-leaf5</FONT> </TD><TD  BORDER="0" > </TD></TR><TR><TD PORT="47">47</TD><TD BORDER="0" > </TD> </TR><TR><TD PORT="48">48</TD><TD BORDER="0" > </TD> </TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" > </TD> </TR></TABLE>>]
+				}
+			}
+		}
+		ranksep=0.7
+		subgraph cluster_child_dc_name2 {
+			label=dc_name2
+			labelloc=t
+			{
+				rank=same
+				"super-spine3" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD  BORDER="0" > </TD><TD BGCOLOR="#4a69bd" COLSPAN="5" ROWSPAN="4"> <FONT COLOR="#ffffff">super-spine3</FONT> </TD><TD  BORDER="0" > </TD></TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" > </TD> </TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" > </TD> </TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" > </TD> </TR><TR><TD BORDER="0" > </TD><TD PORT="1">1</TD><TD PORT="2">2</TD><TD PORT="3">3</TD><TD PORT="4">4</TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD></TR></TABLE>>]
+				"super-spine4" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD  BORDER="0" > </TD><TD BGCOLOR="#4a69bd" COLSPAN="5" ROWSPAN="4"> <FONT COLOR="#ffffff">super-spine4</FONT> </TD><TD  BORDER="0" > </TD></TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" > </TD> </TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" > </TD> </TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" > </TD> </TR><TR><TD BORDER="0" > </TD><TD PORT="1">1</TD><TD PORT="2">2</TD><TD PORT="3">3</TD><TD PORT="4">4</TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD></TR></TABLE>>]
+			}
+			ranksep=0.7
+			subgraph cluster_child_pod_name3 {
+				label=pod_name3
+				labelloc=t
+				{
+					rank=same
+					spine6 [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD PORT="1">1</TD><TD PORT="2">2</TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD></TR><TR><TD  BORDER="0" > </TD><TD BGCOLOR="#4a69bd" COLSPAN="5" ROWSPAN="4"> <FONT COLOR="#ffffff">spine6</FONT> </TD><TD  BORDER="0" > </TD></TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" > </TD> </TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" > </TD> </TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" > </TD> </TR><TR><TD BORDER="0" > </TD><TD PORT="3">3</TD><TD PORT="4">4</TD><TD PORT="5">5</TD><TD PORT="6">6</TD><TD PORT="7">7</TD><TD BORDER="0" > </TD></TR></TABLE>>]
+					spine7 [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD PORT="1">1</TD><TD PORT="2">2</TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD></TR><TR><TD  BORDER="0" > </TD><TD BGCOLOR="#4a69bd" COLSPAN="5" ROWSPAN="4"> <FONT COLOR="#ffffff">spine7</FONT> </TD><TD  BORDER="0" > </TD></TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" > </TD> </TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" > </TD> </TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" > </TD> </TR><TR><TD BORDER="0" > </TD><TD PORT="3">3</TD><TD PORT="4">4</TD><TD PORT="5">5</TD><TD PORT="6">6</TD><TD PORT="7">7</TD><TD BORDER="0" > </TD></TR></TABLE>>]
+					spine8 [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD PORT="1">1</TD><TD PORT="2">2</TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD></TR><TR><TD  BORDER="0" > </TD><TD BGCOLOR="#4a69bd" COLSPAN="5" ROWSPAN="4"> <FONT COLOR="#ffffff">spine8</FONT> </TD><TD  BORDER="0" > </TD></TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" > </TD> </TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" > </TD> </TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" > </TD> </TR><TR><TD BORDER="0" > </TD><TD PORT="3">3</TD><TD PORT="4">4</TD><TD PORT="5">5</TD><TD PORT="6">6</TD><TD PORT="7">7</TD><TD BORDER="0" > </TD></TR></TABLE>>]
+					spine9 [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD PORT="1">1</TD><TD PORT="2">2</TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD></TR><TR><TD  BORDER="0" > </TD><TD BGCOLOR="#4a69bd" COLSPAN="5" ROWSPAN="4"> <FONT COLOR="#ffffff">spine9</FONT> </TD><TD  BORDER="0" > </TD></TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" > </TD> </TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" > </TD> </TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" > </TD> </TR><TR><TD BORDER="0" > </TD><TD PORT="3">3</TD><TD PORT="4">4</TD><TD PORT="5">5</TD><TD PORT="6">6</TD><TD PORT="7">7</TD><TD BORDER="0" > </TD></TR></TABLE>>]
+				}
+				{
+					rank=same
+					"l3-leaf6" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BORDER="0" > </TD><TD PORT="1">1</TD><TD PORT="2">2</TD><TD PORT="3">3</TD><TD PORT="4">4</TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD></TR><TR><TD  BORDER="0" > </TD><TD BGCOLOR="#4a69bd" COLSPAN="5" ROWSPAN="4"> <FONT COLOR="#ffffff">l3-leaf6</FONT> </TD><TD  BORDER="0" > </TD></TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" > </TD> </TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" > </TD> </TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" > </TD> </TR></TABLE>>]
+					"l3-leaf7" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BORDER="0" > </TD><TD PORT="1">1</TD><TD PORT="2">2</TD><TD PORT="3">3</TD><TD PORT="4">4</TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD></TR><TR><TD  BORDER="0" > </TD><TD BGCOLOR="#4a69bd" COLSPAN="5" ROWSPAN="4"> <FONT COLOR="#ffffff">l3-leaf7</FONT> </TD><TD  BORDER="0" > </TD></TR><TR> <TD  BORDER="0" > </TD><TD PORT="47">47</TD></TR><TR> <TD  BORDER="0" > </TD><TD PORT="48">48</TD></TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" > </TD> </TR></TABLE>>]
+					"l3-leaf8" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BORDER="0" > </TD><TD PORT="1">1</TD><TD PORT="2">2</TD><TD PORT="3">3</TD><TD PORT="4">4</TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD></TR><TR><TD  BORDER="0" > </TD><TD BGCOLOR="#4a69bd" COLSPAN="5" ROWSPAN="4"> <FONT COLOR="#ffffff">l3-leaf8</FONT> </TD><TD  BORDER="0" > </TD></TR><TR><TD PORT="47">47</TD><TD BORDER="0" > </TD> </TR><TR><TD PORT="48">48</TD><TD BORDER="0" > </TD> </TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" > </TD> </TR></TABLE>>]
+					"l3-leaf9" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BORDER="0" > </TD><TD PORT="1">1</TD><TD PORT="2">2</TD><TD PORT="3">3</TD><TD PORT="4">4</TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD></TR><TR><TD  BORDER="0" > </TD><TD BGCOLOR="#4a69bd" COLSPAN="5" ROWSPAN="4"> <FONT COLOR="#ffffff">l3-leaf9</FONT> </TD><TD  BORDER="0" > </TD></TR><TR> <TD  BORDER="0" > </TD><TD PORT="47">47</TD></TR><TR> <TD  BORDER="0" > </TD><TD PORT="48">48</TD></TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" > </TD> </TR><TR><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD PORT="5">5</TD><TD PORT="6">6</TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD></TR></TABLE>>]
+					"l3-leaf10" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BORDER="0" > </TD><TD PORT="1">1</TD><TD PORT="2">2</TD><TD PORT="3">3</TD><TD PORT="4">4</TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD></TR><TR><TD  BORDER="0" > </TD><TD BGCOLOR="#4a69bd" COLSPAN="5" ROWSPAN="4"> <FONT COLOR="#ffffff">l3-leaf10</FONT> </TD><TD  BORDER="0" > </TD></TR><TR><TD PORT="47">47</TD><TD BORDER="0" > </TD> </TR><TR><TD PORT="48">48</TD><TD BORDER="0" > </TD> </TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" > </TD> </TR><TR><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD PORT="5">5</TD><TD PORT="6">6</TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD></TR></TABLE>>]
+				}
+				{
+					rank=same
+					"l2-leaf3" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD PORT="1">1</TD><TD PORT="2">2</TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD></TR><TR><TD  BORDER="0" > </TD><TD BGCOLOR="#4a69bd" COLSPAN="5" ROWSPAN="4"> <FONT COLOR="#ffffff">l2-leaf3</FONT> </TD><TD  BORDER="0" > </TD></TR><TR> <TD  BORDER="0" > </TD><TD PORT="47">47</TD></TR><TR> <TD  BORDER="0" > </TD><TD PORT="48">48</TD></TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" > </TD> </TR></TABLE>>]
+					"l2-leaf4" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD><TD PORT="1">1</TD><TD PORT="2">2</TD><TD BORDER="0" > </TD><TD BORDER="0" > </TD></TR><TR><TD  BORDER="0" > </TD><TD BGCOLOR="#4a69bd" COLSPAN="5" ROWSPAN="4"> <FONT COLOR="#ffffff">l2-leaf4</FONT> </TD><TD  BORDER="0" > </TD></TR><TR><TD PORT="47">47</TD><TD BORDER="0" > </TD> </TR><TR><TD PORT="48">48</TD><TD BORDER="0" > </TD> </TR><TR> <TD  BORDER="0" > </TD><TD BORDER="0" > </TD> </TR></TABLE>>]
 				}
 			}
 		}
 	}
-	FIREWALL:4 -- SPINE1:5
-	FIREWALL:6 -- SPINE2:5
-	SPINE2:47 -- SPINE1:47
-	SPINE2:48 -- SPINE1:48
-	SPINE2:1 -- LEAF1:2
-	SPINE2:2 -- LEAF2:2
-	SPINE2:3 -- LEAF3:2
-	SPINE2:4 -- LEAF4:2
-	SPINE1:1 -- LEAF1:1
-	SPINE1:2 -- LEAF2:1
-	SPINE1:3 -- LEAF3:1
-	SPINE1:4 -- LEAF4:1
-	LEAF1:47 -- LEAF2:47
-	LEAF1:48 -- LEAF2:48
-	LEAF1:3 -- HostA
-	LEAF2:3 -- HostB
-	LEAF3:47 -- LEAF4:47
-	LEAF3:48 -- LEAF4:48
-	LEAF3:3 -- HostC
-	LEAF4:3 -- Host2
+	"super-spine1":50 -- "super-spine4":50 [constraint=false]
+	"super-spine1":1 -- spine1:1
+	"super-spine1":2 -- spine2:1
+	"super-spine1":3 -- spine4:1
+	"super-spine1":4 -- spine5:1
+	"super-spine2":1 -- spine1:2
+	"super-spine2":2 -- spine2:2
+	"super-spine2":3 -- spine4:2
+	"super-spine2":4 -- spine5:2
+	spine2:3 -- "l3-leaf1":2
+	spine2:4 -- "l3-leaf2":2
+	"l3-leaf1":3 -- "l2-leaf1":1
+	"l3-leaf1":47 -- "l3-leaf2":47
+	"l3-leaf1":48 -- "l3-leaf2":48
+	spine1:3 -- "l3-leaf1":1
+	spine1:4 -- "l3-leaf2":1
+	"l3-leaf2":50 -- "l3-leaf3":50 [constraint=false]
+	"l3-leaf2":3 -- "l2-leaf1":2
+	"l3-leaf3":1 -- spine4:3
+	"l3-leaf3":2 -- spine5:3
+	spine4:4 -- "l3-leaf4":1
+	spine4:5 -- "l3-leaf5":1
+	spine5:4 -- "l3-leaf4":2
+	spine5:5 -- "l3-leaf5":2
+	"l3-leaf5":47 -- "l3-leaf4":47
+	"l3-leaf5":48 -- "l3-leaf4":48
+	"super-spine3":1 -- spine6:1
+	"super-spine3":2 -- spine7:1
+	"super-spine3":3 -- spine8:1
+	"super-spine3":4 -- spine9:1
+	"super-spine4":1 -- spine6:2
+	"super-spine4":2 -- spine7:2
+	"super-spine4":3 -- spine8:2
+	"super-spine4":4 -- spine9:2
+	"l3-leaf7":47 -- "l3-leaf8":47
+	"l3-leaf7":48 -- "l3-leaf8":48
+	spine7:3 -- "l3-leaf6":2
+	spine7:4 -- "l3-leaf7":2
+	spine7:5 -- "l3-leaf8":2
+	spine7:6 -- "l3-leaf9":2
+	spine7:7 -- "l3-leaf10":2
+	spine6:3 -- "l3-leaf6":1
+	spine6:4 -- "l3-leaf7":1
+	spine6:5 -- "l3-leaf8":1
+	spine6:6 -- "l3-leaf9":1
+	spine6:7 -- "l3-leaf10":1
+	"l2-leaf3":47 -- "l2-leaf4":47
+	"l2-leaf3":48 -- "l2-leaf4":48
+	"l3-leaf10":47 -- "l3-leaf9":47
+	"l3-leaf10":48 -- "l3-leaf9":48
+	"l3-leaf10":5 -- "l2-leaf3":2
+	"l3-leaf10":6 -- "l2-leaf4":2
+	"l3-leaf9":5 -- "l2-leaf3":1
+	"l3-leaf9":6 -- "l2-leaf4":1
+	spine8:3 -- "l3-leaf6":3
+	spine8:4 -- "l3-leaf7":3
+	spine8:5 -- "l3-leaf8":3
+	spine8:6 -- "l3-leaf9":3
+	spine8:7 -- "l3-leaf10":3
+	spine9:3 -- "l3-leaf6":4
+	spine9:4 -- "l3-leaf7":4
+	spine9:5 -- "l3-leaf8":4
+	spine9:6 -- "l3-leaf9":4
+	spine9:7 -- "l3-leaf10":4
 }

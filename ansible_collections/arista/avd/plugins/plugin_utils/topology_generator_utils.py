@@ -8,7 +8,8 @@ import graphviz
 import yaml
 
 DEFAULT_COLUMN_BLOCK = 7
-DEFAULT_ROW_BLOCK = 2
+DEFAULT_ROW_BLOCK = 4
+BORDER_VALUE = 0
 
 def read_yaml_file(filename):
     """
@@ -223,7 +224,7 @@ def find_node_levels(graph, start_node, node_list):
     return level_dict, node_level_dict
 
 
-def draw_nested_subgraphs(input_data, level_dict, graph_obj, undefined_rank_nodes, node_port_val, column_num, row_num):
+def draw_nested_subgraphs(input_data, level_dict, graph_obj, undefined_rank_nodes, node_port_val, column_num, row_num, pod_conn):
     """
     Create a nested subgraphs recursively based on input_data
 
@@ -253,10 +254,12 @@ def draw_nested_subgraphs(input_data, level_dict, graph_obj, undefined_rank_node
 
                 # print("++++++++++new_rank_dict")
                 # print(new_rank_dict)
-                # for rank, nodes in new_rank_dict.items:
-                #     if rank not in pod_conn.keys():
-
-
+                for rank, nodes in new_rank_dict.items():
+                    if nodes:
+                        if rank not in pod_conn.keys():
+                            pod_conn[rank] = [nodes]
+                        else:
+                            pod_conn[rank] = pod_conn[rank] + [nodes]        
 
 
                 for rank, nodes in new_rank_dict.items():
@@ -282,13 +285,23 @@ def draw_nested_subgraphs(input_data, level_dict, graph_obj, undefined_rank_node
                                             node_table = node_table + "<TR>"
                                             port_col = [0] * column_num
 
-                                            if port_len % 2 != 0:
-                                                port_start = column_num / (port_len * 2)
-                                            else:
-                                                if port_len == 0:
-                                                    port_start = column_num / (port_len + 2)
-                                                else:
-                                                    port_start = column_num / (port_len)
+                                            # if port_len % 2 != 0:
+                                            #     port_start = column_num / (port_len * 2)
+                                            # else:
+                                            #     if port_len == 0:
+                                            #         port_start = column_num / (port_len + 2)
+                                            #     else:
+                                            #         port_start = column_num / (port_len)
+
+                                            if (column_num%2) == 0:
+                                                port_start = (column_num / port_len) - 1 
+                                            elif (column_num%2) != 0:
+                                                port_start = (column_num / port_len)         
+
+                                            if port_len == 1:
+                                                port_start = (column_num - 1) / 2
+                                            if port_len == column_num:
+                                                port_start = 0
 
                                             port_start = int(port_start)
 
@@ -299,7 +312,7 @@ def draw_nested_subgraphs(input_data, level_dict, graph_obj, undefined_rank_node
                                             for port_val in port_col:
                                                 port_val = str(port_val).replace(" ", "").replace("0", "")
                                                 if port_val == 0 or port_val == "":
-                                                    node_table = node_table + "<TD BORDER=\"0\" > </TD>"
+                                                    node_table = node_table + "<TD BORDER=\"" + str(BORDER_VALUE) +"\" > </TD>"
                                                 else:
                                                     node_table = node_table + "<TD" + ' PORT="' + str(port_val) + '"' + ">" + str(port_val) + "</TD>"
 
@@ -308,31 +321,93 @@ def draw_nested_subgraphs(input_data, level_dict, graph_obj, undefined_rank_node
 
                                         #left right
                                         if len(node_ports["left"]) == 0 and len(node_ports["right"]) == 0:
-                                            node_table = node_table + "<TR><TD  BORDER=\"0\" > </TD>" + '<TD BGCOLOR="#4a69bd" COLSPAN="' + str(column_num - 2) + '" ROWSPAN="' + str(row_num + 2) +  '"> <FONT COLOR="#ffffff">' + node + "</FONT> </TD><TD  BORDER=\"0\" > </TD></TR>"
-                                            for i in range(row_num+1):
-                                                node_table = node_table + "<TR> <TD  BORDER=\"0\" > </TD><TD BORDER=\"0\" > </TD> </TR>"
+                                            node_table = node_table + "<TR><TD  BORDER=\"" + str(BORDER_VALUE) +"\" > </TD>" + '<TD BGCOLOR="#4a69bd" COLSPAN="' + str(column_num - 2) + '" ROWSPAN="' + str(row_num) +  '"> <FONT COLOR="#ffffff">' + node + "</FONT> </TD><TD  BORDER=\"" + str(BORDER_VALUE) +"\" > </TD></TR>"
+                                            for i in range(row_num - 1):
+                                                node_table = node_table + "<TR> <TD  BORDER=\"" + str(BORDER_VALUE) +"\" > </TD><TD BORDER=\"" + str(BORDER_VALUE) +"\" > </TD> </TR>"
                                         else:
-                                            #left
-                                            if len(node_ports["left"]) > 0:
-                                                node_table = node_table + "<TR><TD BORDER=\"0\" > </TD>" + '<TD BGCOLOR="#4a69bd" COLSPAN="' + str(column_num - 2) + '" ROWSPAN="' + str(row_num + 2) +  '"> <FONT COLOR="#ffffff">' + node + "</FONT> </TD><TD  BORDER=\"0\" > </TD></TR>"
-                                                
-                                                if len(node_ports["left"]) > 1:
-                                                    for i in range(row_num):
-                                                        node_table = node_table + "<TR> <TD PORT=\""+ node_ports["left"][i]  +"\" > " + node_ports["left"][i] + "</TD><TD BORDER=\"0\" > </TD> </TR>"
-                                                    node_table = node_table + "<TR> <TD  BORDER=\"0\" > </TD><TD BORDER=\"0\" > </TD> </TR>"    
-                                                else:    
-                                                    node_table = node_table + "<TR> <TD  BORDER=\"0\" > </TD><TD BORDER=\"0\" > </TD> </TR>"
+                                            node_table = node_table + "<TR><TD  BORDER=\"" + str(BORDER_VALUE) +"\" > </TD>" + '<TD BGCOLOR="#4a69bd" COLSPAN="' + str(column_num - 2) + '" ROWSPAN="' + str(row_num) +  '"> <FONT COLOR="#ffffff">' + node + "</FONT> </TD><TD  BORDER=\"" + str(BORDER_VALUE) +"\" > </TD></TR>"
 
+                                            row_port_num = row_num - 2
+
+                                            #left
+                                            left_row_val = [0] * row_port_num
+
+                                            # print(left_row_val)
+
+                                            row_port_len = len(node_ports["left"])
+                                            #print(row_port_len)
+                                            row_port_start = 0
+
+                                            if row_port_len != 0:
+                                                if (row_port_num%2) == 0:
+                                                    row_port_start = (row_port_num / row_port_len) - 1 
+                                                elif (row_port_num%2) != 0:
+                                                    row_port_start = (row_port_num / row_port_len)         
+
+                                                if row_port_len == 1:
+                                                    row_port_start = (row_port_num - 1) / 2
+                                                if row_port_len == row_port_num:
+                                                    row_port_start = 0
+
+                                            row_port_start = int(row_port_start)
+                                            #print("\n\n")
+                                            #print(row_port_num)
+                                            #print(row_port_len)
+                                            #print(row_port_start)
+
+                                            node_ports["left"].sort()
+                                            for port_pos in range(row_port_start, row_port_len + row_port_start):
+                                                left_row_val[port_pos] = node_ports["left"][port_pos - row_port_start]
+
+                                            # port_start = int(port_start)
                                             #right
-                                            if len(node_ports["right"]) > 0:
-                                                node_table = node_table + "<TR><TD  BORDER=\"0\" >  </TD>" + '<TD BGCOLOR="#4a69bd" COLSPAN="' + str(column_num - 2) + '" ROWSPAN="' + str(row_num + 2) +  '"> <FONT COLOR="#ffffff">' + node + "</FONT> </TD><TD BORDER=\"0\" > </TD></TR>"
-                                                
-                                                if len(node_ports["right"]) > 1:
-                                                    for i in range(row_num):
-                                                        node_table = node_table + "<TR> <TD BORDER=\"0\" > </TD> <TD PORT=\""+ node_ports["right"][i]  +"\" > " + node_ports["right"][i] + "</TD></TR>"
-                                                    node_table = node_table + "<TR> <TD  BORDER=\"0\" > </TD><TD BORDER=\"0\" > </TD> </TR>"
-                                                else:    
-                                                    node_table = node_table + "<TR> <TD  BORDER=\"0\" > </TD><TD BORDER=\"0\" > </TD> </TR>"
+                                            right_row_val = [0] * row_port_num
+
+                                            # print(right_row_val)
+
+                                            row_port_len = len(node_ports["right"])
+                                            #print(row_port_len)
+                                            row_port_start = 0
+
+                                            if row_port_len != 0:
+                                                if (row_port_num%2) == 0:
+                                                    row_port_start = (row_port_num / row_port_len) - 1 
+                                                elif (row_port_num%2) != 0:
+                                                    row_port_start = (row_port_num / row_port_len)         
+
+                                                if row_port_len == 1:
+                                                    row_port_start = (row_port_num - 1) / 2
+                                                if row_port_len == row_port_num:
+                                                    row_port_start = 0
+
+                                            row_port_start = int(row_port_start)
+                                            #print("\n\n")
+                                            #print(row_port_num)
+                                            #print(row_port_len)
+                                            #print(row_port_start)
+
+                                            node_ports["right"].sort()
+                                            for port_pos in range(row_port_start, row_port_len + row_port_start):
+                                                right_row_val[port_pos] = node_ports["right"][port_pos - row_port_start]
+
+
+                                            # node_ports["top"].sort()
+                                            # for port_pos in range(port_start, port_len + port_start):
+                                            #     port_col[port_pos] = node_ports["top"][port_pos - port_start]
+                                            for row_val in range(row_port_num):
+                                                #left
+                                                if left_row_val[row_val] == 0: 
+                                                    node_table = node_table + "<TR> <TD  BORDER=\"" + str(BORDER_VALUE) +"\" > </TD>"
+                                                else:
+                                                    node_table = node_table + "<TR><TD" + ' PORT="' + str(left_row_val[row_val]) + '"' + ">" + str(left_row_val[row_val]) + "</TD>"
+
+                                                #right
+                                                if right_row_val[row_val] == 0:                                                    
+                                                    node_table = node_table + "<TD BORDER=\"" + str(BORDER_VALUE) +"\" > </TD> </TR>"
+                                                else:
+                                                    node_table = node_table + "<TD" + ' PORT="' + str(right_row_val[row_val]) + '"' + ">" + str(right_row_val[row_val]) + "</TD></TR>"
+
+                                            node_table = node_table + "<TR> <TD  BORDER=\"" + str(BORDER_VALUE) +"\" > </TD><TD BORDER=\"" + str(BORDER_VALUE) +"\" > </TD> </TR>"
 
                                         # bottom
                                         port_len = len(node_ports["bottom"])
@@ -341,14 +416,34 @@ def draw_nested_subgraphs(input_data, level_dict, graph_obj, undefined_rank_node
 
                                             port_col = [0] * column_num
 
-                                            if port_len % 2 != 0:
-                                                port_start = column_num / (port_len * 2)
-                                            else:
-                                                if port_len == 0:
-                                                    port_start = column_num / (port_len + 2)
-                                                else:
-                                                    port_start = column_num / (port_len)
+                                            # if port_len % 2 != 0:
+                                            #     port_start = column_num / (port_len * 2)
+                                            # else:
+                                            #     if port_len == 0:
+                                            #         port_start = column_num / (port_len + 2)
+                                            #     else:
+                                            #         port_start = column_num / (port_len)
+
+
+
+                                            if (column_num%2) == 0:
+                                                port_start = (column_num / port_len) - 1 
+                                            elif (column_num%2) != 0:
+                                                port_start = (column_num / port_len)         
+
+                                            if port_len == 1:
+                                                port_start = (column_num - 1) / 2
+                                            if port_len == column_num:
+                                                port_start = 0
+
+
                                             port_start = int(port_start)
+
+                                            print(column_num)
+                                            print(port_len)
+                                            print(port_start)
+                                            print("\n\n")
+
 
                                             node_ports["bottom"].sort()
                                             for port_pos in range(port_start, port_len + port_start):
@@ -357,7 +452,7 @@ def draw_nested_subgraphs(input_data, level_dict, graph_obj, undefined_rank_node
                                             for port_val in port_col:
                                                 port_val = str(port_val).replace(" ", "").replace("0", "")
                                                 if port_val == 0 or port_val == "":
-                                                    node_table = node_table + "<TD BORDER=\"0\" > </TD>"
+                                                    node_table = node_table + "<TD BORDER=\"" + str(BORDER_VALUE) +"\" > </TD>"
                                                 else:
                                                     node_table = node_table + "<TD" + ' PORT="' + str(port_val) + '"' + ">" + str(port_val) + "</TD>"
                                             node_table = node_table + "</TR>"
@@ -370,7 +465,7 @@ def draw_nested_subgraphs(input_data, level_dict, graph_obj, undefined_rank_node
 
 
             if "groups" in data and data["groups"]:
-                draw_nested_subgraphs(data["groups"], level_dict, subgraph, undefined_rank_nodes, node_port_val, column_num, row_num)
+                draw_nested_subgraphs(data["groups"], level_dict, subgraph, undefined_rank_nodes, node_port_val, column_num, row_num, pod_conn)
 
 
 def create_graph_and_set_properties():
@@ -390,7 +485,7 @@ def create_graph_and_set_properties():
         },
         edge_attr={"fontname": "arial", "fontsize": "6", "center": "true", "concentrate": "true", "minlen": "2", "labelfloat": "false"},
     )
-    graph_obj.attr(rank="min")
+    graph_obj.attr(rank="same")
     return graph_obj
 
 
@@ -412,13 +507,13 @@ def generate_topology(level_dict, node_neighbour_dict, output_list, undefined_ra
     graph_obj = create_graph_and_set_properties()
 
 
-    # print("column_num")
+    #print("column_num")
 
-    # print(node_neighbour_dict)
+    #print(node_neighbour_dict)
     # for node, ports in node_port_val.items():
-    #     print(f"{node} {ports}")
+    #     #print(f"{node} {ports}")
 
-    # print(level_dict)
+    #print(level_dict)
     column_num = 0
     row_num = 0
     for rank, nodes in level_dict.items():
@@ -430,21 +525,27 @@ def generate_topology(level_dict, node_neighbour_dict, output_list, undefined_ra
             row_num = max(row_num, len(node_ports["left"]))
             row_num = max(row_num, len(node_ports["right"]))            
 
-    # print("======")
-    # print(column_num)
-    # print(row_num)
+    #print("======")
+    #print(column_num)
+    #print(row_num)
 
     if column_num == 0 or column_num < DEFAULT_COLUMN_BLOCK:
         column_num = DEFAULT_COLUMN_BLOCK 
     elif column_num >= DEFAULT_COLUMN_BLOCK:
         column_num = column_num + 2
 
-    if row_num == 0 or row_num < DEFAULT_ROW_BLOCK:
-        row_num = DEFAULT_ROW_BLOCK 
-    # print(row_num)
+    if row_num <= 1:
+        row_num = DEFAULT_ROW_BLOCK
+    else:    
+        row_num = row_num + 2      
+    #print(row_num)
 
+    #to get list of pod conn
+    pod_conn = {}
 
-    draw_nested_subgraphs(output_list, level_dict, graph_obj, undefined_rank_nodes, node_port_val, column_num, row_num)
+    draw_nested_subgraphs(output_list, level_dict, graph_obj, undefined_rank_nodes, node_port_val, column_num, row_num, pod_conn)
+
+    # print(pod_conn)
 
     for node, neighbours in node_neighbour_dict.items():
         if node != "0":
@@ -459,13 +560,44 @@ def generate_topology(level_dict, node_neighbour_dict, output_list, undefined_ra
                 else:
                     neighbour_val = neighbour["neighborDevice"]
 
-                graph_obj.edge(node_val, neighbour_val)
+                temp_diff_pod = []
+                for nodes_val in pod_conn.values(): #[['LEAF1', 'LEAF2'], ['LEAF3', 'LEAF4']]
+                    if len(nodes_val) > 1:
+                        diff_pod = []
+                        print(nodes_val)
+                        if 'LEAF2' == node and 'LEAF3' == neighbour["neighborDevice"]:
+                            print(node)
+                            print(neighbour["neighborDevice"])
+                            print(len(nodes_val))
+                        for pod_node in range(len(nodes_val)):
+                            if node in nodes_val[pod_node]:
+                                print(pod_node)
+                                if pod_node not in diff_pod:
+                                    diff_pod.append(pod_node) 
+                            if neighbour["neighborDevice"] in nodes_val[pod_node]:
+                                print(pod_node)
+                                if pod_node not in diff_pod:
+                                    diff_pod.append(pod_node)
+                        temp_diff_pod.append(diff_pod)            
+                print(temp_diff_pod) 
+        
+                flag = False
+                for check_len in temp_diff_pod:
+                    if len(check_len) > 1:
+                        flag = True
+
+                if flag:
+                    graph_obj.edge(node_val, neighbour_val, constraint="false")
+                else:
+                    graph_obj.edge(node_val, neighbour_val)    
+
+                # graph_obj.edge(node_val, neighbour_val)
                 
-    # print(level_dict)
-    # for nodes_val in level_dict.values():
+    #print(level_dict)
+    # for nodes_val in pod_conn.values():
     #     if len(nodes_val) > 1:
     #         temps = nodes_val
-    #         print(nodes_val)
+    #         #print(nodes_val)
     #         for idx in range(len(nodes_val)-1):
     #             graph_obj.edge(nodes_val[idx] , nodes_val[idx + 1], constraint="false", style="invis")
     

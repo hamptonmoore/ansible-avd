@@ -711,9 +711,9 @@ port_channel_interfaces:
     mode: trunk
     mlag: 7
 ethernet_interfaces:
-  Ethernet5:
+  Ethernet3:
     peer: l3-leaf6
-    peer_interface: Ethernet5
+    peer_interface: Ethernet1
     peer_type: mlag_peer
     description: MLAG_PEER_DC1-SVC3A_Ethernet5
     type: switched
@@ -721,9 +721,9 @@ ethernet_interfaces:
     channel_group:
       id: 5
       mode: active
-  Ethernet6:
+  Ethernet4:
     peer: l3-leaf7
-    peer_interface: Ethernet6
+    peer_interface: Ethernet1
     peer_type: mlag_peer
     description: MLAG_PEER_DC1-SVC3A_Ethernet6
     type: switched
@@ -731,27 +731,27 @@ ethernet_interfaces:
     channel_group:
       id: 5
       mode: active
-  Ethernet1:
+  Ethernet5:
     peer: l3-leaf8
-    peer_interface: Ethernet5
+    peer_interface: Ethernet1
     peer_type: spine
     description: P2P_LINK_TO_DC1-SPINE1_Ethernet5
     mtu: 1500
     type: routed
     shutdown: false
     ip_address: 172.31.255.33/31
-  Ethernet2:
+  Ethernet6:
     peer: l3-leaf9
-    peer_interface: Ethernet5
+    peer_interface: Ethernet1
     peer_type: spine
     description: P2P_LINK_TO_DC1-SPINE2_Ethernet5
     mtu: 1500
     type: routed
     shutdown: false
     ip_address: 172.31.255.35/31
-  Ethernet3:
+  Ethernet7:
     peer: l3-leaf10
-    peer_interface: Ethernet5
+    peer_interface: Ethernet1
     peer_type: spine
     description: P2P_LINK_TO_DC1-SPINE3_Ethernet5
     mtu: 1500

@@ -110,27 +110,34 @@ class ActionModule(ActionBase):
         # print("level_dict")
         # #example 1: ['FIREWALL'], 2: ['SPINE1', 'SPINE2'], 3: ['LEAF1', 'LEAF2', 'LEAF3', 'LEAF4'],
         # print(level_dict)
-     
-
+        # print("\n\n")
+        # print(graph_dict)
+        # print("\n\n")
+        # print(node_port_val)
+        # print("\n\n")
         for level_list in level_dict.values():
-            for i in range(len(level_list)):
-                if i % 2 != 0:
+            if len(level_list) > 1: 
+                for i in range(len(level_list)-1):
+                    # print("\n")
+                    # print(f"{level_list[i]}  {level_list[i+1]}") 
+                    # print(f"{graph_dict[level_list[i]]}") 
+                    # print(f"{graph_dict[level_list[i + 1]]}")
                     for node_detail in graph_dict[level_list[i]]:
-                        if node_detail["neighborDevice"] in level_list:
-                            if (node_detail["nodePort"] not in node_port_val[level_list[i]]["left"]) and (
-                                node_detail["nodePort"] not in node_port_val[level_list[i]]["checked"]
-                            ):
-                                node_port_val[level_list[i]]["left"] = node_port_val[level_list[i]]["left"] + [node_detail["nodePort"]]
-                                node_port_val[level_list[i]]["checked"] = node_port_val[level_list[i]]["checked"] + [node_detail["nodePort"]]
-                else:
-                    for node_detail in graph_dict[level_list[i]]:
-                        if node_detail["neighborDevice"] in level_list:
-                            if (node_detail["nodePort"] not in node_port_val[level_list[i]]["right"]) and (
-                                node_detail["nodePort"] not in node_port_val[level_list[i]]["checked"]
-                            ):
+                        if node_detail["neighborDevice"] == level_list[i + 1]:
+                            #left node => right port    
+                            if (node_detail["nodePort"] not in node_port_val[level_list[i]]["right"]) and (node_detail["nodePort"] not in node_port_val[level_list[i]]["checked"]):
                                 node_port_val[level_list[i]]["right"] = node_port_val[level_list[i]]["right"] + [node_detail["nodePort"]]
                                 node_port_val[level_list[i]]["checked"] = node_port_val[level_list[i]]["checked"] + [node_detail["nodePort"]]
+                            
+                            #right node => left port 
+                            if (node_detail["neighborPort"] not in node_port_val[level_list[i + 1]]["left"]) and (node_detail["neighborPort"] not in node_port_val[level_list[i + 1]]["checked"]):
+                                node_port_val[level_list[i + 1]]["left"] = node_port_val[level_list[i + 1]]["left"] + [node_detail["neighborPort"]]
+                                node_port_val[level_list[i + 1]]["checked"] = node_port_val[level_list[i + 1]]["checked"] + [node_detail["neighborPort"]]
 
+
+        # for k, v in node_port_val.items():
+        #     print(f"{k} {v}") 
+   
         graph_dict = temp_graph_dict
 
 
