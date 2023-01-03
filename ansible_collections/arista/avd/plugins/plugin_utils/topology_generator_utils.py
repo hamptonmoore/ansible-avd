@@ -252,8 +252,8 @@ def draw_nested_subgraphs(input_data, level_dict, graph_obj, undefined_rank_node
                         if node in pod_node_list and node not in undefined_rank_nodes:
                             new_rank_dict[rank].append(node)
 
-                # print("++++++++++new_rank_dict")
-                # print(new_rank_dict)
+                print("++++++++++new_rank_dict")
+                print(new_rank_dict)
                 for rank, nodes in new_rank_dict.items():
                     if nodes:
                         if rank not in pod_conn.keys():
@@ -317,6 +317,11 @@ def draw_nested_subgraphs(input_data, level_dict, graph_obj, undefined_rank_node
                                                     node_table = node_table + "<TD" + ' PORT="' + str(port_val) + '"' + ">" + str(port_val) + "</TD>"
 
                                             node_table = node_table + "</TR>"
+                                        else:
+                                            node_table = node_table + "<TR>"
+                                            for td_val in range(column_num):
+                                                node_table = node_table + "<TD BORDER=\"" + str(BORDER_VALUE) +"\" > </TD>"    
+                                            node_table = node_table + "</TR>"    
 
 
                                         #left right
@@ -456,6 +461,13 @@ def draw_nested_subgraphs(input_data, level_dict, graph_obj, undefined_rank_node
                                                 else:
                                                     node_table = node_table + "<TD" + ' PORT="' + str(port_val) + '"' + ">" + str(port_val) + "</TD>"
                                             node_table = node_table + "</TR>"
+                                        else:
+                                            node_table = node_table + "<TR>"
+                                            for td_val in range(column_num):
+                                                node_table = node_table + "<TD BORDER=\"" + str(BORDER_VALUE) +"\" > </TD>"    
+                                            node_table = node_table + "</TR>"    
+
+
 
                                     node_table = node_table + "</TABLE>>"
                                     node_table = node_table.replace("\n", "")
@@ -478,7 +490,7 @@ def create_graph_and_set_properties():
         name="parent",
         format="svg",
         filename="topology.gv",
-        graph_attr={"splines": "line"},
+        graph_attr={"splines": "false"},
         node_attr={
             "shape": "plaintext",
             "fontsize": " 8pt"
@@ -587,7 +599,7 @@ def generate_topology(level_dict, node_neighbour_dict, output_list, undefined_ra
                         flag = True
 
                 if flag:
-                    graph_obj.edge(node_val, neighbour_val, constraint="false")
+                    graph_obj.edge(node_val, neighbour_val, constraint="false", minlen="0")
                 else:
                     graph_obj.edge(node_val, neighbour_val)    
 
