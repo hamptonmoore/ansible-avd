@@ -1,3 +1,6 @@
+diagram_groups:
+- fabric_name: EOS_DESIGNS_UNIT_TESTS
+- pod_name: TRUNK_GROUP_TESTS
 router_bgp:
   as: '65002'
   router_id: 192.168.250.11

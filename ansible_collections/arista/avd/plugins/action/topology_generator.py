@@ -20,10 +20,12 @@ class ActionModule(ActionBase):
         if self._task.args and "structured_config" not in self._task.args:
             raise AnsibleActionFail("Missing 'structured_config' variable.")
         path = self._task.args["structured_config"]
-        self.driver_func(path)
+        fabric_name = task_vars["fabric_name"]
+        inventory_group = task_vars["groups"][fabric_name]
+        self.driver_func(path, inventory_group)
         return result
 
-    def driver_func(self, directory_path):
+    def driver_func(self, directory_path, inventory_group):
         files = glob.glob(directory_path + "/*.yml")
 
         output_list = []

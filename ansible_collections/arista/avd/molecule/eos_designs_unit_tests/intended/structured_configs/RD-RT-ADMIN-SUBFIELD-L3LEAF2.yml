@@ -1,3 +1,5 @@
+diagram_groups:
+- fabric_name: EOS_DESIGNS_UNIT_TESTS
 router_bgp:
   as: '65002'
   router_id: 192.168.255.2

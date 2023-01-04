@@ -1,3 +1,6 @@
+diagram_groups:
+- fabric_name: EOS_DESIGNS_UNIT_TESTS
+- dc_name: OVERLAY_ROUTING_PROTOCOL_HER_TESTS
 router_bgp:
   as: '65001'
   router_id: 192.168.254.1

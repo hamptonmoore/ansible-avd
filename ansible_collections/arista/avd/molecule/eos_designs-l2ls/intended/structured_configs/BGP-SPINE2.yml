@@ -1,3 +1,6 @@
+diagram_groups:
+- fabric_name: L2LS
+- pod_name: L2LS_BGP
 router_bgp:
   as: '65001'
   router_id: 192.168.255.2
