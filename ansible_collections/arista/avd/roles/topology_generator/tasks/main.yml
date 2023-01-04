@@ -13,5 +13,5 @@
   tags: [topology_generator]
   run_once: true
   topology_generator:
-    structured_config: "./structured_configs"
+    structured_config: "{{ playbook_dir }}/intended/structured_configs"
   delegate_to: localhost
