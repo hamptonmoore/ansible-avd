@@ -161,18 +161,18 @@ ethernet_interfaces:
     channel_group:
       id: 3
       mode: active
-  Ethernet5:
-    peer: FIREWALL
-    peer_interface: Ethernet6
-    peer_type: firewall
-    description: FIREWALL_Eth2
-    type: switched
-    shutdown: false
-    mode: trunk
-    vlans: 10,20,30
-    channel_group:
-      id: 5
-      mode: active
+  # Ethernet5:
+  #   peer: FIREWALL
+  #   peer_interface: Ethernet6
+  #   peer_type: firewall
+  #   description: FIREWALL_Eth2
+  #   type: switched
+  #   shutdown: false
+  #   mode: trunk
+  #   vlans: 10,20,30
+  #   channel_group:
+  #     id: 5
+  #     mode: active
 mlag_configuration:
   domain_id: SPINES
   local_interface: Vlan4094

@@ -125,16 +125,16 @@ ethernet_interfaces:
     channel_group:
       id: 1
       mode: active
-  Ethernet3:
-    peer: Host2
-    peer_interface: Eth1
-    peer_type: server
-    description: Host2_Eth1
-    type: switched
-    shutdown: false
-    mode: access
-    vlans: 30
-    spanning_tree_portfast: edge
+  # Ethernet3:
+  #   peer: Host2
+  #   peer_interface: Eth1
+  #   peer_type: server
+  #   description: Host2_Eth1
+  #   type: switched
+  #   shutdown: false
+  #   mode: access
+  #   vlans: 30
+  #   spanning_tree_portfast: edge
 mlag_configuration:
   domain_id: RACK2
   local_interface: Vlan4094

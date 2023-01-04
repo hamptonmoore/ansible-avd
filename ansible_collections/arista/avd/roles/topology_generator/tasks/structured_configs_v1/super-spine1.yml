@@ -325,9 +325,6 @@ port_channel_interfaces:
     - LEAF_PEER_L3
     - MLAG
 ethernet_interfaces:
-  Ethernet50:
-    peer: super-spine4
-    peer_interface: Ethernet50
   Ethernet1:
     peer: spine1
     peer_interface: Ethernet1

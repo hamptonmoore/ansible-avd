@@ -36,9 +36,14 @@ class ActionModule(ActionBase):
         root_dict = gt.find_root_nodes(output_list[0])
         output_list[0]["nodes"].append(root_dict)
 
+        # print(node_dict)
+        # exit()
+
         global_node_list, graph_dict = gt.create_graph_dict(output_list)
 
         level_dict, node_level_dict = gt.find_node_levels(graph_dict, "0", global_node_list)
+
+        print(graph_dict)
 
         rank_nodes_list = []
         for v in level_dict.values():
@@ -88,6 +93,12 @@ class ActionModule(ActionBase):
                             temp_graph_dict[node_val] = temp_graph_dict[node_val] + [i]
                     #'SPINE1': [{'nodePort': '1', 'neighborDevice': 'LEAF1', 'neighborPort': '1'}]
                     #'FIREWALL': 1, 'SPINE1': 2, 'SPINE2': 2, 'LEAF1': 3
+
+                    #node_level_dict
+                    #{'0': 0, 'SPINE2': 1, 'SPINE1': 1, 'LEAF1': 1, 'LEAF2': 1, 'LEAF3': 1, 'LEAF4': 1}
+                    # print("node_level_dict")
+                    # print(node_level_dict)
+                    # print("\n\n")
                     # set top and bottom port values
                     if node_level_dict[node_val] < node_level_dict[i["neighborDevice"]]:
                         if i["nodePort"] not in node_port_val[node_val]["bottom"] and i["nodePort"] and i["nodePort"] not in node_port_val[node_val]["checked"]:
@@ -110,35 +121,62 @@ class ActionModule(ActionBase):
         # print("level_dict")
         # #example 1: ['FIREWALL'], 2: ['SPINE1', 'SPINE2'], 3: ['LEAF1', 'LEAF2', 'LEAF3', 'LEAF4'],
         # print(level_dict)
+        # #{0: ['0'], 1: ['SPINE2', 'SPINE1', 'LEAF1', 'LEAF2', 'LEAF3', 'LEAF4']}
         # print("\n\n")
         # print(graph_dict)
+        # #{'SPINE2': [{'nodePort': '1', 'neighborDevice': 'LEAF1', 'neighborPort': '2'}]
         # print("\n\n")
         # print(node_port_val)
         # print("\n\n")
+
+        #  V1 logic for left right node ports
+        # for level_list in level_dict.values():
+        #     # print("===============")
+        #     # print(level_list)
+        #     # # level_list.sort()
+        #     # print("===============")
+        #     # print(level_list)
+        #     if len(level_list) > 1: 
+        #         for i in range(len(level_list)-1):
+        #             # print("\n")
+        #             # print(f"{level_list[i]}  {level_list[i+1]}") 
+        #             # print(f"{graph_dict[level_list[i]]}") 
+        #             # print(f"{graph_dict[level_list[i + 1]]}")
+        #             for node_detail in graph_dict[level_list[i]]:
+        #                 if node_detail["neighborDevice"] == level_list[i + 1]:
+        #                     #left node => right port    
+        #                     if (node_detail["nodePort"] not in node_port_val[level_list[i]]["right"]) and (node_detail["nodePort"] not in node_port_val[level_list[i]]["checked"]):
+        #                         node_port_val[level_list[i]]["right"] = node_port_val[level_list[i]]["right"] + [node_detail["nodePort"]]
+        #                         node_port_val[level_list[i]]["checked"] = node_port_val[level_list[i]]["checked"] + [node_detail["nodePort"]]
+                            
+        #                     #right node => left port 
+        #                     if (node_detail["neighborPort"] not in node_port_val[level_list[i + 1]]["left"]) and (node_detail["neighborPort"] not in node_port_val[level_list[i + 1]]["checked"]):
+        #                         node_port_val[level_list[i + 1]]["left"] = node_port_val[level_list[i + 1]]["left"] + [node_detail["neighborPort"]]
+        #                         node_port_val[level_list[i + 1]]["checked"] = node_port_val[level_list[i + 1]]["checked"] + [node_detail["neighborPort"]]
+
+
         for level_list in level_dict.values():
-            if len(level_list) > 1: 
-                for i in range(len(level_list)-1):
-                    # print("\n")
-                    # print(f"{level_list[i]}  {level_list[i+1]}") 
-                    # print(f"{graph_dict[level_list[i]]}") 
-                    # print(f"{graph_dict[level_list[i + 1]]}")
+            # level_list.sort()
+            for i in range(len(level_list) - 1):
+                for j in range(i+1,len(level_list)): 
                     for node_detail in graph_dict[level_list[i]]:
-                        if node_detail["neighborDevice"] == level_list[i + 1]:
+                        if node_detail["neighborDevice"] == level_list[j]:
                             #left node => right port    
                             if (node_detail["nodePort"] not in node_port_val[level_list[i]]["right"]) and (node_detail["nodePort"] not in node_port_val[level_list[i]]["checked"]):
                                 node_port_val[level_list[i]]["right"] = node_port_val[level_list[i]]["right"] + [node_detail["nodePort"]]
                                 node_port_val[level_list[i]]["checked"] = node_port_val[level_list[i]]["checked"] + [node_detail["nodePort"]]
                             
                             #right node => left port 
-                            if (node_detail["neighborPort"] not in node_port_val[level_list[i + 1]]["left"]) and (node_detail["neighborPort"] not in node_port_val[level_list[i + 1]]["checked"]):
-                                node_port_val[level_list[i + 1]]["left"] = node_port_val[level_list[i + 1]]["left"] + [node_detail["neighborPort"]]
-                                node_port_val[level_list[i + 1]]["checked"] = node_port_val[level_list[i + 1]]["checked"] + [node_detail["neighborPort"]]
+                            if (node_detail["neighborPort"] not in node_port_val[level_list[j]]["left"]) and (node_detail["neighborPort"] not in node_port_val[level_list[j]]["checked"]):
+                                node_port_val[level_list[j]]["left"] = node_port_val[level_list[j]]["left"] + [node_detail["neighborPort"]]
+                                node_port_val[level_list[j]]["checked"] = node_port_val[level_list[j]]["checked"] + [node_detail["neighborPort"]]
 
 
-        # for k, v in node_port_val.items():
-        #     print(f"{k} {v}") 
+        for k, v in node_port_val.items():
+            print(f"{k} {v}") 
    
         graph_dict = temp_graph_dict
+        # print(graph_dict)
 
 
 
