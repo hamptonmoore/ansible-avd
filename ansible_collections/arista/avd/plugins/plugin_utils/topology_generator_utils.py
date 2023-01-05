@@ -122,7 +122,7 @@ def find_root_nodes(data, root=None):
         return root
 
 
-def create_graph_dict(output_list, nodes=None, node_neighbour_dict=None):
+def create_graph_dict(output_list, inventory_group, nodes=None, node_neighbour_dict=None):
     """
     Create a dictionary of rank/levels and it's corresponding node list
 
@@ -142,36 +142,38 @@ def create_graph_dict(output_list, nodes=None, node_neighbour_dict=None):
     for group in output_list:
         if "nodes" in list(group.keys()) and group["nodes"]:
             for node in group["nodes"]:
-                nodes.append(node["name"])
-                neighbours = []
-                for neighbour in node["neighbours"]:
-                    node_detail_dict = {}
+                if  node["name"] in inventory_group:
+                    nodes.append(node["name"])
+                    neighbours = []
+                    for neighbour in node["neighbours"]:
+                        if  neighbour["neighborDevice"] in inventory_group:  
+                            node_detail_dict = {}
 
-                    if len(neighbour["port"]) == 10 and len(neighbour["port"]) != 0:
-                        node_detail_dict["nodePort"] = neighbour["port"][8:10]
+                            if len(neighbour["port"]) == 10 and len(neighbour["port"]) != 0:
+                                node_detail_dict["nodePort"] = neighbour["port"][8:10]
 
-                    if len(neighbour["port"]) == 9 and len(neighbour["port"]) != 0:
-                        node_detail_dict["nodePort"] = neighbour["port"][8]
+                            if len(neighbour["port"]) == 9 and len(neighbour["port"]) != 0:
+                                node_detail_dict["nodePort"] = neighbour["port"][8]
 
-                    if len(neighbour["port"]) < 9:
-                        node_detail_dict["nodePort"] = ""
+                            if len(neighbour["port"]) < 9:
+                                node_detail_dict["nodePort"] = ""
 
-                    node_detail_dict["neighborDevice"] = neighbour["neighborDevice"]
+                            node_detail_dict["neighborDevice"] = neighbour["neighborDevice"]
 
-                    if len(neighbour["neighborPort"]) == 10 and len(neighbour["neighborPort"]) != 0:
-                        node_detail_dict["neighborPort"] = neighbour["neighborPort"][8:10]
+                            if len(neighbour["neighborPort"]) == 10 and len(neighbour["neighborPort"]) != 0:
+                                node_detail_dict["neighborPort"] = neighbour["neighborPort"][8:10]
 
-                    if len(neighbour["neighborPort"]) == 9 and len(neighbour["neighborPort"]) != 0:
-                        node_detail_dict["neighborPort"] = neighbour["neighborPort"][8]
+                            if len(neighbour["neighborPort"]) == 9 and len(neighbour["neighborPort"]) != 0:
+                                node_detail_dict["neighborPort"] = neighbour["neighborPort"][8]
 
-                    if len(neighbour["neighborPort"]) < 9:
-                        node_detail_dict["neighborPort"] = ""
+                            if len(neighbour["neighborPort"]) < 9:
+                                node_detail_dict["neighborPort"] = ""
 
-                    # neighbours.append(neighbour['neighborDevice'])
-                    neighbours.append(node_detail_dict)
-                node_neighbour_dict[node["name"]] = neighbours
+                            # neighbours.append(neighbour['neighborDevice'])
+                            neighbours.append(node_detail_dict)   
+                    node_neighbour_dict[node["name"]] = neighbours
         if "groups" in group and group["groups"]:
-            create_graph_dict(group["groups"], nodes, node_neighbour_dict)
+            create_graph_dict(group["groups"], inventory_group, nodes, node_neighbour_dict)
      
     return nodes, node_neighbour_dict
 

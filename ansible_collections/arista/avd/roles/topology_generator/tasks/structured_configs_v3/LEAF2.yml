@@ -123,16 +123,16 @@ ethernet_interfaces:
     channel_group:
       id: 1
       mode: active
-  # Ethernet3:
-  #   peer: HostB
-  #   peer_interface: Eth1
-  #   peer_type: server
-  #   description: HostB_Eth1
-  #   type: switched
-  #   shutdown: false
-  #   mode: access
-  #   vlans: '20'
-  #   spanning_tree_portfast: edge
+  Ethernet3:
+    peer: HostB
+    peer_interface: Eth1
+    peer_type: server
+    description: HostB_Eth1
+    type: switched
+    shutdown: false
+    mode: access
+    vlans: '20'
+    spanning_tree_portfast: edge
 mlag_configuration:
   domain_id: RACK1
   local_interface: Vlan4094

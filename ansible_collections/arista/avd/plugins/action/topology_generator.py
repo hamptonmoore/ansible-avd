@@ -20,12 +20,29 @@ class ActionModule(ActionBase):
         if self._task.args and "structured_config" not in self._task.args:
             raise AnsibleActionFail("Missing 'structured_config' variable.")
         path = self._task.args["structured_config"]
-        fabric_name = task_vars["fabric_name"]
-        inventory_group = task_vars["groups"][fabric_name]
+
+        # fabric_name logic need to check 
+        # fabric_name = task_vars["fabric_name"]
+        # inventory_group = task_vars["groups"][fabric_name]
+        # print("inventory_group")
+        # print(inventory_group)
+        # self.driver_func(path, inventory_group)
+
+
+        # fabric_name = task_vars["hostvars"]["fabric_name"]
+        # inventory_group = task_vars["groups"][fabric_name]
+        # raise Exception(inventory_group)
+        # print(task_vars)
+        # exit()
+        # print(inventory_group)
+
+        # old logic
+        inventory_group = ['SPINE1', 'SPINE2', 'LEAF1', 'LEAF2', 'LEAF3', 'LEAF4']
         self.driver_func(path, inventory_group)
         return result
 
-    def driver_func(self, directory_path, inventory_group):
+    # def driver_func(self, directory_path):
+    def driver_func(self, directory_path, inventory_group):    
         files = glob.glob(directory_path + "/*.yml")
 
         output_list = []
@@ -39,7 +56,7 @@ class ActionModule(ActionBase):
         # print(node_dict)
         # exit()
 
-        global_node_list, graph_dict = gt.create_graph_dict(output_list)
+        global_node_list, graph_dict = gt.create_graph_dict(output_list, inventory_group)
 
         level_dict, node_level_dict = gt.find_node_levels(graph_dict, "0", global_node_list)
 
@@ -54,7 +71,7 @@ class ActionModule(ActionBase):
         # node_port_val = {top, bottom, left, right}
         node_port_val = {}
 
-        # print(graph_dict)
+        print("1")
         # print("========")
         # top and bottom port values
         # print("node_level_dict")
@@ -72,7 +89,7 @@ class ActionModule(ActionBase):
         # avoid same node neighbour pair
         check_same_node = []
         temp_graph_dict = {}
-
+        print("2")
         for node_val, node_details in graph_dict.items():
             if node_val not in undefined_rank_nodes:
 
@@ -154,7 +171,7 @@ class ActionModule(ActionBase):
         #                         node_port_val[level_list[i + 1]]["left"] = node_port_val[level_list[i + 1]]["left"] + [node_detail["neighborPort"]]
         #                         node_port_val[level_list[i + 1]]["checked"] = node_port_val[level_list[i + 1]]["checked"] + [node_detail["neighborPort"]]
 
-
+        print("3")
         for level_list in level_dict.values():
             # level_list.sort()
             for i in range(len(level_list) - 1):
@@ -174,7 +191,7 @@ class ActionModule(ActionBase):
 
         for k, v in node_port_val.items():
             print(f"{k} {v}") 
-   
+        print("4")
         graph_dict = temp_graph_dict
         # print(graph_dict)
 

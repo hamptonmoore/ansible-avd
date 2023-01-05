@@ -1,17 +1,17 @@
 ---
-#- name: topology
-#  hosts: localhost
-#  connection: local
-#  tasks:
-#    - name: Generate topology diagram from structure config in svg format
-#      tags: [always]
-#      arista.avd.topology_generator:
-#        structured_config: "./structured_configs"
-#      delegate_to: localhost
-
 - name: topology
-  tags: [topology_generator]
-  run_once: true
-  topology_generator:
-    structured_config: "{{ playbook_dir }}/intended/structured_configs"
-  delegate_to: localhost
+  hosts: localhost
+  connection: local
+  tasks:
+    - name: Generate topology diagram from structure config in svg format
+      tags: [always]
+      arista.avd.topology_generator:
+        structured_config: "./structured_configs_v3"
+      delegate_to: localhost
+
+# - name: topology
+#   tags: [topology_generator]
+#   run_once: true
+#   topology_generator:
+#     structured_config: "{{ playbook_dir }}/intended/structured_configs"
+#   delegate_to: localhost
