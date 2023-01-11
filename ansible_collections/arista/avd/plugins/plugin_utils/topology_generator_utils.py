@@ -46,7 +46,7 @@ def create_node_dict(file_data, filename):
         Dictionary with node and its corresponding neighbours
     """
     node_dict = {}
-    node_dict["name"] = os.path.splitext(filename)[0].split("/")[2]
+    node_dict["name"] = os.path.splitext(filename)[0].split("/")[-1]
     node_dict["neighbours"] = []
     if file_data and file_data.get("ethernet_interfaces"):
         for key, value in file_data["ethernet_interfaces"].items():
@@ -56,8 +56,7 @@ def create_node_dict(file_data, filename):
             neighbour_dict["port"] = key
             if "channel_group" in value and "id" in value["channel_group"]:
                 neighbour_dict["portChannel"] = value["channel_group"]["id"]
-            node_dict["neighbours"].append(neighbour_dict)
-    # print(node_dict["name"])        
+            node_dict["neighbours"].append(neighbour_dict)        
     return node_dict
 
 
@@ -68,14 +67,19 @@ def structured_config_to_topology_input(output_list, node_dict, diagram_groups, 
 
     Args:
         output_list: Original input dictionary with nested "name", "nodes" and "groups" keys
-        nodes: List of nodes
+        node_dict: List of nodes
         node_neighbour_dict: Dictionary with nodes and neighbours list
                        ex- {'0': ['super-spine1', 'super-spine2']}
     Returns:
        output_list: List of dictionary with nested "name", "nodes" and "groups" keys
     """
+
     if diagram_groups:
-        diagram_group_var = diagram_groups.pop(0)["name"]
+        diagram_group_var = diagram_groups.pop(0)
+        for temp_check in diagram_group_var.keys():
+            if temp_check in ['fabric_name','dc_name','pod_name','name']:
+                diagram_group_var = diagram_group_var[temp_check] 
+
         if not output_list:
             new_dict = {"name": diagram_group_var, "groups": [], "nodes": []}
             output_list.append(new_dict)
@@ -142,7 +146,7 @@ def create_graph_dict(output_list, inventory_group, nodes=None, node_neighbour_d
     for group in output_list:
         if "nodes" in list(group.keys()) and group["nodes"]:
             for node in group["nodes"]:
-                if  node["name"] in inventory_group:
+                if  (node["name"] in inventory_group) or (node["name"] == "0"):
                     nodes.append(node["name"])
                     neighbours = []
                     for neighbour in node["neighbours"]:
@@ -243,11 +247,13 @@ def draw_nested_subgraphs(input_data, level_dict, graph_obj, undefined_rank_node
     Returns:
          None
     """
+
     for data in input_data:
         graph_obj.attr(ranksep="0.7")
         with graph_obj.subgraph(name="cluster_child_" + str(data["name"])) as subgraph:
             subgraph.attr(label=data["name"])
             subgraph.attr(labelloc="t")
+
             if "nodes" in data and data["nodes"]:
                 pod_node_list = [node["name"] for node in data["nodes"] if node["name"] != "0"]
                 new_rank_dict = {"undefined": {}}
@@ -259,8 +265,6 @@ def draw_nested_subgraphs(input_data, level_dict, graph_obj, undefined_rank_node
                         if node in pod_node_list and node not in undefined_rank_nodes:
                             new_rank_dict[rank].append(node)
 
-                print("++++++++++new_rank_dict")
-                print(new_rank_dict)
                 for rank, nodes in new_rank_dict.items():
                     if nodes:
                         if rank not in pod_conn.keys():
@@ -281,7 +285,7 @@ def draw_nested_subgraphs(input_data, level_dict, graph_obj, undefined_rank_node
                                     node_table = '<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4">'
                                     if (len(node_ports["top"]) == 0) and (len(node_ports["bottom"]) == 0) and (len(node_ports["left"]) == 0) and (len(node_ports["right"]) == 0):
                                         # node_table = node_table + "<TR>"
-                                        node_table = f"{str(node_table)} <TR><TD HEIGHT=\"{str(NODE_HEIGHT_VALUE)}\" WIDTH=\"{str(NODE_WIDTH_VALUE)}\" BGCOLOR=\"#4a69bd\"> <FONT COLOR=\"#ffffff\">{node}</FONT></TD></TR>"
+                                        node_table = f"{str(node_table)} <TR><TD HEIGHT=\"{str(NODE_HEIGHT_VALUE)}\" WIDTH=\"{str(NODE_WIDTH_VALUE)}\" BGCOLOR=\"#4a69bd\"> <FONT COLOR=\"#ffffff\">{node}</FONT></TD></TR>\n"
                                         # node_table = node_table + "</TR>"
                                     else:
                                         # top
@@ -319,35 +323,32 @@ def draw_nested_subgraphs(input_data, level_dict, graph_obj, undefined_rank_node
                                             for port_val in port_col:
                                                 port_val = str(port_val).replace(" ", "").replace("0", "")
                                                 if port_val == 0 or port_val == "":
-                                                    node_table = f"{str(node_table)} <TD HEIGHT=\"{str(HEIGHT_VALUE)}\" WIDTH=\"{str(WIDTH_VALUE)}\" BORDER=\"{str(BORDER_VALUE)}\" ></TD>"
+                                                    node_table = f"{str(node_table)} <TD HEIGHT=\"{str(HEIGHT_VALUE)}\" WIDTH=\"{str(WIDTH_VALUE)}\" BORDER=\"{str(BORDER_VALUE)}\" ></TD>\n"
                                                 else:
-                                                    node_table = f"{str(node_table)} <TD HEIGHT=\"{str(HEIGHT_VALUE)}\" WIDTH=\"{str(WIDTH_VALUE)}\" PORT=\"{str(port_val)}\">{str(port_val)}</TD>"
+                                                    node_table = f"{str(node_table)} <TD HEIGHT=\"{str(HEIGHT_VALUE)}\" WIDTH=\"{str(WIDTH_VALUE)}\" PORT=\"{str(port_val)}\">{str(port_val)}</TD>\n"
 
                                             node_table = f"{str(node_table)} </TR>"
                                         else:
                                             node_table = f"{str(node_table)} <TR>"
                                             for td_val in range(column_num):
-                                                node_table = f"{str(node_table)} <TD HEIGHT=\"{str(HEIGHT_VALUE)}\" WIDTH=\"{str(WIDTH_VALUE)}\" BORDER=\"{str(BORDER_VALUE)}\" ></TD>"    
+                                                node_table = f"{str(node_table)} <TD HEIGHT=\"{str(HEIGHT_VALUE)}\" WIDTH=\"{str(WIDTH_VALUE)}\" BORDER=\"{str(BORDER_VALUE)}\" ></TD>\n"    
                                             node_table = f"{str(node_table)} </TR>"    
 
 
                                         #left right
                                         if len(node_ports["left"]) == 0 and len(node_ports["right"]) == 0:
-                                            node_table = f"{str(node_table)} <TR><TD HEIGHT=\"{str(HEIGHT_VALUE)}\" WIDTH=\"{str(WIDTH_VALUE)}\" BORDER=\"{str(BORDER_VALUE)}\" ></TD><TD BGCOLOR=\"#4a69bd\" COLSPAN=\"{str(column_num - 2)}\" ROWSPAN=\"{str(row_num)}\"> <FONT COLOR=\"#ffffff\">{node}</FONT></TD><TD HEIGHT=\"{str(HEIGHT_VALUE)}\" WIDTH=\"{str(WIDTH_VALUE)}\"  BORDER=\"{str(BORDER_VALUE)}\" ></TD></TR>"
+                                            node_table = f"{str(node_table)} <TR><TD HEIGHT=\"{str(HEIGHT_VALUE)}\" WIDTH=\"{str(WIDTH_VALUE)}\" BORDER=\"{str(BORDER_VALUE)}\" ></TD><TD BGCOLOR=\"#4a69bd\" COLSPAN=\"{str(column_num - 2)}\" ROWSPAN=\"{str(row_num)}\"> <FONT COLOR=\"#ffffff\">{node}</FONT></TD><TD HEIGHT=\"{str(HEIGHT_VALUE)}\" WIDTH=\"{str(WIDTH_VALUE)}\"  BORDER=\"{str(BORDER_VALUE)}\" ></TD></TR>\n"
                                             for i in range(row_num - 1):
-                                                node_table = f"{str(node_table)} <TR><TD HEIGHT=\"{str(HEIGHT_VALUE)}\" WIDTH=\"{str(WIDTH_VALUE)}\" BORDER=\"{str(BORDER_VALUE)}\" ></TD><TD HEIGHT=\"{str(HEIGHT_VALUE)}\" WIDTH=\"{str(WIDTH_VALUE)}\" BORDER=\"{str(BORDER_VALUE)}\" ></TD> </TR>"
+                                                node_table = f"{str(node_table)} <TR><TD HEIGHT=\"{str(HEIGHT_VALUE)}\" WIDTH=\"{str(WIDTH_VALUE)}\" BORDER=\"{str(BORDER_VALUE)}\" ></TD><TD HEIGHT=\"{str(HEIGHT_VALUE)}\" WIDTH=\"{str(WIDTH_VALUE)}\" BORDER=\"{str(BORDER_VALUE)}\" ></TD> </TR>\n"
                                         else:
-                                            node_table = f"{str(node_table)} <TR><TD HEIGHT=\"{str(HEIGHT_VALUE)}\" WIDTH=\"{str(WIDTH_VALUE)}\"  BORDER=\"{str(BORDER_VALUE)}\" ></TD><TD BGCOLOR=\"#4a69bd\" COLSPAN=\"{str(column_num - 2)}\" ROWSPAN=\"{str(row_num)}\"> <FONT COLOR=\"#ffffff\">{node}</FONT></TD><TD HEIGHT=\"{str(HEIGHT_VALUE)}\" WIDTH=\"{str(WIDTH_VALUE)}\"  BORDER=\"{str(BORDER_VALUE)}\" > </TD></TR>"
+                                            node_table = f"{str(node_table)} <TR><TD HEIGHT=\"{str(HEIGHT_VALUE)}\" WIDTH=\"{str(WIDTH_VALUE)}\"  BORDER=\"{str(BORDER_VALUE)}\" ></TD><TD BGCOLOR=\"#4a69bd\" COLSPAN=\"{str(column_num - 2)}\" ROWSPAN=\"{str(row_num)}\"> <FONT COLOR=\"#ffffff\">{node}</FONT></TD><TD HEIGHT=\"{str(HEIGHT_VALUE)}\" WIDTH=\"{str(WIDTH_VALUE)}\"  BORDER=\"{str(BORDER_VALUE)}\" > </TD></TR>\n"
 
                                             row_port_num = row_num - 2
 
                                             #left
                                             left_row_val = [0] * row_port_num
 
-                                            # print(left_row_val)
-
                                             row_port_len = len(node_ports["left"])
-                                            #print(row_port_len)
                                             row_port_start = 0
 
                                             if row_port_len != 0:
@@ -362,23 +363,17 @@ def draw_nested_subgraphs(input_data, level_dict, graph_obj, undefined_rank_node
                                                     row_port_start = 0
 
                                             row_port_start = int(row_port_start)
-                                            #print("\n\n")
-                                            #print(row_port_num)
-                                            #print(row_port_len)
-                                            #print(row_port_start)
+
 
                                             node_ports["left"].sort()
                                             for port_pos in range(row_port_start, row_port_len + row_port_start):
                                                 left_row_val[port_pos] = node_ports["left"][port_pos - row_port_start]
 
-                                            # port_start = int(port_start)
+
                                             #right
                                             right_row_val = [0] * row_port_num
 
-                                            # print(right_row_val)
-
                                             row_port_len = len(node_ports["right"])
-                                            #print(row_port_len)
                                             row_port_start = 0
 
                                             if row_port_len != 0:
@@ -393,10 +388,6 @@ def draw_nested_subgraphs(input_data, level_dict, graph_obj, undefined_rank_node
                                                     row_port_start = 0
 
                                             row_port_start = int(row_port_start)
-                                            #print("\n\n")
-                                            #print(row_port_num)
-                                            #print(row_port_len)
-                                            #print(row_port_start)
 
                                             node_ports["right"].sort()
                                             for port_pos in range(row_port_start, row_port_len + row_port_start):
@@ -409,17 +400,17 @@ def draw_nested_subgraphs(input_data, level_dict, graph_obj, undefined_rank_node
                                             for row_val in range(row_port_num):
                                                 #left
                                                 if left_row_val[row_val] == 0: 
-                                                    node_table = f"{str(node_table)} <TR><TD HEIGHT=\"{str(HEIGHT_VALUE)}\" WIDTH=\"{str(WIDTH_VALUE)}\" BORDER=\"{str(BORDER_VALUE)}\" ></TD>"
+                                                    node_table = f"{str(node_table)} <TR><TD HEIGHT=\"{str(HEIGHT_VALUE)}\" WIDTH=\"{str(WIDTH_VALUE)}\" BORDER=\"{str(BORDER_VALUE)}\" ></TD>\n"
                                                 else:
-                                                    node_table = f"{str(node_table)} <TR><TD HEIGHT=\"{str(HEIGHT_VALUE)}\" WIDTH=\"{str(WIDTH_VALUE)}\" PORT=\"{str(left_row_val[row_val])}\">{str(left_row_val[row_val])}</TD>"
+                                                    node_table = f"{str(node_table)} <TR><TD HEIGHT=\"{str(HEIGHT_VALUE)}\" WIDTH=\"{str(WIDTH_VALUE)}\" PORT=\"{str(left_row_val[row_val])}\">{str(left_row_val[row_val])}</TD>\n"
 
                                                 #right
                                                 if right_row_val[row_val] == 0:                                                    
-                                                    node_table = f"{str(node_table)} <TD HEIGHT=\"{str(HEIGHT_VALUE)}\" WIDTH=\"{str(WIDTH_VALUE)}\" BORDER=\"{str(BORDER_VALUE)}\" ></TD></TR>"
+                                                    node_table = f"{str(node_table)} <TD HEIGHT=\"{str(HEIGHT_VALUE)}\" WIDTH=\"{str(WIDTH_VALUE)}\" BORDER=\"{str(BORDER_VALUE)}\" ></TD></TR>\n"
                                                 else:
-                                                    node_table = f"{str(node_table)} <TD HEIGHT=\"{str(HEIGHT_VALUE)}\" WIDTH=\"{str(WIDTH_VALUE)}\" PORT=\"{str(right_row_val[row_val])}\">{str(right_row_val[row_val])}</TD></TR>"
+                                                    node_table = f"{str(node_table)} <TD HEIGHT=\"{str(HEIGHT_VALUE)}\" WIDTH=\"{str(WIDTH_VALUE)}\" PORT=\"{str(right_row_val[row_val])}\">{str(right_row_val[row_val])}</TD></TR>\n"
 
-                                            node_table = f"{str(node_table)} <TR><TD HEIGHT=\"{str(HEIGHT_VALUE)}\" WIDTH=\"{str(WIDTH_VALUE)}\"  BORDER=\"{str(BORDER_VALUE)}\"></TD><TD HEIGHT=\"{str(HEIGHT_VALUE)}\" WIDTH=\"{str(WIDTH_VALUE)}\" BORDER=\"{str(BORDER_VALUE)}\"></TD></TR>"
+                                            node_table = f"{str(node_table)} <TR><TD HEIGHT=\"{str(HEIGHT_VALUE)}\" WIDTH=\"{str(WIDTH_VALUE)}\"  BORDER=\"{str(BORDER_VALUE)}\"></TD><TD HEIGHT=\"{str(HEIGHT_VALUE)}\" WIDTH=\"{str(WIDTH_VALUE)}\" BORDER=\"{str(BORDER_VALUE)}\"></TD></TR>\n"
 
                                         # bottom
                                         port_len = len(node_ports["bottom"])
@@ -451,12 +442,6 @@ def draw_nested_subgraphs(input_data, level_dict, graph_obj, undefined_rank_node
 
                                             port_start = int(port_start)
 
-                                            # print(column_num)
-                                            # print(port_len)
-                                            # print(port_start)
-                                            # print("\n\n")
-
-
                                             node_ports["bottom"].sort()
                                             for port_pos in range(port_start, port_len + port_start):
                                                 port_col[port_pos] = node_ports["bottom"][port_pos - port_start]
@@ -464,24 +449,20 @@ def draw_nested_subgraphs(input_data, level_dict, graph_obj, undefined_rank_node
                                             for port_val in port_col:
                                                 port_val = str(port_val).replace(" ", "").replace("0", "")
                                                 if port_val == 0 or port_val == "":
-                                                    node_table = f"{str(node_table)} <TD HEIGHT=\"{str(HEIGHT_VALUE)}\" WIDTH=\"{str(WIDTH_VALUE)}\" BORDER=\"{str(BORDER_VALUE)}\" ></TD>"
+                                                    node_table = f"{str(node_table)} <TD HEIGHT=\"{str(HEIGHT_VALUE)}\" WIDTH=\"{str(WIDTH_VALUE)}\" BORDER=\"{str(BORDER_VALUE)}\" ></TD>\n"
                                                 else:
-                                                    node_table = f"{str(node_table)} <TD HEIGHT=\"{str(HEIGHT_VALUE)}\" WIDTH=\"{str(WIDTH_VALUE)}\" PORT=\"{str(port_val)}\">{str(port_val)}</TD>"
+                                                    node_table = f"{str(node_table)} <TD HEIGHT=\"{str(HEIGHT_VALUE)}\" WIDTH=\"{str(WIDTH_VALUE)}\" PORT=\"{str(port_val)}\">{str(port_val)}</TD>\n"
                                             node_table = f"{str(node_table)} </TR>"
                                         else:
                                             node_table = f"{str(node_table)} <TR>"
                                             for td_val in range(column_num):
-                                                node_table = f"{str(node_table)} <TD HEIGHT=\"{str(HEIGHT_VALUE)}\" WIDTH=\"{str(WIDTH_VALUE)}\" BORDER=\"{str(BORDER_VALUE)}\" ></TD>"    
+                                                node_table = f"{str(node_table)} <TD HEIGHT=\"{str(HEIGHT_VALUE)}\" WIDTH=\"{str(WIDTH_VALUE)}\" BORDER=\"{str(BORDER_VALUE)}\" ></TD>\n"    
                                             node_table = f"{str(node_table)} </TR>"    
-
-
 
                                     node_table = f"{str(node_table)} </TABLE>>"
                                     node_table = node_table.replace("\n", "")
 
                                     inner_subgraph.node(node, node_table)
-                                    # inner_subgraph.node("hello")
-
 
             if "groups" in data and data["groups"]:
                 draw_nested_subgraphs(data["groups"], level_dict, subgraph, undefined_rank_nodes, node_port_val, column_num, row_num, pod_conn)
@@ -505,6 +486,7 @@ def create_graph_and_set_properties():
         edge_attr={"fontname": "arial", "fontsize": "6", "center": "true", "concentrate": "true", "minlen": "2", "labelfloat": "false"},
     )
     graph_obj.attr(rank="same")
+    # graphviz.layout("neato")
     return graph_obj
 
 
@@ -526,13 +508,6 @@ def generate_topology(level_dict, node_neighbour_dict, output_list, undefined_ra
     graph_obj = create_graph_and_set_properties()
 
 
-    #print("column_num")
-
-    #print(node_neighbour_dict)
-    # for node, ports in node_port_val.items():
-    #     #print(f"{node} {ports}")
-
-    #print(level_dict)
     column_num = 0
     row_num = 0
     for rank, nodes in level_dict.items():
@@ -544,9 +519,6 @@ def generate_topology(level_dict, node_neighbour_dict, output_list, undefined_ra
             row_num = max(row_num, len(node_ports["left"]))
             row_num = max(row_num, len(node_ports["right"]))            
 
-    #print("======")
-    #print(column_num)
-    #print(row_num)
 
     if column_num == 0 or column_num < DEFAULT_COLUMN_BLOCK:
         column_num = DEFAULT_COLUMN_BLOCK 
@@ -557,14 +529,10 @@ def generate_topology(level_dict, node_neighbour_dict, output_list, undefined_ra
         row_num = DEFAULT_ROW_BLOCK
     else:    
         row_num = row_num + 2      
-    #print(row_num)
 
     #to get list of pod conn
     pod_conn = {}
-
     draw_nested_subgraphs(output_list, level_dict, graph_obj, undefined_rank_nodes, node_port_val, column_num, row_num, pod_conn)
-
-    # print(pod_conn)
 
     for node, neighbours in node_neighbour_dict.items():
         if node != "0":
@@ -583,22 +551,14 @@ def generate_topology(level_dict, node_neighbour_dict, output_list, undefined_ra
                 for nodes_val in pod_conn.values(): #[['LEAF1', 'LEAF2'], ['LEAF3', 'LEAF4']]
                     if len(nodes_val) > 1:
                         diff_pod = []
-                        # print(nodes_val)
-                        # if 'LEAF2' == node and 'LEAF3' == neighbour["neighborDevice"]:
-                        #     print(node)
-                        #     print(neighbour["neighborDevice"])
-                        #     print(len(nodes_val))
                         for pod_node in range(len(nodes_val)):
                             if node in nodes_val[pod_node]:
-                                # print(pod_node)
                                 if pod_node not in diff_pod:
                                     diff_pod.append(pod_node) 
                             if neighbour["neighborDevice"] in nodes_val[pod_node]:
-                                # print(pod_node)
                                 if pod_node not in diff_pod:
                                     diff_pod.append(pod_node)
-                        temp_diff_pod.append(diff_pod)            
-                # print(temp_diff_pod) 
+                        temp_diff_pod.append(diff_pod)             
         
                 flag = False
                 for check_len in temp_diff_pod:

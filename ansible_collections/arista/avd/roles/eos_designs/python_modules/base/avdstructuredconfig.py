@@ -58,12 +58,13 @@ class AvdStructuredConfig(AvdFacts):
     def diagram_groups(self):
         diagram_groups = []
         if (fabric_name := get(self._hostvars, "fabric_name")) is not None:
-            diagram_groups.append({"name": fabric_name})
+            diagram_groups.append({"fabric_name": fabric_name})
         if (dc_name := get(self._hostvars, "dc_name")) is not None:
-            diagram_groups.append({"name": dc_name})
+            diagram_groups.append({"dc_name": dc_name})
         if (pod_name := get(self._hostvars, "pod_name")) is not None:
-            diagram_groups.append({"name": pod_name})
-
+            diagram_groups.append({"pod_name": pod_name})
+        
+        # raise Exception(get(self._hostvars, "switch.group"))
         return diagram_groups
 
     @cached_property

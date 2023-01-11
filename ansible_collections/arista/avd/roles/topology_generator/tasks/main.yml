@@ -6,9 +6,11 @@
     - name: Generate topology diagram from structure config in svg format
       tags: [always]
       arista.avd.topology_generator:
-        structured_config: "./structured_configs_v3"
+        # structured_config: "./structured_configs_l2ls_fabric"
+        structured_config: "./structured_configs_twodc_5stage_clos"
       delegate_to: localhost
 
+#for molecule
 # - name: topology
 #   tags: [topology_generator]
 #   run_once: true
