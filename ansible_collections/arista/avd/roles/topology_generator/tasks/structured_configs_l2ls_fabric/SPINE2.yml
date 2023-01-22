@@ -1,6 +1,7 @@
 diagram_groups:
   - 'name': 'DC1_FABRIC'
   - 'name': 'DC1_SPINES'
+  - 'name': 'DC1_SPINES2'  
 static_routes:
 - vrf: MGMT
   destination_address_prefix: 0.0.0.0/0

@@ -235,7 +235,7 @@ def find_node_levels(graph, start_node, node_list):
     return level_dict, node_level_dict
 
 
-def draw_nested_subgraphs(input_data, level_dict, graph_obj, undefined_rank_nodes, node_port_val, column_num, row_num, pod_conn):
+def draw_nested_subgraphs(input_data, level_dict, graph_obj, undefined_rank_nodes, node_port_val, column_num, row_num, pod_conn, pod_pos):
     """
     Create a nested subgraphs recursively based on input_data
 
@@ -272,6 +272,9 @@ def draw_nested_subgraphs(input_data, level_dict, graph_obj, undefined_rank_node
                         else:
                             pod_conn[rank] = pod_conn[rank] + [nodes]        
 
+                print("new_rank_dict")
+                for rank, nodes in new_rank_dict.items():
+                    print(f"{rank} : {nodes}")
 
                 for rank, nodes in new_rank_dict.items():
                     if nodes:
@@ -279,6 +282,11 @@ def draw_nested_subgraphs(input_data, level_dict, graph_obj, undefined_rank_node
                             inner_subgraph.attr(rank="same")
                             # inner_subgraph.attr(rankdir="LR")
                             for node in nodes:
+                                if rank not in pod_pos.keys():
+                                    pod_pos[rank] = [node]
+                                else:
+                                    pod_pos[rank] = pod_pos[rank] + [node]        
+
                                 if node not in undefined_rank_nodes:
                                     node_ports = node_port_val[node]
 
@@ -462,10 +470,14 @@ def draw_nested_subgraphs(input_data, level_dict, graph_obj, undefined_rank_node
                                     node_table = f"{str(node_table)} </TABLE>>"
                                     node_table = node_table.replace("\n", "")
 
-                                    inner_subgraph.node(node, node_table)
+                                    y_cor = (rank - 1) * (-3)
+                                    x_cor = (len(pod_pos[rank]) - 1) * 2
+                                    x_cor = x_cor - 7
+                                    y_cor = y_cor + 4.5
+                                    inner_subgraph.node(node, node_table, pos=f"{x_cor},{y_cor}!")
 
             if "groups" in data and data["groups"]:
-                draw_nested_subgraphs(data["groups"], level_dict, subgraph, undefined_rank_nodes, node_port_val, column_num, row_num, pod_conn)
+                draw_nested_subgraphs(data["groups"], level_dict, subgraph, undefined_rank_nodes, node_port_val, column_num, row_num, pod_conn, pod_pos)
 
 
 def create_graph_and_set_properties():
@@ -485,7 +497,7 @@ def create_graph_and_set_properties():
         },
         edge_attr={"fontname": "arial", "fontsize": "6", "center": "true", "concentrate": "true", "minlen": "2", "labelfloat": "false"},
     )
-    graph_obj.attr(rank="same")
+    graph_obj.attr(rank="same",layout="neato")
     # graphviz.layout("neato")
     return graph_obj
 
@@ -532,7 +544,36 @@ def generate_topology(level_dict, node_neighbour_dict, output_list, undefined_ra
 
     #to get list of pod conn
     pod_conn = {}
-    draw_nested_subgraphs(output_list, level_dict, graph_obj, undefined_rank_nodes, node_port_val, column_num, row_num, pod_conn)
+    pod_pos = {}
+
+    # print("output_list")
+    # print(output_list)
+    # exit()
+
+    draw_nested_subgraphs(output_list, level_dict, graph_obj, undefined_rank_nodes, node_port_val, column_num, row_num, pod_conn, pod_pos)
+
+    temp_pod_conn = {}
+    for p_key, p_val in pod_conn.items():
+        temp_pod_conn[p_key] = []
+        for node_value in p_val:
+            temp_pod_conn[p_key] = temp_pod_conn[p_key] + node_value             
+
+    print(temp_pod_conn)
+    # print(pod_conn)
+
+    height_level = len(temp_pod_conn.keys())
+    width_level = 0
+    for pod_conn_list in temp_pod_conn.values():
+        width_level = max(width_level,len(pod_conn_list))
+
+    print(height_level)
+    print(width_level) 
+
+    # 			"boundary1" [label=<<TABLE BORDER="3" CELLBORDER="0">  <TR><TD  HEIGHT="290" 
+	# WIDTH="225"  > <FONT COLOR="#ffffff">boundary1</FONT></TD></TR>    </TABLE>>, 
+	# pos="1.1,-1.5!"] 
+    node_table = f"<<TABLE BORDER=\"3\" CELLBORDER=\"0\">  <TR><TD  HEIGHT=\"290\" WIDTH=\"500\"  > <FONT COLOR=\"#ffffff\">boundary1</FONT></TD></TR></TABLE>>"   
+    graph_obj.node("boundary1", node_table, pos="3,-1.5!")
 
     for node, neighbours in node_neighbour_dict.items():
         if node != "0":

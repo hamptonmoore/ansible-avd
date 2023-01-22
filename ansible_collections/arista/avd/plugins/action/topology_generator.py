@@ -37,7 +37,7 @@ class ActionModule(ActionBase):
 
         # old logic
         inventory_group = ['DC1-POD1-LEAF1A', 'DC2-SUPER-SPINE1', 'DC2-SUPER-SPINE2', 'DC2-RS1', 'DC2-RS2', 'DC1-SUPER-SPINE1', 'DC1-SUPER-SPINE2', 'DC1-RS1', 'DC1-RS2', 'DC1-POD1-SPINE1', 'DC1-POD1-SPINE2', 'DC1.POD1.LEAF2A', 'DC1-POD1-LEAF2B', 'DC1-POD1-L2LEAF1A', 'DC1-POD1-L2LEAF2A', 'DC1-POD1-L2LEAF2B', 'DC2-POD1-SPINE1', 'DC2-POD1-SPINE2', 'DC2-POD1-LEAF1A', 'DC2-POD1-L2LEAF1A', 'DC2-POD1-LEAF2A', 'DC2-POD1-L2LEAF2A', 'DC1-POD2-SPINE1', 'DC1-POD2-SPINE2', 'DC1-POD2-LEAF1A']
-        # inventory_group =  ['SPINE1', 'SPINE2', 'LEAF1', 'LEAF2', 'LEAF3', 'LEAF4']
+        # inventory_group =  ['SPINE1', 'SPINE2','SUPER-SPINE2','SUPER-SPINE1', 'LEAF1', 'LEAF2', 'LEAF3', 'LEAF4']
         # inventory_group = ['l3-leaf5', 'spine6', 'l2-leaf1', 'l3-leaf6', 'spine7','l2-leaf2','l3-leaf7','spine8','l2-leaf3','l3-leaf8','spine9','l2-leaf4','l3-leaf9','super-spine1','l3-leaf1','spine1'  ,'super-spine2','l3-leaf10','spine2'  ,'super-spine3','l3-leaf2','spine3'  ,'super-spine4','l3-leaf3','spine4','l3-leaf4','spine5']
         self.driver_func(path, inventory_group)
         return result
