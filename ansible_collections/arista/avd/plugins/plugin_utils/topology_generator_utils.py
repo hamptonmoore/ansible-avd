@@ -3,10 +3,12 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 import os
 import queue
+import math
 
 import graphviz
 import yaml
 import random
+import textwrap
 
 import drawSvg as draw
 
@@ -14,6 +16,8 @@ import drawSvg as draw
 BOXMARGIN = 25
 
 # Sizings
+ROUTERMAXFONTSIZE = 25
+ROUTERWRAPFONTSIZE = 18
 ROUTERSIZE = 120
 ROWSPACING = ROUTERSIZE * 2
 LVLSPACING = ROUTERSIZE * 2
@@ -22,7 +26,7 @@ PORTWIDTH = 20
 PORTOFFSET = 3
 PORTFONTSIZE = 16
 TITLEFONTSIZE = 24
-TITLEOFFSET = 3
+TITLEOFFSET = 0
 
 # Used for horizontal connection overlaps
 WIREDEFAULTDISTANCE = 10
@@ -303,7 +307,7 @@ def generate_topology_hampton(destination, old_level_dict, node_neighbor_dict, o
 
     ol = calculate_box_size_recursive(level_dict, ol)
 
-    nodes, render_orderings, titles = draw_groups_recursive(d, level_dict, ol, 20, size-100)
+    nodes, render_orderings, titles = draw_groups_recursive(d, level_dict, ol, 20, size-100, 90)
 
     del node_port_val['0']
     draw_ports(d, nodes, node_port_val)
@@ -402,34 +406,38 @@ def calculate_box_size_recursive(level_dict, ol):
 
     return ol
 
-def draw_groups_recursive(d, ld, ol, x, y):
+def calculate_text_length(text, size):
+    return (len(text)) * size * 0.62
+
+def calculate_max_letter_count(size, fontsize):
+    return math.floor(size / (fontsize * 0.62))
+
+def draw_groups_recursive(d, ld, ol, x, y, lum):
     titles = []
     orderings = {}
     nodes = {}
     GROUPOFFSET = LVLSPACING
     if len(ol["nodes"]) == 0:
         GROUPOFFSET = 0
-    HEIGHTMARGIN = ol["height"] * (BOXMARGIN*2)
+    HEIGHTMARGIN = ol["height"] * (BOXMARGIN*2.75)
 
     if "psuedo" not in ol:
-        maxLevel = max(list(ld.values()))
-        lum = 90 - ((maxLevel - ol["height"]+1)*10)
         fill = f'hsl(0, 0%, {lum}%)'
-
+        lum -= 10
         d.append(draw.Rectangle(
             x, y-(((ol["height"]-1) * LVLSPACING))-GROUPOFFSET - HEIGHTMARGIN + BOXMARGIN, 
             ol["width"], 
             (((ol["height"]-1) * LVLSPACING))+GROUPOFFSET + HEIGHTMARGIN, 
-            stroke="black", fill=fill, rx="25"
+            fill=fill, rx="25", stroke=f'hsl(0, 0%, {lum * .75}%)', stroke_width=4,
             )
         )
-        textlength = ((len(ol["name"])) * TITLEFONTSIZE * 0.62)
-        titles.append(draw.Rectangle(x + ol["width"]/2 - textlength/2, y-TITLEFONTSIZE + TITLEOFFSET + BOXMARGIN - 3, textlength, TITLEFONTSIZE, fill=fill))
+        textlength = calculate_text_length(ol["name"], TITLEFONTSIZE)
+        titles.append(draw.Rectangle(x + ol["width"]/2 - textlength/2, y-TITLEFONTSIZE + TITLEOFFSET + BOXMARGIN - 3, textlength, TITLEFONTSIZE - 1, fill=fill))
         titles.append(draw.Text(ol["name"], TITLEFONTSIZE, x + ol["width"]/2, y-TITLEFONTSIZE + BOXMARGIN + TITLEOFFSET, fill="black",  text_anchor="middle"))
 
     cx = BOXMARGIN
     for idx, child in enumerate(ol["groups"]):
-        newNodes, newOrderings, newTitles = draw_groups_recursive(d, ld, child, x + cx, y - GROUPOFFSET - (BOXMARGIN))
+        newNodes, newOrderings, newTitles = draw_groups_recursive(d, ld, child, x + cx, y - GROUPOFFSET - (BOXMARGIN * 1.50), lum)
         for k, node in newNodes.items():
             nodes[k] = node
         cx += child["width"] + BOXMARGIN
@@ -451,7 +459,24 @@ def draw_groups_recursive(d, ld, ol, x, y):
             ROUTERSIZE, 
             fill="#5167B7", text=child["name"]
         ))
-        d.append(draw.Text(child["name"], 12, child["x"], child["y"]-6, fill="white", text_anchor="middle"))
+
+        fontsize = ROUTERMAXFONTSIZE
+        while calculate_text_length(child["name"], fontsize) > ROUTERSIZE and fontsize > ROUTERWRAPFONTSIZE:
+            fontsize-=1
+
+        if not fontsize > ROUTERWRAPFONTSIZE:
+            fontsize = ROUTERWRAPFONTSIZE
+            wrapper = textwrap.TextWrapper(width=calculate_max_letter_count(ROUTERSIZE, fontsize))
+            lines = wrapper.wrap(text=child["name"])
+            
+            offset = (fontsize * len(lines)) / 4
+            for element in lines:
+                if element.endswith("-"):
+                    element = element[:-1]
+                d.append(draw.Text(element, fontsize, child["x"], child["y"]-6 + offset, fill="white", text_anchor="middle"))
+                offset -= fontsize
+        else:
+            d.append(draw.Text(child["name"], fontsize, child["x"], child["y"]-6, fill="white", text_anchor="middle"))
         cx += ROWSPACING
         level = ld[child["name"]]
         if level not in orderings:
@@ -513,7 +538,6 @@ def draw_links(d, nodes, node_neighbor_dict, level_dict, render_orderings):
 
             nol = node["ports"][link["nodePort"]]
             nel = neigh["ports"][link["neighborPort"]]
-            # stroke = f'hsl({random.randint(0,360)},{random.randint(50,100)}%,{random.randint(25,75)}%)'
             stroke = "black"
             
             # Check if same level, if so we need to route specially
