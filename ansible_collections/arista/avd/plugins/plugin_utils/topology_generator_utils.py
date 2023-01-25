@@ -26,6 +26,8 @@ PORTFONTSIZE = 16
 WIREDEFAULTDISTANCE = 10
 WIRESPREAD = 6
 
+EDGETYPES = ["server"]
+
 def read_yaml_file(filename):
     """
     Open a structure config file and load a data from the file
@@ -57,17 +59,23 @@ def create_node_dict(file_data, filename):
         Dictionary with node and its corresponding neighbors
     """
     node_dict = {}
+    node_dict["edge"] = False
     node_dict["name"] = os.path.splitext(filename)[0].split("/")[-1]
     node_dict["neighbors"] = []
+
     if file_data and file_data.get("ethernet_interfaces"):
         for key, value in file_data["ethernet_interfaces"].items():
+            if "peer_interface" not in value:
+                continue
             neighbor_dict = {}
             neighbor_dict["neighborDevice"] = value["peer"]
             neighbor_dict["neighborPort"] = value["peer_interface"]
             neighbor_dict["port"] = key
             if "channel_group" in value and "id" in value["channel_group"]:
                 neighbor_dict["portChannel"] = value["channel_group"]["id"]
-            node_dict["neighbors"].append(neighbor_dict)        
+            node_dict["neighbors"].append(neighbor_dict)
+            if value["peer_type"] in EDGETYPES:
+                node_dict["edge"] = True
     return node_dict
 
 
@@ -111,6 +119,18 @@ def structured_config_to_topology_input(ol, node_dict, diagram_groups, current_d
 
     return ol
 
+def find_edge_distance(currentNode, nodes, seen):
+    seen.append(currentNode["name"])
+    if currentNode["edge"]:
+        return 1
+
+    links = []
+    for link in currentNode["neighbors"]:
+        if link["neighborDevice"] in nodes and link["neighborDevice"] not in seen:
+            links.append(find_edge_distance(nodes[link["neighborDevice"]], nodes, seen))
+    if len(links) == 0:
+        return 1
+    return 1 + min(links)
 
 def find_root_nodes(data, root=None):
     """
@@ -122,11 +142,30 @@ def find_root_nodes(data, root=None):
     Returns:
         Return a dictinary with root node as "0" with it's neighbors
     """
-
+    psuedo = False
     if not root:
         root = {"name": "0", "neighbors": []}
-    if "nodes" in data and data["nodes"]:
+        psuedo = True
+
+    # Calculate distance to edges if we just have nodes
+    if psuedo and "groups" in data and len(data["groups"]) == 0:
+        nodeLookup = {}
+        maxDistance = -1
         for node in data["nodes"]:
+            nodeLookup[node["name"]] = node
+
+        for node in data["nodes"]:    
+            node["distanceToEdge"] = find_edge_distance(node, nodeLookup, [])
+            maxDistance = max(maxDistance, node["distanceToEdge"])
+
+        for node in data["nodes"]:
+            if node["distanceToEdge"] == maxDistance:
+                neighbor_dict = {"neighborDevice": node["name"], "neighborPort": "", "port": ""}
+                root["neighbors"].append(neighbor_dict)
+        return root
+
+    if "nodes" in data and data["nodes"]:
+        for node in data["nodes"]:            
             neighbor_dict = {"neighborDevice": node["name"], "neighborPort": "", "port": ""}
             root["neighbors"].append(neighbor_dict)
         return root
@@ -263,8 +302,6 @@ def generate_topology_hampton(destination, old_level_dict, node_neighbor_dict, o
     ol = calculate_box_size_recursive(level_dict, ol)
 
     nodes, render_orderings = draw_groups_recursive(d, level_dict, ol, 20, size-100)
-
-    print(render_orderings)
 
     del node_port_val['0']
     draw_ports(d, nodes, node_port_val)
@@ -463,7 +500,8 @@ def draw_links(d, nodes, node_neighbor_dict, level_dict, render_orderings):
 
             nol = node["ports"][link["nodePort"]]
             nel = neigh["ports"][link["neighborPort"]]
-            stroke = f'hsl({random.randint(0,360)},{random.randint(50,100)}%,{random.randint(25,75)}%)'
+            # stroke = f'hsl({random.randint(0,360)},{random.randint(50,100)}%,{random.randint(25,75)}%)'
+            stroke = "black"
             
             # Check if same level, if so we need to route specially
             if level_dict.get(node["name"]) == level_dict.get(neigh["name"]):

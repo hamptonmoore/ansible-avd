@@ -31,19 +31,7 @@ class ActionModule(ActionBase):
             raise AnsibleActionFail("Missing 'destination' variable.")
         destination = self._task.args["destination"]
 
-        # fabric_name logic need to check only for molecule
-        # fabric_name = task_vars["fabric_name"]
-        # inventory_group = task_vars["groups"][fabric_name]
-        # print("inventory_group")
-        # print(inventory_group)
-        # self.driver_func(path, inventory_group)
-
-
-        # old logic
         inventory_group = [i.split(".")[0] for i in os.listdir(path)]
-        # inventory_group = ['DC1-POD1-LEAF1A', 'DC2-SUPER-SPINE1', 'DC2-SUPER-SPINE2', 'DC2-RS1', 'DC2-RS2', 'DC1-SUPER-SPINE1', 'DC1-SUPER-SPINE2', 'DC1-RS1', 'DC1-RS2', 'DC1-POD1-SPINE1', 'DC1-POD1-SPINE2', 'DC1.POD1.LEAF2A', 'DC1-POD1-LEAF2B', 'DC1-POD1-L2LEAF1A', 'DC1-POD1-L2LEAF2A', 'DC1-POD1-L2LEAF2B', 'DC2-POD1-SPINE1', 'DC2-POD1-SPINE2', 'DC2-POD1-LEAF1A', 'DC2-POD1-L2LEAF1A', 'DC2-POD1-LEAF2A', 'DC2-POD1-L2LEAF2A', 'DC1-POD2-SPINE1', 'DC1-POD2-SPINE2', 'DC1-POD2-LEAF1A']
-        # inventory_group =  ['SPINE1', 'SPINE2','SUPER-SPINE2','SUPER-SPINE1', 'LEAF1', 'LEAF2', 'LEAF3', 'LEAF4']
-        # inventory_group = ['l3-leaf5', 'spine6', 'l2-leaf1', 'l3-leaf6', 'spine7','l2-leaf2','l3-leaf7','spine8','l2-leaf3','l3-leaf8','spine9','l2-leaf4','l3-leaf9','super-spine1','l3-leaf1','spine1'  ,'super-spine2','l3-leaf10','spine2'  ,'super-spine3','l3-leaf2','spine3'  ,'super-spine4','l3-leaf3','spine4','l3-leaf4','spine5']
         self.driver_func(path, inventory_group, destination)
         return result
 
@@ -71,9 +59,7 @@ class ActionModule(ActionBase):
 
         undefined_rank_nodes = list(set(rank_nodes_list) ^ set(global_node_list))
 
-        # node_port_val = {top, bottom, left, right}
         node_port_val = {}
-
 
         for i in node_level_dict.keys():
             if i not in undefined_rank_nodes:
