@@ -1,9 +1,8 @@
 diagram_groups:
-- fabric_name: TWODC_5STAGE_CLOS
-- dc_name: DC2
+- fabric_name: FABRIC
 router_bgp:
-  as: '65201'
-  router_id: 172.16.20.1
+  as: '65100'
+  router_id: 10.255.0.2
   bgp_defaults:
   - no bgp default ipv4-unicast
   - distance bgp 20 200 200
@@ -13,15 +12,17 @@ router_bgp:
   peer_groups:
     IPv4-UNDERLAY-PEERS:
       type: ipv4
+      password: 7x4B4rnJhZB438m9+BrBfQ==
       maximum_routes: 12000
       send_community: all
     EVPN-OVERLAY-PEERS:
       type: evpn
       update_source: Loopback0
       bfd: true
+      password: Q4fqtbqcZ7oQuKfuWtNGRQ==
       send_community: all
       maximum_routes: 0
-      ebgp_multihop: 5
+      ebgp_multihop: 3
       next_hop_unchanged: true
   address_family_ipv4:
     peer_groups:
@@ -33,44 +34,46 @@ router_bgp:
     connected:
       route_map: RM-CONN-2-BGP
   neighbors:
-    172.17.20.0:
+    10.255.255.3:
       peer_group: IPv4-UNDERLAY-PEERS
-      remote_as: '65200'
-      description: DC2-SUPER-SPINE1_Ethernet3
-    172.17.20.2:
-      peer_group: IPv4-UNDERLAY-PEERS
-      remote_as: '65200'
-      description: DC2-SUPER-SPINE1_Ethernet6
-    172.16.110.3:
-      peer_group: EVPN-OVERLAY-PEERS
-      description: DC1-POD1-LEAF1A
-      remote_as: '65111.100'
-    172.16.110.1:
-      peer_group: EVPN-OVERLAY-PEERS
-      description: DC1-POD1-SPINE1
-      remote_as: '65110.100'
-    172.16.10.1:
-      peer_group: EVPN-OVERLAY-PEERS
-      description: DC1-RS1
       remote_as: '65101'
-    172.16.10.2:
+      description: dc1-leaf1a_Ethernet2
+    10.255.255.7:
+      peer_group: IPv4-UNDERLAY-PEERS
+      remote_as: '65101'
+      description: dc1-leaf1b_Ethernet2
+    10.255.255.11:
+      peer_group: IPv4-UNDERLAY-PEERS
+      remote_as: '65102'
+      description: dc1-leaf2a_Ethernet2
+    10.255.255.15:
+      peer_group: IPv4-UNDERLAY-PEERS
+      remote_as: '65102'
+      description: dc1-leaf2b_Ethernet2
+    10.255.0.3:
       peer_group: EVPN-OVERLAY-PEERS
-      description: DC1-RS2
+      description: dc1-leaf1a
+      remote_as: '65101'
+    10.255.0.4:
+      peer_group: EVPN-OVERLAY-PEERS
+      description: dc1-leaf1b
+      remote_as: '65101'
+    10.255.0.5:
+      peer_group: EVPN-OVERLAY-PEERS
+      description: dc1-leaf2a
+      remote_as: '65102'
+    10.255.0.6:
+      peer_group: EVPN-OVERLAY-PEERS
+      description: dc1-leaf2b
       remote_as: '65102'
   address_family_evpn:
     peer_groups:
       EVPN-OVERLAY-PEERS:
         activate: true
-  address_family_rtc:
-    peer_groups:
-      EVPN-OVERLAY-PEERS:
-        activate: true
-        default_route_target:
-          only: true
 static_routes:
 - vrf: MGMT
   destination_address_prefix: 0.0.0.0/0
-  gateway: 192.168.1.254
+  gateway: 172.16.1.1
 service_routing_protocols_model: multi-agent
 ip_routing: true
 vlan_internal_order:
@@ -78,15 +81,17 @@ vlan_internal_order:
   range:
     beginning: 1006
     ending: 1199
-snmp_server:
-  location: TWODC_5STAGE_CLOS DC2 DC2-RS1
 spanning_tree:
   mode: none
 local_users:
   admin:
     privilege: 15
     role: network-admin
-    sha512_password: $6$eJ5TvI8oru5i9e8G$R1X/SbtGTk9xoEHEBQASc7SC2nHYmi.crVgp2pXuCXwxsXEA81e4E0cXgQ6kX08fIeQzauqhv2kS.RGJFCon5/
+    no_password: true
+  ansible:
+    privilege: 15
+    role: network-admin
+    sha512_password: $6$7u4j1rkb3VELgcZE$EJt2Qff8kd/TapRoci0XaIZsL4tFzgq1YZBLD9c6f/knXzvcYY0NcMKndZeCv0T268knGKhOEwZAxqKjlMm920
 vrfs:
   MGMT:
     ip_routing: false
@@ -95,45 +100,60 @@ management_interfaces:
     description: oob_management
     shutdown: false
     vrf: MGMT
-    ip_address: 192.168.1.18/24
-    gateway: 192.168.1.254
+    ip_address: 172.16.1.12/24
+    gateway: 172.16.1.1
     type: oob
 management_api_http:
   enable_vrfs:
     MGMT: {}
   enable_https: true
-eos_cli: "interface Loopback1111\n  description Loopback created from raw_eos_cli under platform_settings vEOS-LAB\n"
 ethernet_interfaces:
   Ethernet1:
-    peer: DC2-SUPER-SPINE1
-    peer_interface: Ethernet3
-    peer_type: super-spine
-    description: P2P_LINK_TO_DC2-SUPER-SPINE1_Ethernet3
+    peer: dc1-leaf1a
+    peer_interface: Ethernet2
+    peer_type: l3leaf
+    description: P2P_LINK_TO_DC1-LEAF1A_Ethernet2
     shutdown: false
     mtu: 1500
-    service_profile: QOS-PROFILE
     type: routed
-    ip_address: 172.17.20.1/31
+    ip_address: 10.255.255.2/31
   Ethernet2:
-    peer: DC2-SUPER-SPINE1
-    peer_interface: Ethernet6
-    peer_type: super-spine
-    description: P2P_LINK_TO_DC2-SUPER-SPINE1_Ethernet6
+    peer: dc1-leaf1b
+    peer_interface: Ethernet2
+    peer_type: l3leaf
+    description: P2P_LINK_TO_DC1-LEAF1B_Ethernet2
     shutdown: false
     mtu: 1500
-    service_profile: QOS-PROFILE
     type: routed
-    ip_address: 172.17.20.3/31
+    ip_address: 10.255.255.6/31
+  Ethernet3:
+    peer: dc1-leaf2a
+    peer_interface: Ethernet2
+    peer_type: l3leaf
+    description: P2P_LINK_TO_DC1-LEAF2A_Ethernet2
+    shutdown: false
+    mtu: 1500
+    type: routed
+    ip_address: 10.255.255.10/31
+  Ethernet4:
+    peer: dc1-leaf2b
+    peer_interface: Ethernet2
+    peer_type: l3leaf
+    description: P2P_LINK_TO_DC1-LEAF2B_Ethernet2
+    shutdown: false
+    mtu: 1500
+    type: routed
+    ip_address: 10.255.255.14/31
 loopback_interfaces:
   Loopback0:
     description: EVPN_Overlay_Peering
     shutdown: false
-    ip_address: 172.16.20.1/32
+    ip_address: 10.255.0.2/32
 prefix_lists:
   PL-LOOPBACKS-EVPN-OVERLAY:
     sequence_numbers:
       10:
-        action: permit 172.16.20.0/24 eq 32
+        action: permit 10.255.0.0/27 eq 32
 route_maps:
   RM-CONN-2-BGP:
     sequence_numbers:

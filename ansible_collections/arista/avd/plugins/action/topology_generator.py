@@ -4,6 +4,7 @@ __metaclass__ = type
 
 
 import glob
+import os
 
 from ansible.errors import AnsibleActionFail
 from ansible.plugins.action import ActionBase
@@ -36,7 +37,8 @@ class ActionModule(ActionBase):
 
 
         # old logic
-        inventory_group = ['DC1-POD1-LEAF1A', 'DC2-SUPER-SPINE1', 'DC2-SUPER-SPINE2', 'DC2-RS1', 'DC2-RS2', 'DC1-SUPER-SPINE1', 'DC1-SUPER-SPINE2', 'DC1-RS1', 'DC1-RS2', 'DC1-POD1-SPINE1', 'DC1-POD1-SPINE2', 'DC1.POD1.LEAF2A', 'DC1-POD1-LEAF2B', 'DC1-POD1-L2LEAF1A', 'DC1-POD1-L2LEAF2A', 'DC1-POD1-L2LEAF2B', 'DC2-POD1-SPINE1', 'DC2-POD1-SPINE2', 'DC2-POD1-LEAF1A', 'DC2-POD1-L2LEAF1A', 'DC2-POD1-LEAF2A', 'DC2-POD1-L2LEAF2A', 'DC1-POD2-SPINE1', 'DC1-POD2-SPINE2', 'DC1-POD2-LEAF1A']
+        inventory_group = [i.split(".")[0] for i in os.listdir(path)]
+        # inventory_group = ['DC1-POD1-LEAF1A', 'DC2-SUPER-SPINE1', 'DC2-SUPER-SPINE2', 'DC2-RS1', 'DC2-RS2', 'DC1-SUPER-SPINE1', 'DC1-SUPER-SPINE2', 'DC1-RS1', 'DC1-RS2', 'DC1-POD1-SPINE1', 'DC1-POD1-SPINE2', 'DC1.POD1.LEAF2A', 'DC1-POD1-LEAF2B', 'DC1-POD1-L2LEAF1A', 'DC1-POD1-L2LEAF2A', 'DC1-POD1-L2LEAF2B', 'DC2-POD1-SPINE1', 'DC2-POD1-SPINE2', 'DC2-POD1-LEAF1A', 'DC2-POD1-L2LEAF1A', 'DC2-POD1-LEAF2A', 'DC2-POD1-L2LEAF2A', 'DC1-POD2-SPINE1', 'DC1-POD2-SPINE2', 'DC1-POD2-LEAF1A']
         # inventory_group =  ['SPINE1', 'SPINE2','SUPER-SPINE2','SUPER-SPINE1', 'LEAF1', 'LEAF2', 'LEAF3', 'LEAF4']
         # inventory_group = ['l3-leaf5', 'spine6', 'l2-leaf1', 'l3-leaf6', 'spine7','l2-leaf2','l3-leaf7','spine8','l2-leaf3','l3-leaf8','spine9','l2-leaf4','l3-leaf9','super-spine1','l3-leaf1','spine1'  ,'super-spine2','l3-leaf10','spine2'  ,'super-spine3','l3-leaf2','spine3'  ,'super-spine4','l3-leaf3','spine4','l3-leaf4','spine5']
         self.driver_func(path, inventory_group)
@@ -58,6 +60,7 @@ class ActionModule(ActionBase):
 
         global_node_list, graph_dict = gt.create_graph_dict(output_list, inventory_group)
 
+        print(graph_dict)
         level_dict, node_level_dict = gt.find_node_levels(graph_dict, "0", global_node_list)
 
         rank_nodes_list = []
@@ -121,31 +124,6 @@ class ActionModule(ActionBase):
                             node_port_val[i["neighborDevice"]]["bottom"] = node_port_val[i["neighborDevice"]]["bottom"] + [i["neighborPort"]]
                             node_port_val[i["neighborDevice"]]["checked"] = node_port_val[i["neighborDevice"]]["checked"] + [i["neighborPort"]]
 
-        #  V1 logic for left right node ports
-        # for level_list in level_dict.values():
-        #     # print("===============")
-        #     # print(level_list)
-        #     # # level_list.sort()
-        #     # print("===============")
-        #     # print(level_list)
-        #     if len(level_list) > 1: 
-        #         for i in range(len(level_list)-1):
-        #             # print("\n")
-        #             # print(f"{level_list[i]}  {level_list[i+1]}") 
-        #             # print(f"{graph_dict[level_list[i]]}") 
-        #             # print(f"{graph_dict[level_list[i + 1]]}")
-        #             for node_detail in graph_dict[level_list[i]]:
-        #                 if node_detail["neighborDevice"] == level_list[i + 1]:
-        #                     #left node => right port    
-        #                     if (node_detail["nodePort"] not in node_port_val[level_list[i]]["right"]) and (node_detail["nodePort"] not in node_port_val[level_list[i]]["checked"]):
-        #                         node_port_val[level_list[i]]["right"] = node_port_val[level_list[i]]["right"] + [node_detail["nodePort"]]
-        #                         node_port_val[level_list[i]]["checked"] = node_port_val[level_list[i]]["checked"] + [node_detail["nodePort"]]
-                            
-        #                     #right node => left port 
-        #                     if (node_detail["neighborPort"] not in node_port_val[level_list[i + 1]]["left"]) and (node_detail["neighborPort"] not in node_port_val[level_list[i + 1]]["checked"]):
-        #                         node_port_val[level_list[i + 1]]["left"] = node_port_val[level_list[i + 1]]["left"] + [node_detail["neighborPort"]]
-        #                         node_port_val[level_list[i + 1]]["checked"] = node_port_val[level_list[i + 1]]["checked"] + [node_detail["neighborPort"]]
-
         for level_pos,level_list in level_dict.items():
             level_list.sort(key=natural_sort_key)
 
@@ -166,4 +144,4 @@ class ActionModule(ActionBase):
  
         graph_dict = temp_graph_dict
 
-        gt.generate_topology(level_dict, graph_dict, output_list, undefined_rank_nodes, node_port_val)
+        gt.generate_topology_hampton(level_dict, graph_dict, output_list, undefined_rank_nodes, node_port_val)

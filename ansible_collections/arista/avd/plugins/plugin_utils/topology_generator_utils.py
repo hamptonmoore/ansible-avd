@@ -6,14 +6,17 @@ import queue
 
 import graphviz
 import yaml
+import random
 
-DEFAULT_COLUMN_BLOCK = 7
-DEFAULT_ROW_BLOCK = 4
-BORDER_VALUE = 0
-HEIGHT_VALUE = 20
-WIDTH_VALUE = 14
-NODE_HEIGHT_VALUE = 70
-NODE_WIDTH_VALUE = 40
+import drawSvg as draw
+
+ROUTERSIZE = 120
+ROWSPACING = ROUTERSIZE * 2
+LVLSPACING = ROUTERSIZE * 2.5
+PORTHEIGHT = 30
+PORTWIDTH = 20
+PORTOFFSET = 3
+PORTFONTSIZE = 16
 
 def read_yaml_file(filename):
     """
@@ -60,18 +63,18 @@ def create_node_dict(file_data, filename):
     return node_dict
 
 
-def structured_config_to_topology_input(output_list, node_dict, diagram_groups, current_dict=None):
+def structured_config_to_topology_input(ol, node_dict, diagram_groups, current_dict=None):
     """
     Convert structure config file data to topology input data by creating a nested dictionary
     of "nodes" and "groups"
 
     Args:
-        output_list: Original input dictionary with nested "name", "nodes" and "groups" keys
+        ol: Original input dictionary with nested "name", "nodes" and "groups" keys
         node_dict: List of nodes
         node_neighbour_dict: Dictionary with nodes and neighbours list
                        ex- {'0': ['super-spine1', 'super-spine2']}
     Returns:
-       output_list: List of dictionary with nested "name", "nodes" and "groups" keys
+       ol: List of dictionary with nested "name", "nodes" and "groups" keys
     """
 
     if diagram_groups:
@@ -80,25 +83,25 @@ def structured_config_to_topology_input(output_list, node_dict, diagram_groups, 
             if temp_check in ['fabric_name','dc_name','pod_name','name']:
                 diagram_group_var = diagram_group_var[temp_check] 
 
-        if not output_list:
+        if not ol:
             new_dict = {"name": diagram_group_var, "groups": [], "nodes": []}
-            output_list.append(new_dict)
+            ol.append(new_dict)
             structured_config_to_topology_input(new_dict["groups"], node_dict, diagram_groups, new_dict)
         else:
             found = False
-            for entry in output_list:
+            for entry in ol:
                 if diagram_group_var == entry["name"]:
                     structured_config_to_topology_input(entry["groups"], node_dict, diagram_groups, entry)
                     found = True     
 
             if not found:
                 new_dict = {"name": diagram_group_var, "groups": [], "nodes": []}
-                output_list.append(new_dict)
+                ol.append(new_dict)
                 structured_config_to_topology_input(new_dict["groups"], node_dict, diagram_groups, new_dict)
     else:
         current_dict["nodes"].append(node_dict)
 
-    return output_list
+    return ol
 
 
 def find_root_nodes(data, root=None):
@@ -126,12 +129,12 @@ def find_root_nodes(data, root=None):
         return root
 
 
-def create_graph_dict(output_list, inventory_group, nodes=None, node_neighbour_dict=None):
+def create_graph_dict(ol, inventory_group, nodes=None, node_neighbour_dict=None):
     """
     Create a dictionary of rank/levels and it's corresponding node list
 
     Args:
-      output_list: List of dictionaries with nested "name", "nodes" and "groups" keys
+      ol: List of dictionaries with nested "name", "nodes" and "groups" keys
       nodes: List of nodes
       node_neighbour_dict: Dictionary with nodes and neighbours list
                         ex- {'0': ['super-spine1', 'super-spine2']}
@@ -143,7 +146,7 @@ def create_graph_dict(output_list, inventory_group, nodes=None, node_neighbour_d
         nodes = []
     if node_neighbour_dict is None:
         node_neighbour_dict = {}
-    for group in output_list:
+    for group in ol:
         if "nodes" in list(group.keys()) and group["nodes"]:
             for node in group["nodes"]:
                 if  (node["name"] in inventory_group) or (node["name"] == "0"):
@@ -206,7 +209,6 @@ def find_node_levels(graph, start_node, node_list):
     node_level_dict[start_node] = 0
     # marked it as visited
     marked[start_node] = True
-
     # do until queue is empty
     while not que.empty():
         # get the first element of queue
@@ -234,392 +236,219 @@ def find_node_levels(graph, start_node, node_list):
 
     return level_dict, node_level_dict
 
+def generate_topology_hampton(old_level_dict, node_neighbour_dict, ol, undefined_rank_nodes, node_port_val):
+    # Weird 0th line they have
+    del old_level_dict[0]
 
-def draw_nested_subgraphs(input_data, level_dict, graph_obj, undefined_rank_nodes, node_port_val, column_num, row_num, pod_conn, pod_pos):
-    """
-    Create a nested subgraphs recursively based on input_data
-
-    Args:
-        input_data: Original input dictionary with nested "name", "nodes" and "groups" keys
-        level_dict: Node level dictionary
-        graph_obj: Object of graphviz.Graph class
-        undefined_rank_nodes: Nodes without parent/root nodes
-    Returns:
-         None
-    """
-
-    for data in input_data:
-        graph_obj.attr(ranksep="0.7")
-        with graph_obj.subgraph(name="cluster_child_" + str(data["name"])) as subgraph:
-            subgraph.attr(label=data["name"])
-            subgraph.attr(labelloc="t")
-
-            if "nodes" in data and data["nodes"]:
-                pod_node_list = [node["name"] for node in data["nodes"] if node["name"] != "0"]
-                new_rank_dict = {"undefined": {}}
-                new_node_list = [undefined_rank_node for undefined_rank_node in undefined_rank_nodes if undefined_rank_node in pod_node_list]
-                new_rank_dict["undefined"] = new_node_list
-                for rank, nodes in level_dict.items():
-                    new_rank_dict[rank] = []
-                    for node in nodes:
-                        if node in pod_node_list and node not in undefined_rank_nodes:
-                            new_rank_dict[rank].append(node)
-
-                for rank, nodes in new_rank_dict.items():
-                    if nodes:
-                        if rank not in pod_conn.keys():
-                            pod_conn[rank] = [nodes]
-                        else:
-                            pod_conn[rank] = pod_conn[rank] + [nodes]        
-
-                print("new_rank_dict")
-                for rank, nodes in new_rank_dict.items():
-                    print(f"{rank} : {nodes}")
-
-                for rank, nodes in new_rank_dict.items():
-                    if nodes:
-                        with subgraph.subgraph() as inner_subgraph:
-                            inner_subgraph.attr(rank="same")
-                            # inner_subgraph.attr(rankdir="LR")
-                            for node in nodes:
-                                if rank not in pod_pos.keys():
-                                    pod_pos[rank] = [node]
-                                else:
-                                    pod_pos[rank] = pod_pos[rank] + [node]        
-
-                                if node not in undefined_rank_nodes:
-                                    node_ports = node_port_val[node]
-
-                                    node_table = '<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4">'
-                                    if (len(node_ports["top"]) == 0) and (len(node_ports["bottom"]) == 0) and (len(node_ports["left"]) == 0) and (len(node_ports["right"]) == 0):
-                                        # node_table = node_table + "<TR>"
-                                        node_table = f"{str(node_table)} <TR><TD HEIGHT=\"{str(NODE_HEIGHT_VALUE)}\" WIDTH=\"{str(NODE_WIDTH_VALUE)}\" BGCOLOR=\"#4a69bd\"> <FONT COLOR=\"#ffffff\">{node}</FONT></TD></TR>\n"
-                                        # node_table = node_table + "</TR>"
-                                    else:
-                                        # top
-                                        port_len = len(node_ports["top"])
-
-                                        # port_len = len(node_ports["top"])
-                                        if port_len != 0:
-                                            node_table = f"{str(node_table)} <TR>"
-                                            port_col = [0] * column_num
-
-                                            # if port_len % 2 != 0:
-                                            #     port_start = column_num / (port_len * 2)
-                                            # else:
-                                            #     if port_len == 0:
-                                            #         port_start = column_num / (port_len + 2)
-                                            #     else:
-                                            #         port_start = column_num / (port_len)
-
-                                            if (column_num%2) == 0:
-                                                port_start = (column_num / port_len) - 1 
-                                            elif (column_num%2) != 0:
-                                                port_start = (column_num / port_len)         
-
-                                            if port_len == 1:
-                                                port_start = (column_num - 1) / 2
-                                            if port_len == column_num:
-                                                port_start = 0
-
-                                            port_start = int(port_start)
-
-                                            node_ports["top"].sort()
-                                            for port_pos in range(port_start, port_len + port_start):
-                                                port_col[port_pos] = node_ports["top"][port_pos - port_start]
-
-                                            for port_val in port_col:
-                                                port_val = str(port_val).replace(" ", "").replace("0", "")
-                                                if port_val == 0 or port_val == "":
-                                                    node_table = f"{str(node_table)} <TD HEIGHT=\"{str(HEIGHT_VALUE)}\" WIDTH=\"{str(WIDTH_VALUE)}\" BORDER=\"{str(BORDER_VALUE)}\" ></TD>\n"
-                                                else:
-                                                    node_table = f"{str(node_table)} <TD HEIGHT=\"{str(HEIGHT_VALUE)}\" WIDTH=\"{str(WIDTH_VALUE)}\" PORT=\"{str(port_val)}\">{str(port_val)}</TD>\n"
-
-                                            node_table = f"{str(node_table)} </TR>"
-                                        else:
-                                            node_table = f"{str(node_table)} <TR>"
-                                            for td_val in range(column_num):
-                                                node_table = f"{str(node_table)} <TD HEIGHT=\"{str(HEIGHT_VALUE)}\" WIDTH=\"{str(WIDTH_VALUE)}\" BORDER=\"{str(BORDER_VALUE)}\" ></TD>\n"    
-                                            node_table = f"{str(node_table)} </TR>"    
-
-
-                                        #left right
-                                        if len(node_ports["left"]) == 0 and len(node_ports["right"]) == 0:
-                                            node_table = f"{str(node_table)} <TR><TD HEIGHT=\"{str(HEIGHT_VALUE)}\" WIDTH=\"{str(WIDTH_VALUE)}\" BORDER=\"{str(BORDER_VALUE)}\" ></TD><TD BGCOLOR=\"#4a69bd\" COLSPAN=\"{str(column_num - 2)}\" ROWSPAN=\"{str(row_num)}\"> <FONT COLOR=\"#ffffff\">{node}</FONT></TD><TD HEIGHT=\"{str(HEIGHT_VALUE)}\" WIDTH=\"{str(WIDTH_VALUE)}\"  BORDER=\"{str(BORDER_VALUE)}\" ></TD></TR>\n"
-                                            for i in range(row_num - 1):
-                                                node_table = f"{str(node_table)} <TR><TD HEIGHT=\"{str(HEIGHT_VALUE)}\" WIDTH=\"{str(WIDTH_VALUE)}\" BORDER=\"{str(BORDER_VALUE)}\" ></TD><TD HEIGHT=\"{str(HEIGHT_VALUE)}\" WIDTH=\"{str(WIDTH_VALUE)}\" BORDER=\"{str(BORDER_VALUE)}\" ></TD> </TR>\n"
-                                        else:
-                                            node_table = f"{str(node_table)} <TR><TD HEIGHT=\"{str(HEIGHT_VALUE)}\" WIDTH=\"{str(WIDTH_VALUE)}\"  BORDER=\"{str(BORDER_VALUE)}\" ></TD><TD BGCOLOR=\"#4a69bd\" COLSPAN=\"{str(column_num - 2)}\" ROWSPAN=\"{str(row_num)}\"> <FONT COLOR=\"#ffffff\">{node}</FONT></TD><TD HEIGHT=\"{str(HEIGHT_VALUE)}\" WIDTH=\"{str(WIDTH_VALUE)}\"  BORDER=\"{str(BORDER_VALUE)}\" > </TD></TR>\n"
-
-                                            row_port_num = row_num - 2
-
-                                            #left
-                                            left_row_val = [0] * row_port_num
-
-                                            row_port_len = len(node_ports["left"])
-                                            row_port_start = 0
-
-                                            if row_port_len != 0:
-                                                if (row_port_num%2) == 0:
-                                                    row_port_start = (row_port_num / row_port_len) - 1 
-                                                elif (row_port_num%2) != 0:
-                                                    row_port_start = (row_port_num / row_port_len)         
-
-                                                if row_port_len == 1:
-                                                    row_port_start = (row_port_num - 1) / 2
-                                                if row_port_len == row_port_num:
-                                                    row_port_start = 0
-
-                                            row_port_start = int(row_port_start)
-
-
-                                            node_ports["left"].sort()
-                                            for port_pos in range(row_port_start, row_port_len + row_port_start):
-                                                left_row_val[port_pos] = node_ports["left"][port_pos - row_port_start]
-
-
-                                            #right
-                                            right_row_val = [0] * row_port_num
-
-                                            row_port_len = len(node_ports["right"])
-                                            row_port_start = 0
-
-                                            if row_port_len != 0:
-                                                if (row_port_num%2) == 0:
-                                                    row_port_start = (row_port_num / row_port_len) - 1 
-                                                elif (row_port_num%2) != 0:
-                                                    row_port_start = (row_port_num / row_port_len)         
-
-                                                if row_port_len == 1:
-                                                    row_port_start = (row_port_num - 1) / 2
-                                                if row_port_len == row_port_num:
-                                                    row_port_start = 0
-
-                                            row_port_start = int(row_port_start)
-
-                                            node_ports["right"].sort()
-                                            for port_pos in range(row_port_start, row_port_len + row_port_start):
-                                                right_row_val[port_pos] = node_ports["right"][port_pos - row_port_start]
-
-
-                                            # node_ports["top"].sort()
-                                            # for port_pos in range(port_start, port_len + port_start):
-                                            #     port_col[port_pos] = node_ports["top"][port_pos - port_start]
-                                            for row_val in range(row_port_num):
-                                                #left
-                                                if left_row_val[row_val] == 0: 
-                                                    node_table = f"{str(node_table)} <TR><TD HEIGHT=\"{str(HEIGHT_VALUE)}\" WIDTH=\"{str(WIDTH_VALUE)}\" BORDER=\"{str(BORDER_VALUE)}\" ></TD>\n"
-                                                else:
-                                                    node_table = f"{str(node_table)} <TR><TD HEIGHT=\"{str(HEIGHT_VALUE)}\" WIDTH=\"{str(WIDTH_VALUE)}\" PORT=\"{str(left_row_val[row_val])}\">{str(left_row_val[row_val])}</TD>\n"
-
-                                                #right
-                                                if right_row_val[row_val] == 0:                                                    
-                                                    node_table = f"{str(node_table)} <TD HEIGHT=\"{str(HEIGHT_VALUE)}\" WIDTH=\"{str(WIDTH_VALUE)}\" BORDER=\"{str(BORDER_VALUE)}\" ></TD></TR>\n"
-                                                else:
-                                                    node_table = f"{str(node_table)} <TD HEIGHT=\"{str(HEIGHT_VALUE)}\" WIDTH=\"{str(WIDTH_VALUE)}\" PORT=\"{str(right_row_val[row_val])}\">{str(right_row_val[row_val])}</TD></TR>\n"
-
-                                            node_table = f"{str(node_table)} <TR><TD HEIGHT=\"{str(HEIGHT_VALUE)}\" WIDTH=\"{str(WIDTH_VALUE)}\"  BORDER=\"{str(BORDER_VALUE)}\"></TD><TD HEIGHT=\"{str(HEIGHT_VALUE)}\" WIDTH=\"{str(WIDTH_VALUE)}\" BORDER=\"{str(BORDER_VALUE)}\"></TD></TR>\n"
-
-                                        # bottom
-                                        port_len = len(node_ports["bottom"])
-                                        if port_len != 0:
-                                            node_table = f"{str(node_table)} <TR>"
-
-                                            port_col = [0] * column_num
-
-                                            # if port_len % 2 != 0:
-                                            #     port_start = column_num / (port_len * 2)
-                                            # else:
-                                            #     if port_len == 0:
-                                            #         port_start = column_num / (port_len + 2)
-                                            #     else:
-                                            #         port_start = column_num / (port_len)
-
-
-
-                                            if (column_num%2) == 0:
-                                                port_start = (column_num / port_len) - 1 
-                                            elif (column_num%2) != 0:
-                                                port_start = (column_num / port_len)         
-
-                                            if port_len == 1:
-                                                port_start = (column_num - 1) / 2
-                                            if port_len == column_num:
-                                                port_start = 0
-
-
-                                            port_start = int(port_start)
-
-                                            node_ports["bottom"].sort()
-                                            for port_pos in range(port_start, port_len + port_start):
-                                                port_col[port_pos] = node_ports["bottom"][port_pos - port_start]
-
-                                            for port_val in port_col:
-                                                port_val = str(port_val).replace(" ", "").replace("0", "")
-                                                if port_val == 0 or port_val == "":
-                                                    node_table = f"{str(node_table)} <TD HEIGHT=\"{str(HEIGHT_VALUE)}\" WIDTH=\"{str(WIDTH_VALUE)}\" BORDER=\"{str(BORDER_VALUE)}\" ></TD>\n"
-                                                else:
-                                                    node_table = f"{str(node_table)} <TD HEIGHT=\"{str(HEIGHT_VALUE)}\" WIDTH=\"{str(WIDTH_VALUE)}\" PORT=\"{str(port_val)}\">{str(port_val)}</TD>\n"
-                                            node_table = f"{str(node_table)} </TR>"
-                                        else:
-                                            node_table = f"{str(node_table)} <TR>"
-                                            for td_val in range(column_num):
-                                                node_table = f"{str(node_table)} <TD HEIGHT=\"{str(HEIGHT_VALUE)}\" WIDTH=\"{str(WIDTH_VALUE)}\" BORDER=\"{str(BORDER_VALUE)}\" ></TD>\n"    
-                                            node_table = f"{str(node_table)} </TR>"    
-
-                                    node_table = f"{str(node_table)} </TABLE>>"
-                                    node_table = node_table.replace("\n", "")
-
-                                    y_cor = (rank - 1) * (-3)
-                                    x_cor = (len(pod_pos[rank]) - 1) * 2
-                                    x_cor = x_cor - 7
-                                    y_cor = y_cor + 4.5
-                                    inner_subgraph.node(node, node_table, pos=f"{x_cor},{y_cor}!")
-
-            if "groups" in data and data["groups"]:
-                draw_nested_subgraphs(data["groups"], level_dict, subgraph, undefined_rank_nodes, node_port_val, column_num, row_num, pod_conn, pod_pos)
-
-
-def create_graph_and_set_properties():
-    """
-    Create a graphviz graph object and set node and edge properties
-
-    Returns: Graph object
-    """
-    graph_obj = graphviz.Graph(
-        name="parent",
-        format="svg",
-        filename="topology.gv",
-        graph_attr={"splines": "false"},
-        node_attr={
-            "shape": "plaintext",
-            "fontsize": " 8pt"
-        },
-        edge_attr={"fontname": "arial", "fontsize": "6", "center": "true", "concentrate": "true", "minlen": "2", "labelfloat": "false"},
-    )
-    graph_obj.attr(rank="same",layout="neato")
-    # graphviz.layout("neato")
-    return graph_obj
-
-
-def generate_topology(level_dict, node_neighbour_dict, output_list, undefined_rank_nodes, node_port_val):
-    """
-    Generate topology diagram using graphviz.Graph
-
-    Args:
-       level_dict: Dictionary of nodes with respective levels
-                  ex- {0: ['0'], 1: ['super-spine1', 'super-spine2']}
-       node_neighbour_dict: Dictionary with nodes and neighbours list
-                            ex- {'0': ['super-spine1', 'super-spine2']}
-       output_list: List of dictionaries with nested "name", "nodes" and "groups" keys
-       undefined_rank_nodes: Nodes without parent
-    Returns:
-        None
-    """
-
-    graph_obj = create_graph_and_set_properties()
-
-
-    column_num = 0
-    row_num = 0
-    for rank, nodes in level_dict.items():
+    # Make a level loopup dict
+    level_dict = {}
+    for idx, nodes in old_level_dict.items():
         for node in nodes:
-            node_ports = node_port_val[node]
-            column_num = max(column_num, len(node_ports["top"]))
-            column_num = max(column_num, len(node_ports["bottom"]))
+            level_dict[node] = idx
 
-            row_num = max(row_num, len(node_ports["left"]))
-            row_num = max(row_num, len(node_ports["right"]))            
+    # print(ol, "\n\n")
 
 
-    if column_num == 0 or column_num < DEFAULT_COLUMN_BLOCK:
-        column_num = DEFAULT_COLUMN_BLOCK 
-    elif column_num >= DEFAULT_COLUMN_BLOCK:
-        column_num = column_num + 2
+    ol = subgroup_inventor_recursive(level_dict, ol[0])
+    size = 3000
+    d = draw.Drawing(size, size, origin=(0,0), font_family="monospace")
+    d.append(draw.Rectangle(0,0,size,size, fill='white'))
 
-    if row_num <= 1:
-        row_num = DEFAULT_ROW_BLOCK
-    else:    
-        row_num = row_num + 2      
+    ol = calculate_box_size_recursive(level_dict, ol)
 
-    #to get list of pod conn
-    pod_conn = {}
-    pod_pos = {}
+    # print(level_dict)
+    print("\n\n")
+    print(ol)
+    print("\n\n")
+    nodes = draw_groups_recursive(d, ol, 20, size-100)
 
-    # print("output_list")
-    # print(output_list)
-    # exit()
-
-    draw_nested_subgraphs(output_list, level_dict, graph_obj, undefined_rank_nodes, node_port_val, column_num, row_num, pod_conn, pod_pos)
-
-    temp_pod_conn = {}
-    for p_key, p_val in pod_conn.items():
-        temp_pod_conn[p_key] = []
-        for node_value in p_val:
-            temp_pod_conn[p_key] = temp_pod_conn[p_key] + node_value             
-
-    print(temp_pod_conn)
-    # print(pod_conn)
-
-    height_level = len(temp_pod_conn.keys())
-    width_level = 0
-    for pod_conn_list in temp_pod_conn.values():
-        width_level = max(width_level,len(pod_conn_list))
-
-    print(height_level)
-    print(width_level) 
-
-    # 			"boundary1" [label=<<TABLE BORDER="3" CELLBORDER="0">  <TR><TD  HEIGHT="290" 
-	# WIDTH="225"  > <FONT COLOR="#ffffff">boundary1</FONT></TD></TR>    </TABLE>>, 
-	# pos="1.1,-1.5!"] 
-    node_table = f"<<TABLE BORDER=\"3\" CELLBORDER=\"0\">  <TR><TD  HEIGHT=\"290\" WIDTH=\"500\"  > <FONT COLOR=\"#ffffff\">boundary1</FONT></TD></TR></TABLE>>"   
-    graph_obj.node("boundary1", node_table, pos="3,-1.5!")
-
-    for node, neighbours in node_neighbour_dict.items():
-        if node != "0":
-            for neighbour in neighbours:
-                if neighbour["nodePort"] != "":
-                    node_val = node + ":" + neighbour["nodePort"]
-                else:
-                    node_val = node
-
-                if neighbour["neighborPort"] != "":
-                    neighbour_val = neighbour["neighborDevice"] + ":" + neighbour["neighborPort"]
-                else:
-                    neighbour_val = neighbour["neighborDevice"]
-
-                temp_diff_pod = []
-                for nodes_val in pod_conn.values(): #[['LEAF1', 'LEAF2'], ['LEAF3', 'LEAF4']]
-                    if len(nodes_val) > 1:
-                        diff_pod = []
-                        for pod_node in range(len(nodes_val)):
-                            if node in nodes_val[pod_node]:
-                                if pod_node not in diff_pod:
-                                    diff_pod.append(pod_node) 
-                            if neighbour["neighborDevice"] in nodes_val[pod_node]:
-                                if pod_node not in diff_pod:
-                                    diff_pod.append(pod_node)
-                        temp_diff_pod.append(diff_pod)             
+    del node_port_val['0']
+    for name, parts in node_port_val.items():
+        if name not in nodes:
+            continue 
+        node = nodes[name]
+        node["ports"] = {}
+        ox = 0
+        for portID in parts["top"]:
+            port = {"x": node["x"] - (ROUTERSIZE/2) + ox + (PORTWIDTH/2), "y": node["y"] + (ROUTERSIZE/2) + PORTHEIGHT}
+            node["ports"][portID] = port
+            d.append(draw.Rectangle(port["x"] - (PORTWIDTH/2), port["y"] - PORTHEIGHT, PORTWIDTH, PORTHEIGHT, fill="white", stroke="black"))
+            d.append(draw.Text(portID, PORTFONTSIZE, port["x"], port["y"] - PORTHEIGHT/2 - PORTFONTSIZE/3, fill="black", text_anchor="middle"))
+            ox = PORTWIDTH + PORTOFFSET
         
-                flag = False
-                for check_len in temp_diff_pod:
-                    if len(check_len) > 1:
-                        flag = True
+        ox = 0
+        for portID in parts["bottom"]:
+            port = {"x": node["x"] - (ROUTERSIZE/2) + ox + (PORTWIDTH/2), "y": node["y"] - (ROUTERSIZE/2) - PORTHEIGHT}
+            node["ports"][portID] = port
+            d.append(draw.Rectangle(port["x"] - (PORTWIDTH/2), port["y"], PORTWIDTH, PORTHEIGHT, fill="white", stroke="black"))
+            d.append(draw.Text(portID, PORTFONTSIZE, port["x"], port["y"] + PORTHEIGHT/2 - PORTFONTSIZE/3, fill="black", text_anchor="middle"))
+            ox = PORTWIDTH + PORTOFFSET
+        
+        oy = 0
+        for portID in parts["right"]:
+            port = {"x": node["x"] + (ROUTERSIZE/2) + PORTHEIGHT, "y": node["y"] + (ROUTERSIZE/2) - PORTHEIGHT - oy + PORTWIDTH}
+            node["ports"][portID] = port
+            d.append(draw.Rectangle(port["x"] - PORTHEIGHT, port["y"] - PORTWIDTH/2, PORTHEIGHT, PORTWIDTH, fill="white", stroke="black"))
+            d.append(draw.Text(portID, PORTFONTSIZE, port["x"] - PORTHEIGHT/2, port["y"] - PORTFONTSIZE/3, fill="black", text_anchor="middle"))
+            oy = PORTWIDTH + PORTOFFSET
 
-                if flag:
-                    graph_obj.edge(node_val, neighbour_val, constraint="false", minlen="0")
+        oy = 0
+        for portID in parts["left"]:
+            port = {"x": node["x"] - (ROUTERSIZE/2) - PORTHEIGHT , "y": node["y"] + (ROUTERSIZE/2) - oy - PORTWIDTH/2}
+            node["ports"][portID] = port
+            d.append(draw.Rectangle(port["x"], port["y"] - (PORTWIDTH/2), PORTHEIGHT, PORTWIDTH, fill="white", stroke="black"))
+            d.append(draw.Text(portID, PORTFONTSIZE, port["x"] + PORTHEIGHT/2, port["y"] - PORTFONTSIZE/3, fill="black", text_anchor="middle"))
+            oy = PORTWIDTH + PORTOFFSET
+
+    del node_neighbour_dict['0']
+    print(node_neighbour_dict)
+
+    for name, links in node_neighbour_dict.items():
+        if name not in nodes:
+                continue 
+        node = nodes[name]["ports"]
+        for id, link in enumerate(links):
+            if link["neighborDevice"] not in nodes:
+                continue
+            neigh = nodes[link["neighborDevice"]]["ports"]
+            if link["neighborPort"] not in neigh or link["nodePort"] not in node:
+                print("MISSING LINK BETWEEN", id, neigh)
+                continue
+            nol = node[link["nodePort"]]
+            nel = neigh[link["neighborPort"]]
+            d.append(draw.Line(nol["x"], nol["y"], nel["x"], nel["y"], stroke=f'hsl({random.randint(0,360)},{random.randint(50,100)}%,{random.randint(25,75)}%)', stroke_width=2))
+
+
+    # Display
+    d.setRenderSize(786)
+    d.saveSvg('example.svg')
+
+def subgroup_inventor_recursive(ld, ol):
+    groupLookup = {}
+    if len(ol["groups"]) == 0:
+        for idx, child in enumerate(ol["nodes"]):
+            if ("." in child["name"] or "0" == child["name"]):
+                continue
+            lvl = ld[child["name"]]
+            if lvl not in groupLookup:
+                groupLookup[lvl] = {
+                    "nodes": [],
+                    "groups": [],
+                    "name": child["name"],
+                    "psuedo": True,
+                }
+            groupLookup[lvl]["nodes"].append(child)
+
+        ol["nodes"] = []
+        if len(groupLookup.keys()) == 1:
+            ol["nodes"] = list(groupLookup.values())[0]["nodes"]
+        else:
+            keys = list(groupLookup.keys())
+            lowest = min(keys)
+            keys.remove(lowest)
+            secondLowest = min(keys)
+            sLI = 0
+            other = []
+            for i, group in groupLookup.items():
+                if i == lowest:
+                    ol["nodes"] = group["nodes"]
+                elif i == secondLowest:
+                    sLI = len(ol["groups"])
+                    ol["groups"].append(group)
                 else:
-                    graph_obj.edge(node_val, neighbour_val)    
+                    other.append(group)
+            for group in other:
+                ol["groups"][sLI]["groups"].append(group)
 
-                # graph_obj.edge(node_val, neighbour_val)
-                
-    #print(level_dict)
-    # for nodes_val in pod_conn.values():
-    #     if len(nodes_val) > 1:
-    #         temps = nodes_val
-    #         #print(nodes_val)
-    #         for idx in range(len(nodes_val)-1):
-    #             graph_obj.edge(nodes_val[idx] , nodes_val[idx + 1], constraint="false", style="invis")
+    for idx, child in enumerate(ol["groups"]):
+        child = subgroup_inventor_recursive(ld, child)
+        ol["groups"][idx] = child
+
+    return ol
+
+def draw_groups(d, ol, x, y):
+    cx = 0
+    nodes = {}
+    for idx, child in enumerate(ol["groups"]):
+        newNodes = draw_groups_recursive(d, child, x + cx, y)
+        for k, node in newNodes.items():
+            nodes[k] = node
+        cx += child["width"]
     
+    return nodes
 
-    graph_obj.view()
+def draw_groups_recursive(d, ol, x, y):
+    nodes = {}
+    GROUPOFFSET = LVLSPACING
+    if len(ol["nodes"]) == 0:
+        GROUPOFFSET = 0
+    if "psuedo" not in ol:
+        d.append(draw.Rectangle(
+            x, y-(((ol["height"]-1) * LVLSPACING))-GROUPOFFSET, 
+            ol["width"], 
+            (((ol["height"]-1) * LVLSPACING))+GROUPOFFSET, 
+            stroke="black", fill="white"
+            )
+        )
+        d.append(draw.Text(ol["name"], 24, x+4, y-24, fill="black"))
+
+    cx = 0
+    for idx, child in enumerate(ol["groups"]):
+        newNodes = draw_groups_recursive(d, child, x + cx, y - GROUPOFFSET)
+        for k, node in newNodes.items():
+            nodes[k] = node
+        cx += child["width"]
+
+    
+    cx = (ol["width"]/2) - ((len(ol["nodes"])/2)*ROWSPACING) + (ROUTERSIZE/2)
+    for idx, child in enumerate(ol["nodes"]):
+        child["x"] = x + cx + (ROUTERSIZE/2)
+        child["y"] = y-(LVLSPACING/2)
+        d.append(draw.Rectangle(
+            child["x"] - (ROUTERSIZE/2), child["y"]-(ROUTERSIZE/2), 
+            ROUTERSIZE, 
+            ROUTERSIZE, 
+            fill="#5167B7", text=child["name"]
+        ))
+        d.append(draw.Text(child["name"], 12, child["x"], child["y"]-6, fill="white", text_anchor="middle"))
+        cx += ROWSPACING
+        nodes[child["name"]] = child
+    
+    return nodes
+
+
+def calculate_box_size_recursive(level_dict, ol):
+    if "neighbours" in ol:
+        ol["width"] = ROWSPACING
+        return ol
+
+    groupWidths = 0
+    
+    height = 0
+    for idx, child in enumerate(ol["groups"]):
+        child = calculate_box_size_recursive(level_dict, child)
+        ol["groups"][idx] = child
+        groupWidths += child["width"]
+        height = max(child["height"]+1, height)
+
+    childrenWidth = 0
+    for idx, child in enumerate(ol["nodes"]):
+        if child["name"] == "0":
+            del ol["nodes"][idx]
+            continue
+        child = calculate_box_size_recursive(level_dict, child)
+        ol["nodes"][idx] = child
+        childrenWidth += child["width"]
+
+    ol["nodes"] = sorted(ol["nodes"], key=lambda d: d['name']) 
+
+    # Add padding
+    childrenWidth += ROUTERSIZE
+
+    ol["width"] = max(groupWidths, childrenWidth)
+
+    if height == 0:
+        height = 1
+
+    ol["height"] = height
+    return ol

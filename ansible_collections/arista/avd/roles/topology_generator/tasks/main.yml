@@ -7,7 +7,8 @@
       tags: [always]
       arista.avd.topology_generator:
         # structured_config: "./structured_configs_l2ls_fabric"
-        structured_config: "./structured_configs_twodc_5stage_clos"
+        # structured_config: "./structured_configs_twodc_5stage_clos"
+        structured_config: "./structured_configs_l3ls"
       delegate_to: localhost
 
 #for molecule
