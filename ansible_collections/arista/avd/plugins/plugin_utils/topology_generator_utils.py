@@ -10,6 +10,10 @@ import random
 
 import drawSvg as draw
 
+# MARGINS between real groups
+BOXMARGIN = 25
+
+# Sizings
 ROUTERSIZE = 120
 ROWSPACING = ROUTERSIZE * 2
 LVLSPACING = ROUTERSIZE * 2
@@ -17,7 +21,10 @@ PORTHEIGHT = 30
 PORTWIDTH = 20
 PORTOFFSET = 3
 PORTFONTSIZE = 16
-BOXMARGIN = 25
+
+# Used for horizontal connection overlaps
+WIREDEFAULTDISTANCE = 10
+WIRESPREAD = 6
 
 def read_yaml_file(filename):
     """
@@ -238,7 +245,7 @@ def find_node_levels(graph, start_node, node_list):
     return level_dict, node_level_dict
 
 def generate_topology_hampton(destination, old_level_dict, node_neighbor_dict, ol, undefined_rank_nodes, node_port_val):
-    # Remove psuedo 0'th node
+    # Remove psuedo 0'th element
     del old_level_dict[0]
 
     # Make a level loopup dict
@@ -255,13 +262,15 @@ def generate_topology_hampton(destination, old_level_dict, node_neighbor_dict, o
 
     ol = calculate_box_size_recursive(level_dict, ol)
 
-    nodes = draw_groups_recursive(d, ol, 20, size-100)
+    nodes, render_orderings = draw_groups_recursive(d, level_dict, ol, 20, size-100)
+
+    print(render_orderings)
 
     del node_port_val['0']
     draw_ports(d, nodes, node_port_val)
 
     del node_neighbor_dict['0']
-    draw_links(d, nodes, node_neighbor_dict)
+    draw_links(d, nodes, node_neighbor_dict, level_dict, render_orderings)
   
 
     # Display
@@ -326,6 +335,11 @@ def calculate_box_size_recursive(level_dict, ol):
         groupWidths += child["width"] + (BOXMARGIN *2)
         height = max(child["height"]+1, height)
 
+    if height == 0:
+        height = 1
+
+    ol["height"] = height
+
     if len(ol["groups"]) > 1:
         groupWidths -= BOXMARGIN
 
@@ -345,13 +359,10 @@ def calculate_box_size_recursive(level_dict, ol):
 
     ol["width"] = max(groupWidths, childrenWidth)
 
-    if height == 0:
-        height = 1
-
-    ol["height"] = height
     return ol
 
-def draw_groups_recursive(d, ol, x, y):
+def draw_groups_recursive(d, ld, ol, x, y):
+    orderings = {}
     nodes = {}
     GROUPOFFSET = LVLSPACING
     if len(ol["nodes"]) == 0:
@@ -369,16 +380,21 @@ def draw_groups_recursive(d, ol, x, y):
 
     cx = BOXMARGIN
     for idx, child in enumerate(ol["groups"]):
-        newNodes = draw_groups_recursive(d, child, x + cx, y - GROUPOFFSET - (BOXMARGIN))
+        newNodes, newOrderings = draw_groups_recursive(d, ld, child, x + cx, y - GROUPOFFSET - (BOXMARGIN))
         for k, node in newNodes.items():
             nodes[k] = node
         cx += child["width"] + BOXMARGIN
-
+        for level, onodes in newOrderings.items():
+            if level not in orderings:
+                orderings[level] = []
+            for node in onodes:
+                orderings[level].append(node)
     
     cx = (ol["width"]/2) - ((len(ol["nodes"])/2)*ROWSPACING) + (ROUTERSIZE/2)
     for idx, child in enumerate(ol["nodes"]):
         child["x"] = x + cx + (ROUTERSIZE/2)
         child["y"] = y-(LVLSPACING/2)
+        nodes[child["name"]] = child
         d.append(draw.Rectangle(
             child["x"] - (ROUTERSIZE/2), child["y"]-(ROUTERSIZE/2), 
             ROUTERSIZE, 
@@ -387,9 +403,11 @@ def draw_groups_recursive(d, ol, x, y):
         ))
         d.append(draw.Text(child["name"], 12, child["x"], child["y"]-6, fill="white", text_anchor="middle"))
         cx += ROWSPACING
-        nodes[child["name"]] = child
-    
-    return nodes
+        level = ld[child["name"]]
+        if level not in orderings:
+            orderings[level] = []
+        orderings[level].append(child["name"])
+    return nodes, orderings
 
 def draw_ports(d, nodes, node_port_val):
     for name, parts in node_port_val.items():
@@ -399,7 +417,7 @@ def draw_ports(d, nodes, node_port_val):
         node["ports"] = {}
         ox = 0
         for portID in parts["top"]:
-            port = {"x": node["x"] - (ROUTERSIZE/2) + ox + (PORTWIDTH/2), "y": node["y"] + (ROUTERSIZE/2) + PORTHEIGHT}
+            port = {"x": node["x"] - (ROUTERSIZE/2) + ox + (PORTWIDTH/2), "y": node["y"] + (ROUTERSIZE/2) + PORTHEIGHT, "dir": "up"}
             node["ports"][portID] = port
             d.append(draw.Rectangle(port["x"] - (PORTWIDTH/2), port["y"] - PORTHEIGHT, PORTWIDTH, PORTHEIGHT, fill="white", stroke="black"))
             d.append(draw.Text(portID, PORTFONTSIZE, port["x"], port["y"] - PORTHEIGHT/2 - PORTFONTSIZE/3, fill="black", text_anchor="middle"))
@@ -407,7 +425,7 @@ def draw_ports(d, nodes, node_port_val):
         
         ox = 0
         for portID in parts["bottom"]:
-            port = {"x": node["x"] - (ROUTERSIZE/2) + ox + (PORTWIDTH/2), "y": node["y"] - (ROUTERSIZE/2) - PORTHEIGHT}
+            port = {"x": node["x"] - (ROUTERSIZE/2) + ox + (PORTWIDTH/2), "y": node["y"] - (ROUTERSIZE/2) - PORTHEIGHT, "dir": "down"}
             node["ports"][portID] = port
             d.append(draw.Rectangle(port["x"] - (PORTWIDTH/2), port["y"], PORTWIDTH, PORTHEIGHT, fill="white", stroke="black"))
             d.append(draw.Text(portID, PORTFONTSIZE, port["x"], port["y"] + PORTHEIGHT/2 - PORTFONTSIZE/3, fill="black", text_anchor="middle"))
@@ -415,7 +433,7 @@ def draw_ports(d, nodes, node_port_val):
         
         oy = 0
         for portID in parts["right"]:
-            port = {"x": node["x"] + (ROUTERSIZE/2) + PORTHEIGHT, "y": node["y"] + (ROUTERSIZE/2) - PORTHEIGHT - oy + PORTWIDTH}
+            port = {"x": node["x"] + (ROUTERSIZE/2) + PORTHEIGHT, "y": node["y"] + (ROUTERSIZE/2) - PORTHEIGHT - oy + PORTWIDTH, "dir": "right"}
             node["ports"][portID] = port
             d.append(draw.Rectangle(port["x"] - PORTHEIGHT, port["y"] - PORTWIDTH/2, PORTHEIGHT, PORTWIDTH, fill="white", stroke="black"))
             d.append(draw.Text(portID, PORTFONTSIZE, port["x"] - PORTHEIGHT/2, port["y"] - PORTFONTSIZE/3, fill="black", text_anchor="middle"))
@@ -423,24 +441,57 @@ def draw_ports(d, nodes, node_port_val):
 
         oy = 0
         for portID in parts["left"]:
-            port = {"x": node["x"] - (ROUTERSIZE/2) - PORTHEIGHT , "y": node["y"] + (ROUTERSIZE/2) - oy - PORTWIDTH/2}
+            port = {"x": node["x"] - (ROUTERSIZE/2) - PORTHEIGHT , "y": node["y"] + (ROUTERSIZE/2) - oy - PORTWIDTH/2, "dir": "left"}
             node["ports"][portID] = port
             d.append(draw.Rectangle(port["x"], port["y"] - (PORTWIDTH/2), PORTHEIGHT, PORTWIDTH, fill="white", stroke="black"))
             d.append(draw.Text(portID, PORTFONTSIZE, port["x"] + PORTHEIGHT/2, port["y"] - PORTFONTSIZE/3, fill="black", text_anchor="middle"))
             oy = PORTWIDTH + PORTOFFSET
 
-def draw_links(d, nodes, node_neighbor_dict):
+def draw_links(d, nodes, node_neighbor_dict, level_dict, render_orderings):
+    used_heights = {}
     for name, links in node_neighbor_dict.items():
         if name not in nodes:
                 continue 
-        node = nodes[name]["ports"]
+        node = nodes[name]
         for id, link in enumerate(links):
             if link["neighborDevice"] not in nodes:
                 continue
-            neigh = nodes[link["neighborDevice"]]["ports"]
-            if link["neighborPort"] not in neigh or link["nodePort"] not in node:
+            neigh = nodes[link["neighborDevice"]]
+            if link["neighborPort"] not in neigh["ports"] or link["nodePort"] not in node["ports"]:
                 print("MISSING LINK BETWEEN", id, neigh)
                 continue
-            nol = node[link["nodePort"]]
-            nel = neigh[link["neighborPort"]]
-            d.append(draw.Line(nol["x"], nol["y"], nel["x"], nel["y"], stroke=f'hsl({random.randint(0,360)},{random.randint(50,100)}%,{random.randint(25,75)}%)', stroke_width=2))
+
+            nol = node["ports"][link["nodePort"]]
+            nel = neigh["ports"][link["neighborPort"]]
+            stroke = f'hsl({random.randint(0,360)},{random.randint(50,100)}%,{random.randint(25,75)}%)'
+            
+            # Check if same level, if so we need to route specially
+            if level_dict.get(node["name"]) == level_dict.get(neigh["name"]):
+                level = level_dict.get(node["name"])
+                # Check collision, if their index is more than 1 apart then the lines would collide
+                if abs(render_orderings[level].index(node["name"]) - render_orderings[level].index(neigh["name"])) > 1:
+                    if level not in used_heights:
+                        used_heights[level] = WIREDEFAULTDISTANCE
+                    used_heights[level] = used_heights[level] + WIRESPREAD
+                    draw_same_level_links(d, node, neigh, nol, nel, stroke, used_heights[level])
+                    continue
+
+            d.append(draw.Line(nol["x"], nol["y"], nel["x"], nel["y"], stroke=stroke, stroke_width=2))
+
+def draw_same_level_links(d, node, neigh, nol, nel, stroke, used_height):
+    if nel["dir"] == "right":
+        temp = nol
+        nol = nel
+        nel = temp
+    routey = node["y"] + ROUTERSIZE/2 + PORTHEIGHT + used_height
+    routex = (nel["x"] + nol["x"])/2
+
+    XOffset = 10
+    d.append(draw.Line(nol["x"], nol["y"], nol["x"] + XOffset, nol["y"], stroke=stroke, stroke_width=2))
+    d.append(draw.Line(nol["x"] + XOffset, nol["y"], nol["x"] + XOffset, routey, stroke=stroke, stroke_width=2))
+    d.append(draw.Line(nol["x"] + XOffset, routey, routex, routey, stroke=stroke, stroke_width=2))
+
+
+    d.append(draw.Line(nel["x"], nel["y"], nel["x"] - XOffset, nel["y"], stroke=stroke, stroke_width=2))
+    d.append(draw.Line(nel["x"] - XOffset, nel["y"], nel["x"] - XOffset, routey, stroke=stroke, stroke_width=2))
+    d.append(draw.Line(nel["x"] - XOffset, routey, routex, routey, stroke=stroke, stroke_width=2))
