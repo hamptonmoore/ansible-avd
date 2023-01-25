@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+     width="500" height="440.92827004219413" viewBox="0 -1045.0 1185 1045.0" font-family="monospace">
+<defs>
+</defs>
+<rect x="0" y="-1045.0" width="1185" height="1045.0" fill="#00285A" />
+<rect x="20" y="-1020.0" width="1135" height="995.0" fill="hsl(0, 0%, 90%)" rx="25" stroke="hsl(0, 0%, 60.0%)" stroke-width="4" />
+<rect x="45" y="-982.5" width="1085" height="926.25" fill="hsl(0, 0%, 80%)" rx="25" stroke="hsl(0, 0%, 52.5%)" stroke-width="4" />
+<rect x="70" y="-705.0" width="1035" height="617.5" fill="hsl(0, 0%, 70%)" rx="25" stroke="hsl(0, 0%, 45.0%)" stroke-width="4" />
+<rect x="95" y="-427.5" width="480" height="308.75" fill="hsl(0, 0%, 60%)" rx="25" stroke="hsl(0, 0%, 37.5%)" stroke-width="4" />
+<rect x="155.0" y="-342.5" width="120" height="120" fill="#5167B7" text="LEAF1" />
+<text x="215.0" y="-276.5" font-size="25" fill="white" text-anchor="middle" dy="0em">LEAF1</text>
+<rect x="395.0" y="-342.5" width="120" height="120" fill="#5167B7" text="LEAF2" />
+<text x="455.0" y="-276.5" font-size="25" fill="white" text-anchor="middle" dy="0em">LEAF2</text>
+<rect x="600" y="-427.5" width="480" height="308.75" fill="hsl(0, 0%, 60%)" rx="25" stroke="hsl(0, 0%, 37.5%)" stroke-width="4" />
+<rect x="660.0" y="-342.5" width="120" height="120" fill="#5167B7" text="LEAF3" />
+<text x="720.0" y="-276.5" font-size="25" fill="white" text-anchor="middle" dy="0em">LEAF3</text>
+<rect x="900.0" y="-342.5" width="120" height="120" fill="#5167B7" text="LEAF4" />
+<text x="960.0" y="-276.5" font-size="25" fill="white" text-anchor="middle" dy="0em">LEAF4</text>
+<rect x="407.5" y="-620.0" width="120" height="120" fill="#5167B7" text="SPINE1" />
+<text x="467.5" y="-554.0" font-size="25" fill="white" text-anchor="middle" dy="0em">SPINE1</text>
+<rect x="647.5" y="-620.0" width="120" height="120" fill="#5167B7" text="SPINE2" />
+<text x="707.5" y="-554.0" font-size="25" fill="white" text-anchor="middle" dy="0em">SPINE2</text>
+<rect x="407.5" y="-897.5" width="120" height="120" fill="#5167B7" text="SUPER-SPINE1" />
+<text x="467.5" y="-840.5" font-size="18" fill="white" text-anchor="middle" dy="0em">SUPER</text>
+<text x="467.5" y="-822.5" font-size="18" fill="white" text-anchor="middle" dy="0em">SPINE1</text>
+<rect x="647.5" y="-897.5" width="120" height="120" fill="#5167B7" text="SUPER-SPINE2" />
+<text x="707.5" y="-840.5" font-size="18" fill="white" text-anchor="middle" dy="0em">SUPER</text>
+<text x="707.5" y="-822.5" font-size="18" fill="white" text-anchor="middle" dy="0em">SPINE2</text>
+<rect x="407.5" y="-777.5" width="20" height="30" fill="white" stroke="black" />
+<text x="417.5" y="-757.1666666666666" font-size="16" fill="black" text-anchor="middle" dy="0em">6</text>
+<rect x="430.5" y="-777.5" width="20" height="30" fill="white" stroke="black" />
+<text x="440.5" y="-757.1666666666666" font-size="16" fill="black" text-anchor="middle" dy="0em">7</text>
+<rect x="647.5" y="-777.5" width="20" height="30" fill="white" stroke="black" />
+<text x="657.5" y="-757.1666666666666" font-size="16" fill="black" text-anchor="middle" dy="0em">6</text>
+<rect x="670.5" y="-777.5" width="20" height="30" fill="white" stroke="black" />
+<text x="680.5" y="-757.1666666666666" font-size="16" fill="black" text-anchor="middle" dy="0em">7</text>
+<rect x="407.5" y="-650.0" width="20" height="30" fill="white" stroke="black" />
+<text x="417.5" y="-629.6666666666666" font-size="16" fill="black" text-anchor="middle" dy="0em">6</text>
+<rect x="430.5" y="-650.0" width="20" height="30" fill="white" stroke="black" />
+<text x="440.5" y="-629.6666666666666" font-size="16" fill="black" text-anchor="middle" dy="0em">7</text>
+<rect x="407.5" y="-500.0" width="20" height="30" fill="white" stroke="black" />
+<text x="417.5" y="-479.6666666666667" font-size="16" fill="black" text-anchor="middle" dy="0em">1</text>
+<rect x="430.5" y="-500.0" width="20" height="30" fill="white" stroke="black" />
+<text x="440.5" y="-479.6666666666667" font-size="16" fill="black" text-anchor="middle" dy="0em">2</text>
+<rect x="430.5" y="-500.0" width="20" height="30" fill="white" stroke="black" />
+<text x="440.5" y="-479.6666666666667" font-size="16" fill="black" text-anchor="middle" dy="0em">3</text>
+<rect x="430.5" y="-500.0" width="20" height="30" fill="white" stroke="black" />
+<text x="440.5" y="-479.6666666666667" font-size="16" fill="black" text-anchor="middle" dy="0em">4</text>
+<rect x="527.5" y="-620.0" width="30" height="20" fill="white" stroke="black" />
+<text x="542.5" y="-604.6666666666666" font-size="16" fill="black" text-anchor="middle" dy="0em">47</text>
+<rect x="527.5" y="-597.0" width="30" height="20" fill="white" stroke="black" />
+<text x="542.5" y="-581.6666666666666" font-size="16" fill="black" text-anchor="middle" dy="0em">48</text>
+<rect x="647.5" y="-650.0" width="20" height="30" fill="white" stroke="black" />
+<text x="657.5" y="-629.6666666666666" font-size="16" fill="black" text-anchor="middle" dy="0em">6</text>
+<rect x="670.5" y="-650.0" width="20" height="30" fill="white" stroke="black" />
+<text x="680.5" y="-629.6666666666666" font-size="16" fill="black" text-anchor="middle" dy="0em">7</text>
+<rect x="647.5" y="-500.0" width="20" height="30" fill="white" stroke="black" />
+<text x="657.5" y="-479.6666666666667" font-size="16" fill="black" text-anchor="middle" dy="0em">1</text>
+<rect x="670.5" y="-500.0" width="20" height="30" fill="white" stroke="black" />
+<text x="680.5" y="-479.6666666666667" font-size="16" fill="black" text-anchor="middle" dy="0em">2</text>
+<rect x="670.5" y="-500.0" width="20" height="30" fill="white" stroke="black" />
+<text x="680.5" y="-479.6666666666667" font-size="16" fill="black" text-anchor="middle" dy="0em">3</text>
+<rect x="670.5" y="-500.0" width="20" height="30" fill="white" stroke="black" />
+<text x="680.5" y="-479.6666666666667" font-size="16" fill="black" text-anchor="middle" dy="0em">4</text>
+<rect x="617.5" y="-620.0" width="30" height="20" fill="white" stroke="black" />
+<text x="632.5" y="-604.6666666666666" font-size="16" fill="black" text-anchor="middle" dy="0em">47</text>
+<rect x="617.5" y="-597.0" width="30" height="20" fill="white" stroke="black" />
+<text x="632.5" y="-581.6666666666666" font-size="16" fill="black" text-anchor="middle" dy="0em">48</text>
+<rect x="155.0" y="-372.5" width="20" height="30" fill="white" stroke="black" />
+<text x="165.0" y="-352.1666666666667" font-size="16" fill="black" text-anchor="middle" dy="0em">2</text>
+<rect x="178.0" y="-372.5" width="20" height="30" fill="white" stroke="black" />
+<text x="188.0" y="-352.1666666666667" font-size="16" fill="black" text-anchor="middle" dy="0em">1</text>
+<rect x="275.0" y="-342.5" width="30" height="20" fill="white" stroke="black" />
+<text x="290.0" y="-327.1666666666667" font-size="16" fill="black" text-anchor="middle" dy="0em">47</text>
+<rect x="275.0" y="-319.5" width="30" height="20" fill="white" stroke="black" />
+<text x="290.0" y="-304.1666666666667" font-size="16" fill="black" text-anchor="middle" dy="0em">48</text>
+<rect x="395.0" y="-372.5" width="20" height="30" fill="white" stroke="black" />
+<text x="405.0" y="-352.1666666666667" font-size="16" fill="black" text-anchor="middle" dy="0em">2</text>
+<rect x="418.0" y="-372.5" width="20" height="30" fill="white" stroke="black" />
+<text x="428.0" y="-352.1666666666667" font-size="16" fill="black" text-anchor="middle" dy="0em">1</text>
+<rect x="515.0" y="-342.5" width="30" height="20" fill="white" stroke="black" />
+<text x="530.0" y="-327.1666666666667" font-size="16" fill="black" text-anchor="middle" dy="0em">50</text>
+<rect x="365.0" y="-342.5" width="30" height="20" fill="white" stroke="black" />
+<text x="380.0" y="-327.1666666666667" font-size="16" fill="black" text-anchor="middle" dy="0em">47</text>
+<rect x="365.0" y="-319.5" width="30" height="20" fill="white" stroke="black" />
+<text x="380.0" y="-304.1666666666667" font-size="16" fill="black" text-anchor="middle" dy="0em">48</text>
+<rect x="660.0" y="-372.5" width="20" height="30" fill="white" stroke="black" />
+<text x="670.0" y="-352.1666666666667" font-size="16" fill="black" text-anchor="middle" dy="0em">2</text>
+<rect x="683.0" y="-372.5" width="20" height="30" fill="white" stroke="black" />
+<text x="693.0" y="-352.1666666666667" font-size="16" fill="black" text-anchor="middle" dy="0em">1</text>
+<rect x="780.0" y="-342.5" width="30" height="20" fill="white" stroke="black" />
+<text x="795.0" y="-327.1666666666667" font-size="16" fill="black" text-anchor="middle" dy="0em">47</text>
+<rect x="780.0" y="-319.5" width="30" height="20" fill="white" stroke="black" />
+<text x="795.0" y="-304.1666666666667" font-size="16" fill="black" text-anchor="middle" dy="0em">48</text>
+<rect x="630.0" y="-342.5" width="30" height="20" fill="white" stroke="black" />
+<text x="645.0" y="-327.1666666666667" font-size="16" fill="black" text-anchor="middle" dy="0em">50</text>
+<rect x="900.0" y="-372.5" width="20" height="30" fill="white" stroke="black" />
+<text x="910.0" y="-352.1666666666667" font-size="16" fill="black" text-anchor="middle" dy="0em">2</text>
+<rect x="923.0" y="-372.5" width="20" height="30" fill="white" stroke="black" />
+<text x="933.0" y="-352.1666666666667" font-size="16" fill="black" text-anchor="middle" dy="0em">1</text>
+<rect x="870.0" y="-342.5" width="30" height="20" fill="white" stroke="black" />
+<text x="885.0" y="-327.1666666666667" font-size="16" fill="black" text-anchor="middle" dy="0em">47</text>
+<rect x="870.0" y="-319.5" width="30" height="20" fill="white" stroke="black" />
+<text x="885.0" y="-304.1666666666667" font-size="16" fill="black" text-anchor="middle" dy="0em">48</text>
+<path d="M417.5,-747.5 L417.5,-650.0" stroke="black" stroke-width="2" />
+<path d="M440.5,-747.5 L657.5,-650.0" stroke="black" stroke-width="2" />
+<path d="M657.5,-747.5 L440.5,-650.0" stroke="black" stroke-width="2" />
+<path d="M680.5,-747.5 L680.5,-650.0" stroke="black" stroke-width="2" />
+<path d="M617.5,-610.0 L557.5,-610.0" stroke="black" stroke-width="2" />
+<path d="M617.5,-587.0 L557.5,-587.0" stroke="black" stroke-width="2" />
+<path d="M657.5,-470.0 L165.0,-372.5" stroke="black" stroke-width="2" />
+<path d="M680.5,-470.0 L405.0,-372.5" stroke="black" stroke-width="2" />
+<path d="M680.5,-470.0 L670.0,-372.5" stroke="black" stroke-width="2" />
+<path d="M680.5,-470.0 L910.0,-372.5" stroke="black" stroke-width="2" />
+<path d="M417.5,-470.0 L188.0,-372.5" stroke="black" stroke-width="2" />
+<path d="M440.5,-470.0 L428.0,-372.5" stroke="black" stroke-width="2" />
+<path d="M440.5,-470.0 L693.0,-372.5" stroke="black" stroke-width="2" />
+<path d="M440.5,-470.0 L933.0,-372.5" stroke="black" stroke-width="2" />
+<path d="M305.0,-332.5 L365.0,-332.5" stroke="black" stroke-width="2" />
+<path d="M305.0,-309.5 L365.0,-309.5" stroke="black" stroke-width="2" />
+<path d="M545.0,-332.5 L630.0,-332.5" stroke="black" stroke-width="2" />
+<path d="M810.0,-332.5 L870.0,-332.5" stroke="black" stroke-width="2" />
+<path d="M810.0,-309.5 L870.0,-309.5" stroke="black" stroke-width="2" />
+<rect x="513.1" y="-1016.0" width="148.8" height="23" fill="hsl(0, 0%, 90%)" />
+<text x="587.5" y="-996.0" font-size="24" fill="black" text-anchor="middle" dy="0em">DC1_FABRIC</text>
+<rect x="513.1" y="-978.5" width="148.8" height="23" fill="hsl(0, 0%, 80%)" />
+<text x="587.5" y="-958.5" font-size="24" fill="black" text-anchor="middle" dy="0em">DC1_SPINES</text>
+<rect x="505.65999999999997" y="-701.0" width="163.68" height="23" fill="hsl(0, 0%, 70%)" />
+<text x="587.5" y="-681.0" font-size="24" fill="black" text-anchor="middle" dy="0em">DC1_SPINES2</text>
+<rect x="297.8" y="-423.5" width="74.4" height="23" fill="hsl(0, 0%, 60%)" />
+<text x="335.0" y="-403.5" font-size="24" fill="black" text-anchor="middle" dy="0em">RACK1</text>
+<rect x="802.8" y="-423.5" width="74.4" height="23" fill="hsl(0, 0%, 60%)" />
+<text x="840.0" y="-403.5" font-size="24" fill="black" text-anchor="middle" dy="0em">RACK2</text>
+</svg>

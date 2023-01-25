@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+     width="500" height="460.49528301886795" viewBox="0 -976.25 1060 976.25" font-family="monospace">
+<defs>
+</defs>
+<rect x="0" y="-976.25" width="1060" height="976.25" fill="#00285A" />
+<rect x="20" y="-951.25" width="1010" height="926.25" fill="hsl(0, 0%, 90%)" rx="25" stroke="hsl(0, 0%, 60.0%)" stroke-width="4" />
+<rect x="130.0" y="-311.25" width="120" height="120" fill="#5167B7" text="dc1-leaf1c" />
+<text x="190.0" y="-245.25" font-size="19" fill="white" text-anchor="middle" dy="0em">dc1-leaf1c</text>
+<rect x="370.0" y="-311.25" width="120" height="120" fill="#5167B7" text="dc1-leaf2c" />
+<text x="430.0" y="-245.25" font-size="19" fill="white" text-anchor="middle" dy="0em">dc1-leaf2c</text>
+<rect x="105.0" y="-588.75" width="120" height="120" fill="#5167B7" text="dc1-leaf1a" />
+<text x="165.0" y="-522.75" font-size="19" fill="white" text-anchor="middle" dy="0em">dc1-leaf1a</text>
+<rect x="345.0" y="-588.75" width="120" height="120" fill="#5167B7" text="dc1-leaf1b" />
+<text x="405.0" y="-522.75" font-size="19" fill="white" text-anchor="middle" dy="0em">dc1-leaf1b</text>
+<rect x="585.0" y="-588.75" width="120" height="120" fill="#5167B7" text="dc1-leaf2a" />
+<text x="645.0" y="-522.75" font-size="19" fill="white" text-anchor="middle" dy="0em">dc1-leaf2a</text>
+<rect x="825.0" y="-588.75" width="120" height="120" fill="#5167B7" text="dc1-leaf2b" />
+<text x="885.0" y="-522.75" font-size="19" fill="white" text-anchor="middle" dy="0em">dc1-leaf2b</text>
+<rect x="345.0" y="-866.25" width="120" height="120" fill="#5167B7" text="dc1-spine1" />
+<text x="405.0" y="-800.25" font-size="19" fill="white" text-anchor="middle" dy="0em">dc1-spine1</text>
+<rect x="585.0" y="-866.25" width="120" height="120" fill="#5167B7" text="dc1-spine2" />
+<text x="645.0" y="-800.25" font-size="19" fill="white" text-anchor="middle" dy="0em">dc1-spine2</text>
+<rect x="345.0" y="-746.25" width="20" height="30" fill="white" stroke="black" />
+<text x="355.0" y="-725.9166666666666" font-size="16" fill="black" text-anchor="middle" dy="0em">1</text>
+<rect x="368.0" y="-746.25" width="20" height="30" fill="white" stroke="black" />
+<text x="378.0" y="-725.9166666666666" font-size="16" fill="black" text-anchor="middle" dy="0em">2</text>
+<rect x="368.0" y="-746.25" width="20" height="30" fill="white" stroke="black" />
+<text x="378.0" y="-725.9166666666666" font-size="16" fill="black" text-anchor="middle" dy="0em">3</text>
+<rect x="368.0" y="-746.25" width="20" height="30" fill="white" stroke="black" />
+<text x="378.0" y="-725.9166666666666" font-size="16" fill="black" text-anchor="middle" dy="0em">4</text>
+<rect x="585.0" y="-746.25" width="20" height="30" fill="white" stroke="black" />
+<text x="595.0" y="-725.9166666666666" font-size="16" fill="black" text-anchor="middle" dy="0em">1</text>
+<rect x="608.0" y="-746.25" width="20" height="30" fill="white" stroke="black" />
+<text x="618.0" y="-725.9166666666666" font-size="16" fill="black" text-anchor="middle" dy="0em">2</text>
+<rect x="608.0" y="-746.25" width="20" height="30" fill="white" stroke="black" />
+<text x="618.0" y="-725.9166666666666" font-size="16" fill="black" text-anchor="middle" dy="0em">3</text>
+<rect x="608.0" y="-746.25" width="20" height="30" fill="white" stroke="black" />
+<text x="618.0" y="-725.9166666666666" font-size="16" fill="black" text-anchor="middle" dy="0em">4</text>
+<rect x="105.0" y="-618.75" width="20" height="30" fill="white" stroke="black" />
+<text x="115.0" y="-598.4166666666666" font-size="16" fill="black" text-anchor="middle" dy="0em">1</text>
+<rect x="128.0" y="-618.75" width="20" height="30" fill="white" stroke="black" />
+<text x="138.0" y="-598.4166666666666" font-size="16" fill="black" text-anchor="middle" dy="0em">2</text>
+<rect x="105.0" y="-468.75" width="20" height="30" fill="white" stroke="black" />
+<text x="115.0" y="-448.4166666666667" font-size="16" fill="black" text-anchor="middle" dy="0em">8</text>
+<rect x="225.0" y="-588.75" width="30" height="20" fill="white" stroke="black" />
+<text x="240.0" y="-573.4166666666666" font-size="16" fill="black" text-anchor="middle" dy="0em">3</text>
+<rect x="225.0" y="-565.75" width="30" height="20" fill="white" stroke="black" />
+<text x="240.0" y="-550.4166666666666" font-size="16" fill="black" text-anchor="middle" dy="0em">4</text>
+<rect x="345.0" y="-618.75" width="20" height="30" fill="white" stroke="black" />
+<text x="355.0" y="-598.4166666666666" font-size="16" fill="black" text-anchor="middle" dy="0em">1</text>
+<rect x="368.0" y="-618.75" width="20" height="30" fill="white" stroke="black" />
+<text x="378.0" y="-598.4166666666666" font-size="16" fill="black" text-anchor="middle" dy="0em">2</text>
+<rect x="345.0" y="-468.75" width="20" height="30" fill="white" stroke="black" />
+<text x="355.0" y="-448.4166666666667" font-size="16" fill="black" text-anchor="middle" dy="0em">8</text>
+<rect x="315.0" y="-588.75" width="30" height="20" fill="white" stroke="black" />
+<text x="330.0" y="-573.4166666666666" font-size="16" fill="black" text-anchor="middle" dy="0em">3</text>
+<rect x="315.0" y="-565.75" width="30" height="20" fill="white" stroke="black" />
+<text x="330.0" y="-550.4166666666666" font-size="16" fill="black" text-anchor="middle" dy="0em">4</text>
+<rect x="585.0" y="-618.75" width="20" height="30" fill="white" stroke="black" />
+<text x="595.0" y="-598.4166666666666" font-size="16" fill="black" text-anchor="middle" dy="0em">1</text>
+<rect x="608.0" y="-618.75" width="20" height="30" fill="white" stroke="black" />
+<text x="618.0" y="-598.4166666666666" font-size="16" fill="black" text-anchor="middle" dy="0em">2</text>
+<rect x="585.0" y="-468.75" width="20" height="30" fill="white" stroke="black" />
+<text x="595.0" y="-448.4166666666667" font-size="16" fill="black" text-anchor="middle" dy="0em">8</text>
+<rect x="705.0" y="-588.75" width="30" height="20" fill="white" stroke="black" />
+<text x="720.0" y="-573.4166666666666" font-size="16" fill="black" text-anchor="middle" dy="0em">3</text>
+<rect x="705.0" y="-565.75" width="30" height="20" fill="white" stroke="black" />
+<text x="720.0" y="-550.4166666666666" font-size="16" fill="black" text-anchor="middle" dy="0em">4</text>
+<rect x="825.0" y="-618.75" width="20" height="30" fill="white" stroke="black" />
+<text x="835.0" y="-598.4166666666666" font-size="16" fill="black" text-anchor="middle" dy="0em">1</text>
+<rect x="848.0" y="-618.75" width="20" height="30" fill="white" stroke="black" />
+<text x="858.0" y="-598.4166666666666" font-size="16" fill="black" text-anchor="middle" dy="0em">2</text>
+<rect x="825.0" y="-468.75" width="20" height="30" fill="white" stroke="black" />
+<text x="835.0" y="-448.4166666666667" font-size="16" fill="black" text-anchor="middle" dy="0em">8</text>
+<rect x="795.0" y="-588.75" width="30" height="20" fill="white" stroke="black" />
+<text x="810.0" y="-573.4166666666666" font-size="16" fill="black" text-anchor="middle" dy="0em">3</text>
+<rect x="795.0" y="-565.75" width="30" height="20" fill="white" stroke="black" />
+<text x="810.0" y="-550.4166666666666" font-size="16" fill="black" text-anchor="middle" dy="0em">4</text>
+<rect x="130.0" y="-341.25" width="20" height="30" fill="white" stroke="black" />
+<text x="140.0" y="-320.9166666666667" font-size="16" fill="black" text-anchor="middle" dy="0em">2</text>
+<rect x="153.0" y="-341.25" width="20" height="30" fill="white" stroke="black" />
+<text x="163.0" y="-320.9166666666667" font-size="16" fill="black" text-anchor="middle" dy="0em">1</text>
+<rect x="370.0" y="-341.25" width="20" height="30" fill="white" stroke="black" />
+<text x="380.0" y="-320.9166666666667" font-size="16" fill="black" text-anchor="middle" dy="0em">1</text>
+<rect x="393.0" y="-341.25" width="20" height="30" fill="white" stroke="black" />
+<text x="403.0" y="-320.9166666666667" font-size="16" fill="black" text-anchor="middle" dy="0em">2</text>
+<path d="M355.0,-716.25 L115.0,-618.75" stroke="black" stroke-width="2" />
+<path d="M378.0,-716.25 L355.0,-618.75" stroke="black" stroke-width="2" />
+<path d="M378.0,-716.25 L595.0,-618.75" stroke="black" stroke-width="2" />
+<path d="M378.0,-716.25 L835.0,-618.75" stroke="black" stroke-width="2" />
+<path d="M595.0,-716.25 L138.0,-618.75" stroke="black" stroke-width="2" />
+<path d="M618.0,-716.25 L378.0,-618.75" stroke="black" stroke-width="2" />
+<path d="M618.0,-716.25 L618.0,-618.75" stroke="black" stroke-width="2" />
+<path d="M618.0,-716.25 L858.0,-618.75" stroke="black" stroke-width="2" />
+<path d="M315.0,-578.75 L255.0,-578.75" stroke="black" stroke-width="2" />
+<path d="M315.0,-555.75 L255.0,-555.75" stroke="black" stroke-width="2" />
+<path d="M355.0,-438.75 L140.0,-341.25" stroke="black" stroke-width="2" />
+<path d="M163.0,-341.25 L115.0,-438.75" stroke="black" stroke-width="2" />
+<path d="M735.0,-578.75 L795.0,-578.75" stroke="black" stroke-width="2" />
+<path d="M735.0,-555.75 L795.0,-555.75" stroke="black" stroke-width="2" />
+<path d="M595.0,-438.75 L380.0,-341.25" stroke="black" stroke-width="2" />
+<path d="M835.0,-438.75 L403.0,-341.25" stroke="black" stroke-width="2" />
+<rect x="480.36" y="-947.25" width="89.28" height="23" fill="hsl(0, 0%, 90%)" />
+<text x="525.0" y="-927.25" font-size="24" fill="black" text-anchor="middle" dy="0em">FABRIC</text>
+</svg>
