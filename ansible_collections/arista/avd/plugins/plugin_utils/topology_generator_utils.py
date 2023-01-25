@@ -21,6 +21,8 @@ PORTHEIGHT = 30
 PORTWIDTH = 20
 PORTOFFSET = 3
 PORTFONTSIZE = 16
+TITLEFONTSIZE = 24
+TITLEOFFSET = 3
 
 # Used for horizontal connection overlaps
 WIREDEFAULTDISTANCE = 10
@@ -301,14 +303,16 @@ def generate_topology_hampton(destination, old_level_dict, node_neighbor_dict, o
 
     ol = calculate_box_size_recursive(level_dict, ol)
 
-    nodes, render_orderings = draw_groups_recursive(d, level_dict, ol, 20, size-100)
+    nodes, render_orderings, titles = draw_groups_recursive(d, level_dict, ol, 20, size-100)
 
     del node_port_val['0']
     draw_ports(d, nodes, node_port_val)
 
     del node_neighbor_dict['0']
     draw_links(d, nodes, node_neighbor_dict, level_dict, render_orderings)
-  
+    
+    for title in titles:
+        d.append(title)
 
     # Display
     d.setRenderSize(786)
@@ -392,35 +396,44 @@ def calculate_box_size_recursive(level_dict, ol):
     ol["nodes"] = sorted(ol["nodes"], key=lambda d: d['name']) 
 
     # Add padding
-    childrenWidth += ROUTERSIZE
+    # childrenWidth += ROUTERSIZE/2
 
     ol["width"] = max(groupWidths, childrenWidth)
 
     return ol
 
 def draw_groups_recursive(d, ld, ol, x, y):
+    titles = []
     orderings = {}
     nodes = {}
     GROUPOFFSET = LVLSPACING
     if len(ol["nodes"]) == 0:
         GROUPOFFSET = 0
     HEIGHTMARGIN = ol["height"] * (BOXMARGIN*2)
+
     if "psuedo" not in ol:
+        maxLevel = max(list(ld.values()))
+        lum = 90 - ((maxLevel - ol["height"]+1)*10)
+        fill = f'hsl(0, 0%, {lum}%)'
+
         d.append(draw.Rectangle(
             x, y-(((ol["height"]-1) * LVLSPACING))-GROUPOFFSET - HEIGHTMARGIN + BOXMARGIN, 
             ol["width"], 
             (((ol["height"]-1) * LVLSPACING))+GROUPOFFSET + HEIGHTMARGIN, 
-            stroke="black", fill="white"
+            stroke="black", fill=fill, rx="25"
             )
         )
-        d.append(draw.Text(ol["name"], 24, x+4, y-20 + BOXMARGIN, fill="black"))
+        textlength = ((len(ol["name"])) * TITLEFONTSIZE * 0.62)
+        titles.append(draw.Rectangle(x + ol["width"]/2 - textlength/2, y-TITLEFONTSIZE + TITLEOFFSET + BOXMARGIN - 3, textlength, TITLEFONTSIZE, fill=fill))
+        titles.append(draw.Text(ol["name"], TITLEFONTSIZE, x + ol["width"]/2, y-TITLEFONTSIZE + BOXMARGIN + TITLEOFFSET, fill="black",  text_anchor="middle"))
 
     cx = BOXMARGIN
     for idx, child in enumerate(ol["groups"]):
-        newNodes, newOrderings = draw_groups_recursive(d, ld, child, x + cx, y - GROUPOFFSET - (BOXMARGIN))
+        newNodes, newOrderings, newTitles = draw_groups_recursive(d, ld, child, x + cx, y - GROUPOFFSET - (BOXMARGIN))
         for k, node in newNodes.items():
             nodes[k] = node
         cx += child["width"] + BOXMARGIN
+        titles = [*titles, *newTitles]
         for level, onodes in newOrderings.items():
             if level not in orderings:
                 orderings[level] = []
@@ -444,7 +457,7 @@ def draw_groups_recursive(d, ld, ol, x, y):
         if level not in orderings:
             orderings[level] = []
         orderings[level].append(child["name"])
-    return nodes, orderings
+    return nodes, orderings, titles
 
 def draw_ports(d, nodes, node_port_val):
     for name, parts in node_port_val.items():
