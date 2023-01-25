@@ -326,7 +326,7 @@ def generate_topology_hampton(destination, old_level_dict, node_neighbor_dict, o
         d.append(title)
 
     # Display
-    d.setRenderSize(500)
+    d.setRenderSize(width, height)
     d.saveSvg(destination)
 
 def subgroup_inventor_recursive(ld, ol):
