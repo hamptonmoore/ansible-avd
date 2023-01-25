@@ -5,9 +5,7 @@ import os
 import queue
 import math
 
-import graphviz
 import yaml
-import random
 import textwrap
 
 import drawSvg as draw
@@ -27,6 +25,7 @@ PORTOFFSET = 3
 PORTFONTSIZE = 16
 TITLEFONTSIZE = 24
 TITLEOFFSET = 0
+FONTWIDTHHEIGHTRATIO = 0.62
 
 # Used for horizontal connection overlaps
 WIREDEFAULTDISTANCE = 10
@@ -415,10 +414,10 @@ def calculate_box_size_recursive(level_dict, ol):
     return ol
 
 def calculate_text_length(text, size):
-    return (len(text)) * size * 0.62
+    return (len(text)) * size * FONTWIDTHHEIGHTRATIO
 
 def calculate_max_letter_count(size, fontsize):
-    return math.floor(size / (fontsize * 0.62))
+    return math.floor(size / (fontsize * FONTWIDTHHEIGHTRATIO))
 
 def draw_groups_recursive(d, ld, ol, x, y, lum):
     titles = []
