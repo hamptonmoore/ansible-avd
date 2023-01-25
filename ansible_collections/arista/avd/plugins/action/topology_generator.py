@@ -27,6 +27,9 @@ class ActionModule(ActionBase):
         if self._task.args and "structured_config" not in self._task.args:
             raise AnsibleActionFail("Missing 'structured_config' variable.")
         path = self._task.args["structured_config"]
+        if self._task.args and "destination" not in self._task.args:
+            raise AnsibleActionFail("Missing 'destination' variable.")
+        destination = self._task.args["destination"]
 
         # fabric_name logic need to check only for molecule
         # fabric_name = task_vars["fabric_name"]
@@ -41,11 +44,11 @@ class ActionModule(ActionBase):
         # inventory_group = ['DC1-POD1-LEAF1A', 'DC2-SUPER-SPINE1', 'DC2-SUPER-SPINE2', 'DC2-RS1', 'DC2-RS2', 'DC1-SUPER-SPINE1', 'DC1-SUPER-SPINE2', 'DC1-RS1', 'DC1-RS2', 'DC1-POD1-SPINE1', 'DC1-POD1-SPINE2', 'DC1.POD1.LEAF2A', 'DC1-POD1-LEAF2B', 'DC1-POD1-L2LEAF1A', 'DC1-POD1-L2LEAF2A', 'DC1-POD1-L2LEAF2B', 'DC2-POD1-SPINE1', 'DC2-POD1-SPINE2', 'DC2-POD1-LEAF1A', 'DC2-POD1-L2LEAF1A', 'DC2-POD1-LEAF2A', 'DC2-POD1-L2LEAF2A', 'DC1-POD2-SPINE1', 'DC1-POD2-SPINE2', 'DC1-POD2-LEAF1A']
         # inventory_group =  ['SPINE1', 'SPINE2','SUPER-SPINE2','SUPER-SPINE1', 'LEAF1', 'LEAF2', 'LEAF3', 'LEAF4']
         # inventory_group = ['l3-leaf5', 'spine6', 'l2-leaf1', 'l3-leaf6', 'spine7','l2-leaf2','l3-leaf7','spine8','l2-leaf3','l3-leaf8','spine9','l2-leaf4','l3-leaf9','super-spine1','l3-leaf1','spine1'  ,'super-spine2','l3-leaf10','spine2'  ,'super-spine3','l3-leaf2','spine3'  ,'super-spine4','l3-leaf3','spine4','l3-leaf4','spine5']
-        self.driver_func(path, inventory_group)
+        self.driver_func(path, inventory_group, destination)
         return result
 
     # def driver_func(self, directory_path):
-    def driver_func(self, directory_path, inventory_group):  
+    def driver_func(self, directory_path, inventory_group, destination):  
         files = glob.glob(directory_path + "/*.yml")
 
         output_list = []
@@ -60,7 +63,6 @@ class ActionModule(ActionBase):
 
         global_node_list, graph_dict = gt.create_graph_dict(output_list, inventory_group)
 
-        print(graph_dict)
         level_dict, node_level_dict = gt.find_node_levels(graph_dict, "0", global_node_list)
 
         rank_nodes_list = []
@@ -82,7 +84,7 @@ class ActionModule(ActionBase):
                 node_port_val[i]["left"] = []
                 node_port_val[i]["right"] = []
 
-        # avoid same node neighbour pair
+        # avoid same node neighbor pair
         check_same_node = []
         temp_graph_dict = {}
 
@@ -144,4 +146,4 @@ class ActionModule(ActionBase):
  
         graph_dict = temp_graph_dict
 
-        gt.generate_topology_hampton(level_dict, graph_dict, output_list, undefined_rank_nodes, node_port_val)
+        gt.generate_topology_hampton(destination, level_dict, graph_dict, output_list, undefined_rank_nodes, node_port_val)
