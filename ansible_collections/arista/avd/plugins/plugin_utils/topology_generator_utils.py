@@ -301,13 +301,21 @@ def generate_topology_hampton(destination, old_level_dict, node_neighbor_dict, o
 
 
     ol = subgroup_inventor_recursive(level_dict, ol[0])
-    size = 3000
-    d = draw.Drawing(size, size, origin=(0,0), font_family="monospace")
-    d.append(draw.Rectangle(0,0,size,size, fill='white'))
 
     ol = calculate_box_size_recursive(level_dict, ol)
 
-    nodes, render_orderings, titles = draw_groups_recursive(d, level_dict, ol, 20, size-100, 90)
+    print(ol["width"])
+
+    GROUPOFFSET = LVLSPACING
+    if len(ol["nodes"]) == 0:
+        GROUPOFFSET = 0
+    HEIGHTMARGIN = ol["height"] * (BOXMARGIN*2.75)
+    height = (((ol["height"]-1) * LVLSPACING))+ GROUPOFFSET + HEIGHTMARGIN + (BOXMARGIN*2)
+    width = ol["width"] + BOXMARGIN * 2
+    d = draw.Drawing(width, height, origin=(0,0), font_family="monospace")
+    d.append(draw.Rectangle(0,0, width, height, fill='#00285A'))
+
+    nodes, render_orderings, titles = draw_groups_recursive(d, level_dict, ol, 20, height-50, 90)
 
     del node_port_val['0']
     draw_ports(d, nodes, node_port_val)
@@ -319,7 +327,7 @@ def generate_topology_hampton(destination, old_level_dict, node_neighbor_dict, o
         d.append(title)
 
     # Display
-    d.setRenderSize(786)
+    d.setRenderSize(500)
     d.saveSvg(destination)
 
 def subgroup_inventor_recursive(ld, ol):
