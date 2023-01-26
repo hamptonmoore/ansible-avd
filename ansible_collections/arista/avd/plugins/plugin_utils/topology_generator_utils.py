@@ -208,27 +208,12 @@ def create_graph_dict(ol, inventory_group, nodes=None, node_neighbor_dict=None):
                         if  neighbor["neighborDevice"] in inventory_group:  
                             node_detail_dict = {}
 
-                            if len(neighbor["port"]) == 10 and len(neighbor["port"]) != 0:
-                                node_detail_dict["nodePort"] = neighbor["port"][8:10]
-
-                            if len(neighbor["port"]) == 9 and len(neighbor["port"]) != 0:
-                                node_detail_dict["nodePort"] = neighbor["port"][8]
-
-                            if len(neighbor["port"]) < 9:
-                                node_detail_dict["nodePort"] = ""
+                            node_detail_dict["nodePort"] = neighbor["port"].replace("Ethernet", "")
 
                             node_detail_dict["neighborDevice"] = neighbor["neighborDevice"]
 
-                            if len(neighbor["neighborPort"]) == 10 and len(neighbor["neighborPort"]) != 0:
-                                node_detail_dict["neighborPort"] = neighbor["neighborPort"][8:10]
+                            node_detail_dict["neighborPort"] = neighbor["neighborPort"].replace("Ethernet", "")
 
-                            if len(neighbor["neighborPort"]) == 9 and len(neighbor["neighborPort"]) != 0:
-                                node_detail_dict["neighborPort"] = neighbor["neighborPort"][8]
-
-                            if len(neighbor["neighborPort"]) < 9:
-                                node_detail_dict["neighborPort"] = ""
-
-                            # neighbors.append(neighbor['neighborDevice'])
                             neighbors.append(node_detail_dict)   
                     node_neighbor_dict[node["name"]] = neighbors
         if "groups" in group and group["groups"]:
@@ -507,7 +492,10 @@ def draw_ports(d, nodes, node_port_val):
                 port = {"x": ox, "y": node["y"] + (ROUTERSIZE/2) + PORTHEIGHT, "dir": "up"}
                 node["ports"][portID] = port
                 d.append(draw.Rectangle(port["x"] - (PORTWIDTH/2), port["y"] - PORTHEIGHT, PORTWIDTH, PORTHEIGHT, fill="white", stroke="black"))
-                d.append(draw.Text(portID, PORTFONTSIZE, port["x"], port["y"] - PORTHEIGHT/2 - PORTFONTSIZE/3, fill="black", text_anchor="middle"))
+                fontsize = PORTFONTSIZE
+                while calculate_text_length(portID, fontsize) > PORTWIDTH:
+                    fontsize-=1
+                d.append(draw.Text(portID, fontsize, port["x"], port["y"] - PORTHEIGHT/2 - PORTFONTSIZE/3, fill="black", text_anchor="middle"))
                 ox = ox + PORTWIDTH + PORTOFFSET
         
         if len(parts["bottom"]) > 0:
@@ -516,7 +504,10 @@ def draw_ports(d, nodes, node_port_val):
                 port = {"x": ox, "y": node["y"] - (ROUTERSIZE/2) - PORTHEIGHT, "dir": "down"}
                 node["ports"][portID] = port
                 d.append(draw.Rectangle(port["x"] - (PORTWIDTH/2), port["y"], PORTWIDTH, PORTHEIGHT, fill="white", stroke="black"))
-                d.append(draw.Text(portID, PORTFONTSIZE, port["x"], port["y"] + PORTHEIGHT/2 - PORTFONTSIZE/3, fill="black", text_anchor="middle"))
+                fontsize = PORTFONTSIZE
+                while calculate_text_length(portID, fontsize) > PORTWIDTH:
+                    fontsize-=1
+                d.append(draw.Text(portID, fontsize, port["x"], port["y"] + PORTHEIGHT/2 - PORTFONTSIZE/3, fill="black", text_anchor="middle"))
                 ox = ox + PORTWIDTH + PORTOFFSET
         
         if len(parts["right"]) > 0:
@@ -525,7 +516,10 @@ def draw_ports(d, nodes, node_port_val):
                 port = {"x": node["x"] + (ROUTERSIZE/2) + PORTHEIGHT, "y": oy, "dir": "right"}
                 node["ports"][portID] = port
                 d.append(draw.Rectangle(port["x"] - PORTHEIGHT, port["y"] - PORTWIDTH/2, PORTHEIGHT, PORTWIDTH, fill="white", stroke="black"))
-                d.append(draw.Text(portID, PORTFONTSIZE, port["x"] - PORTHEIGHT/2, port["y"] - PORTFONTSIZE/3, fill="black", text_anchor="middle"))
+                fontsize = PORTFONTSIZE
+                while calculate_text_length(portID, fontsize) > PORTWIDTH:
+                    fontsize-=1
+                d.append(draw.Text(portID, fontsize, port["x"] - PORTHEIGHT/2, port["y"] - PORTFONTSIZE/3, fill="black", text_anchor="middle"))
                 oy = oy - PORTWIDTH - PORTOFFSET
 
         if len(parts["left"]) > 0:
@@ -534,7 +528,10 @@ def draw_ports(d, nodes, node_port_val):
                 port = {"x": node["x"] - (ROUTERSIZE/2) - PORTHEIGHT , "y": oy, "dir": "left"}
                 node["ports"][portID] = port
                 d.append(draw.Rectangle(port["x"], port["y"] - (PORTWIDTH/2), PORTHEIGHT, PORTWIDTH, fill="white", stroke="black"))
-                d.append(draw.Text(portID, PORTFONTSIZE, port["x"] + PORTHEIGHT/2, port["y"] - PORTFONTSIZE/3, fill="black", text_anchor="middle"))
+                fontsize = PORTFONTSIZE
+                while calculate_text_length(portID, fontsize) > PORTHEIGHT:
+                    fontsize-=1
+                d.append(draw.Text(portID, fontsize, port["x"] + PORTHEIGHT/2, port["y"] - PORTFONTSIZE/3, fill="black", text_anchor="middle"))
                 oy = oy - PORTWIDTH - PORTOFFSET
 
 def draw_links(d, nodes, node_neighbor_dict, level_dict, render_orderings):
