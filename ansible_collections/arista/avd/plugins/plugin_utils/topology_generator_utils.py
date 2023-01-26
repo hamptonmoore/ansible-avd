@@ -442,7 +442,10 @@ def draw_groups_recursive(d, ld, ol, x, y, lum):
         titles.append(draw.Rectangle(x + ol["width"]/2 - textlength/2, y-TITLEFONTSIZE + TITLEOFFSET + BOXMARGIN - 3, textlength, TITLEFONTSIZE - 1, fill=fill))
         titles.append(draw.Text(ol["name"], TITLEFONTSIZE, x + ol["width"]/2, y-TITLEFONTSIZE + BOXMARGIN + TITLEOFFSET, fill="black",  text_anchor="middle"))
 
-    cx = BOXMARGIN
+    cx = 0
+    for child in ol["groups"]:
+        cx += child["width"] + BOXMARGIN
+    cx = ol["width"]/2 - (cx/2) + BOXMARGIN/2 + 0.5
     for idx, child in enumerate(ol["groups"]):
         newNodes, newOrderings, newTitles = draw_groups_recursive(d, ld, child, x + cx, y - GROUPOFFSET - (BOXMARGIN * 1.50), lum)
         for k, node in newNodes.items():
@@ -497,37 +500,42 @@ def draw_ports(d, nodes, node_port_val):
             continue 
         node = nodes[name]
         node["ports"] = {}
-        ox = 0
-        for portID in parts["top"]:
-            port = {"x": node["x"] - (ROUTERSIZE/2) + ox + (PORTWIDTH/2), "y": node["y"] + (ROUTERSIZE/2) + PORTHEIGHT, "dir": "up"}
-            node["ports"][portID] = port
-            d.append(draw.Rectangle(port["x"] - (PORTWIDTH/2), port["y"] - PORTHEIGHT, PORTWIDTH, PORTHEIGHT, fill="white", stroke="black"))
-            d.append(draw.Text(portID, PORTFONTSIZE, port["x"], port["y"] - PORTHEIGHT/2 - PORTFONTSIZE/3, fill="black", text_anchor="middle"))
-            ox = PORTWIDTH + PORTOFFSET
-        
-        ox = 0
-        for portID in parts["bottom"]:
-            port = {"x": node["x"] - (ROUTERSIZE/2) + ox + (PORTWIDTH/2), "y": node["y"] - (ROUTERSIZE/2) - PORTHEIGHT, "dir": "down"}
-            node["ports"][portID] = port
-            d.append(draw.Rectangle(port["x"] - (PORTWIDTH/2), port["y"], PORTWIDTH, PORTHEIGHT, fill="white", stroke="black"))
-            d.append(draw.Text(portID, PORTFONTSIZE, port["x"], port["y"] + PORTHEIGHT/2 - PORTFONTSIZE/3, fill="black", text_anchor="middle"))
-            ox = PORTWIDTH + PORTOFFSET
-        
-        oy = 0
-        for portID in parts["right"]:
-            port = {"x": node["x"] + (ROUTERSIZE/2) + PORTHEIGHT, "y": node["y"] + (ROUTERSIZE/2) - PORTHEIGHT - oy + PORTWIDTH, "dir": "right"}
-            node["ports"][portID] = port
-            d.append(draw.Rectangle(port["x"] - PORTHEIGHT, port["y"] - PORTWIDTH/2, PORTHEIGHT, PORTWIDTH, fill="white", stroke="black"))
-            d.append(draw.Text(portID, PORTFONTSIZE, port["x"] - PORTHEIGHT/2, port["y"] - PORTFONTSIZE/3, fill="black", text_anchor="middle"))
-            oy = PORTWIDTH + PORTOFFSET
 
-        oy = 0
-        for portID in parts["left"]:
-            port = {"x": node["x"] - (ROUTERSIZE/2) - PORTHEIGHT , "y": node["y"] + (ROUTERSIZE/2) - oy - PORTWIDTH/2, "dir": "left"}
-            node["ports"][portID] = port
-            d.append(draw.Rectangle(port["x"], port["y"] - (PORTWIDTH/2), PORTHEIGHT, PORTWIDTH, fill="white", stroke="black"))
-            d.append(draw.Text(portID, PORTFONTSIZE, port["x"] + PORTHEIGHT/2, port["y"] - PORTFONTSIZE/3, fill="black", text_anchor="middle"))
-            oy = PORTWIDTH + PORTOFFSET
+        if len(parts["top"]) > 0:
+            ox = node["x"] - (((PORTWIDTH + PORTOFFSET) * len(parts["top"]))/2) + PORTWIDTH/2 + PORTOFFSET/2
+            for portID in parts["top"]:
+                port = {"x": ox, "y": node["y"] + (ROUTERSIZE/2) + PORTHEIGHT, "dir": "up"}
+                node["ports"][portID] = port
+                d.append(draw.Rectangle(port["x"] - (PORTWIDTH/2), port["y"] - PORTHEIGHT, PORTWIDTH, PORTHEIGHT, fill="white", stroke="black"))
+                d.append(draw.Text(portID, PORTFONTSIZE, port["x"], port["y"] - PORTHEIGHT/2 - PORTFONTSIZE/3, fill="black", text_anchor="middle"))
+                ox = ox + PORTWIDTH + PORTOFFSET
+        
+        if len(parts["bottom"]) > 0:
+            ox = node["x"] - (((PORTWIDTH + PORTOFFSET) * len(parts["bottom"]))/2) + PORTWIDTH/2 + PORTOFFSET/2
+            for portID in parts["bottom"]:
+                port = {"x": ox, "y": node["y"] - (ROUTERSIZE/2) - PORTHEIGHT, "dir": "down"}
+                node["ports"][portID] = port
+                d.append(draw.Rectangle(port["x"] - (PORTWIDTH/2), port["y"], PORTWIDTH, PORTHEIGHT, fill="white", stroke="black"))
+                d.append(draw.Text(portID, PORTFONTSIZE, port["x"], port["y"] + PORTHEIGHT/2 - PORTFONTSIZE/3, fill="black", text_anchor="middle"))
+                ox = ox + PORTWIDTH + PORTOFFSET
+        
+        if len(parts["right"]) > 0:
+            oy = node["y"] + (((PORTWIDTH + PORTOFFSET) * len(parts["right"]))/2) - PORTWIDTH/2 - PORTOFFSET/2
+            for portID in parts["right"]:
+                port = {"x": node["x"] + (ROUTERSIZE/2) + PORTHEIGHT, "y": oy, "dir": "right"}
+                node["ports"][portID] = port
+                d.append(draw.Rectangle(port["x"] - PORTHEIGHT, port["y"] - PORTWIDTH/2, PORTHEIGHT, PORTWIDTH, fill="white", stroke="black"))
+                d.append(draw.Text(portID, PORTFONTSIZE, port["x"] - PORTHEIGHT/2, port["y"] - PORTFONTSIZE/3, fill="black", text_anchor="middle"))
+                oy = oy - PORTWIDTH - PORTOFFSET
+
+        if len(parts["left"]) > 0:
+            oy = node["y"] + (((PORTWIDTH + PORTOFFSET) * len(parts["left"]))/2) - PORTWIDTH/2 - PORTOFFSET/2
+            for portID in parts["left"]:
+                port = {"x": node["x"] - (ROUTERSIZE/2) - PORTHEIGHT , "y": oy, "dir": "left"}
+                node["ports"][portID] = port
+                d.append(draw.Rectangle(port["x"], port["y"] - (PORTWIDTH/2), PORTHEIGHT, PORTWIDTH, fill="white", stroke="black"))
+                d.append(draw.Text(portID, PORTFONTSIZE, port["x"] + PORTHEIGHT/2, port["y"] - PORTFONTSIZE/3, fill="black", text_anchor="middle"))
+                oy = oy - PORTWIDTH - PORTOFFSET
 
 def draw_links(d, nodes, node_neighbor_dict, level_dict, render_orderings):
     used_heights = {}
